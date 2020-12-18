@@ -1,0 +1,70 @@
+﻿<Project>
+  <!-- Canonical information -->
+
+  <PropertyGroup>
+    <CanonicalName>nathanaldensr-vorpalengine</CanonicalName>
+    <CanonicalRootNamespace>NathanAldenSr.VorpalEngine</CanonicalRootNamespace>
+    <CurrentYear>$([System.DateTime]::UtcNow.ToString(yyyy))</CurrentYear>
+    <CopyrightYear>2021</CopyrightYear>
+  </PropertyGroup>
+
+  <!-- Repository information -->
+
+  <PropertyGroup>
+    <RepositoryRootUrl>https://github.com/nathan-alden-sr/vorpal-engine</RepositoryRootUrl>
+    <RepositoryUrl>$(RepositoryRootUrl).git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <!-- Directories -->
+
+  <PropertyGroup>
+    <BaseArtifactsPath>$(MSBuildThisFileDirectory)artifacts\</BaseArtifactsPath>
+    <BaseArtifactsPathSuffix>$(ProjectCategory)\$(MSBuildProjectName)</BaseArtifactsPathSuffix>
+    <BaseOutputPath>$(BaseArtifactsPath)bin\$(BaseArtifactsPathSuffix)\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(BaseArtifactsPath)obj\$(BaseArtifactsPathSuffix)\</BaseIntermediateOutputPath>
+    <PackageOutputPath>$(BaseArtifactsPath)packages\$(Configuration)\</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Packages -->
+
+  <PropertyGroup>
+    <Company>Nathan Alden, Sr.</Company>
+    <Product>$(CanonicalName)</Product>
+    <Title>$(AssemblyName)</Title>
+    <Authors>Nathan Alden Sr. and Contributors</Authors>
+    <Copyright Condition="'$(CurrentYear)' == '$(CopyrightYear)'">Copyright $(CopyrightYear) Nathan Alden, Sr. and Contributors</Copyright>
+    <Copyright Condition="'$(CurrentYear)' != '$(CopyrightYear)'">Copyright $(CopyrightYear)-$(CurrentYear) Nathan Alden, Sr. and Contributors</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>$(RepositoryRootUrl)</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RestoreSources>
+      https://api.nuget.org/v3/index.json;
+      https://pkgs.dev.azure.com/tagoo/terrafx/_packaging/terrafx/nuget/v3/index.json
+    </RestoreSources>
+  </PropertyGroup>
+
+  <!-- Miscellaneous -->
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Features>strict</Features>
+    <Nullable>enable</Nullable>
+    <DebugType>embedded</DebugType>
+    <MinClientVersion>4.3</MinClientVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <OverwriteReadOnlyFiles>true</OverwriteReadOnlyFiles>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UseSharedCompilation>true</UseSharedCompilation>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_RUN_ID)' != ''">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- Debug-only -->
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+</Project>

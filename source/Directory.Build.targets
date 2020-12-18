@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileDirectory)..\Directory.Build.targets</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
+
+  <!-- NuGet package versions -->
+  
+  <PropertyGroup>
+    <!-- Use all components except source revision ID (e.g., 1.2.3.123456-alpha-pr123-dev) -->
+    <PackageVersion>$(CanonicalVersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(CanonicalVersionSuffix)' != ''">$(PackageVersion)-$(CanonicalVersionSuffix)</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.0.0" />
+  </ItemGroup>
+</Project>
