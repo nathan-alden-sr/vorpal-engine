@@ -8,7 +8,7 @@ using static NathanAldenSr.VorpalEngine.Common.State;
 
 namespace NathanAldenSr.VorpalEngine.Logging
 {
-    /// <summary>Logs messages.</summary>
+    /// <summary>Logs messages using Serilog.</summary>
     /// <remarks>
     ///     The class is sealed to improve the chances of devirtualization.
     ///     See <a href="https://github.com/dotnet/runtime/issues/7541">this GitHub issue</a>.
