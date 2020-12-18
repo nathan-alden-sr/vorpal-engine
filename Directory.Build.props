@@ -1,11 +1,11 @@
-﻿<Project>
+<Project>
   <!-- Canonical information -->
 
   <PropertyGroup>
     <CanonicalName>nathanaldensr-vorpalengine</CanonicalName>
     <CanonicalRootNamespace>NathanAldenSr.VorpalEngine</CanonicalRootNamespace>
     <CurrentYear>$([System.DateTime]::UtcNow.ToString(yyyy))</CurrentYear>
-    <CopyrightYear>2021</CopyrightYear>
+    <CopyrightYear>2020</CopyrightYear>
   </PropertyGroup>
 
   <!-- Repository information -->
