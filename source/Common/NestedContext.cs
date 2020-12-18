@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace NathanAldenSr.VorpalEngine.Common
 {
-    /// <summary>A breadcrum of contexts useful for logging purposes.</summary>
+    /// <summary>A breadcrumb of contexts useful for logging purposes.</summary>
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public readonly struct NestedContext
     {
