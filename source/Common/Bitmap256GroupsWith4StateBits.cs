@@ -76,10 +76,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         public void LogicalExclusiveOr(byte groupIndex, byte value) => Set(groupIndex, (byte)(Get(groupIndex) ^ value));
 
         /// <summary>Resets all bits to zero.</summary>
-        public void Reset()
-        {
-            Unsafe.InitBlock(ref Unsafe.As<uint, byte>(ref _data[0]), 0, (uint)sizeof(Bitmap256GroupsWith4StateBits));
-        }
+        public void Reset() => this = default;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int GetFieldIndex(byte groupIndex) => groupIndex * BitsPerGroup / BitsPerField;
