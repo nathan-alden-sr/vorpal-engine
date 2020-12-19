@@ -1,4 +1,4 @@
-namespace NathanAldenSr.VorpalEngine.Common.Messaging
+namespace NathanAldenSr.VorpalEngine.Common
 {
     /// <summary>Represents a message queue message.</summary>
     public interface IMessage

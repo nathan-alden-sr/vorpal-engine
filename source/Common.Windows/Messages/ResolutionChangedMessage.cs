@@ -1,6 +1,4 @@
-using NathanAldenSr.VorpalEngine.Common.Messaging;
-
-namespace NathanAldenSr.VorpalEngine.Common.Messages
+namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 {
     /// <summary>Indicates the resolution has changed.</summary>
     public readonly struct ResolutionChangedMessage : IMessage

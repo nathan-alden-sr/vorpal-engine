@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyName>$(CanonicalRootNamespace).Common.Windows</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Common.Windows</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.19041-beta2-421722498" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

@@ -1,12 +1,12 @@
 using System;
 using System.Numerics;
 using TerraFX.Interop;
-using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
+using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    /// <summary>A monitor.</summary>
+    /// <summary>A Windows monitor.</summary>
     public class Monitor : IEquatable<Monitor>
     {
         /// <summary>Initializes a new instance of the <see cref="Monitor" /> class.</summary>
@@ -28,12 +28,12 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
             ThrowExternalExceptionIfFalse(
                 GetMonitorInfoW(monitorHandle, (MONITORINFO*)&monitorInfo),
                 nameof(GetMonitorInfoW));
-            
+
             RECT bounds = monitorInfo.Base.rcMonitor;
             RECT workingArea = monitorInfo.Base.rcWork;
 
-            Bounds = bounds;
-            WorkingArea = workingArea;
+            Bounds = bounds.ToRectangle<int>();
+            WorkingArea = workingArea.ToRectangle<int>();
             Primary = (monitorInfo.Base.dwFlags & MONITORINFOF_PRIMARY) != 0;
             DeviceName = new string((char*)monitorInfo.szDevice);
 
@@ -105,7 +105,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
         /// <returns>A <see cref="Monitor" /> whose bounds contain <paramref name="rectangle" />, defaulting to the nearest monitor.</returns>
         public static unsafe Monitor From(Rectangle<int> rectangle)
         {
-            RECT rect = rectangle;
+            var rect = rectangle.ToRECT();
 
             return new Monitor(MonitorFromRect(&rect, MONITOR_DEFAULTTONEAREST));
         }

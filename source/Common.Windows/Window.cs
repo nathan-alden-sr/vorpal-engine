@@ -7,22 +7,23 @@ using TerraFX.Interop;
 using static NathanAldenSr.VorpalEngine.Common.AssertHelper;
 using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 using static NathanAldenSr.VorpalEngine.Common.State;
+using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    /// <summary>Represents a Win32 window.</summary>
+    /// <summary>Represents a Windows window.</summary>
     /// <remarks>Inspired by <a href="https://github.com/terrafx">TerraFX</a>.</remarks>
-    public class Win32Window : IDisposable
+    public class Window : IDisposable
     {
         private static readonly unsafe HINSTANCE ModuleHandle = GetModuleHandleW(null);
         private static readonly Size SmallIconSize = new(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
         private readonly WindowMessageHandlerDelegate? _afterMessageHandledDelegate;
-        private readonly Action<Win32Window>? _beforeCreationDelegate;
+        private readonly Action<Window>? _beforeCreationDelegate;
         private readonly WindowMessageHandlerDelegate? _beforeMessageHandledDelegate;
         private readonly IMonitorProvider _monitorProvider;
         private readonly Thread _ownerThread;
-        private readonly Win32WindowProvider _windowProvider;
+        private readonly WindowProvider _windowProvider;
         private bool _allowMaximize = true;
         private bool _allowMinimize = true;
         private BorderStyle _borderStyle;
@@ -40,16 +41,16 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
         private WindowState _windowState = WindowState.Restored;
         private uint _windowStyles;
 
-        /// <summary>Initializes a new instance of the <see cref="Win32Window" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="Window" /> class.</summary>
         /// <param name="monitorProvider">An <see cref="IMonitorProvider" /> implementation.</param>
-        /// <param name="windowProvider">A <see cref="Win32WindowProvider" /> object.</param>
-        /// <param name="beforeCreationDelegate">A delegate that can be used to configure the new <see cref="Win32Window" /> object.</param>
+        /// <param name="windowProvider">A <see cref="WindowProvider" /> object.</param>
+        /// <param name="beforeCreationDelegate">A delegate that can be used to configure the new <see cref="Window" /> object.</param>
         /// <param name="beforeMessageHandledDelegate">A delegate invoked before a message is handled.</param>
         /// <param name="afterMessageHandledDelegate">A delegate invoked after a message is handled.</param>
-        public Win32Window(
+        public Window(
             IMonitorProvider monitorProvider,
-            Win32WindowProvider windowProvider,
-            Action<Win32Window>? beforeCreationDelegate = null,
+            WindowProvider windowProvider,
+            Action<Window>? beforeCreationDelegate = null,
             WindowMessageHandlerDelegate? beforeMessageHandledDelegate = null,
             WindowMessageHandlerDelegate? afterMessageHandledDelegate = null)
         {
@@ -366,7 +367,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
         public event EventHandler? Deactivated;
 
         /// <inheritdoc />
-        ~Win32Window()
+        ~Window()
         {
             if (_state.BeginDispose() < Disposing)
             {

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.19041-beta2-421722498" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Input.Mouse\Input.Mouse.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>

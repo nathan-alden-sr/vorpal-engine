@@ -4,31 +4,31 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using TerraFX.Interop;
 using static NathanAldenSr.VorpalEngine.Common.AssertHelper;
-using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 using static NathanAldenSr.VorpalEngine.Common.State;
+using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    /// <summary>Creates <see cref="Win32Window" /> objects.</summary>
+    /// <summary>Creates <see cref="Window" /> objects.</summary>
     /// <remarks>Inspired by <a href="https://github.com/terrafx">TerraFX</a>.</remarks>
-    public class Win32WindowProvider : IDisposable
+    public class WindowProvider : IDisposable
     {
         private static readonly unsafe HINSTANCE ModuleHandle = GetModuleHandleW(null);
         private readonly IMonitorProvider _monitorProvider;
-        private readonly ThreadLocal<Dictionary<HWND, Win32Window>> _windowsByWindowHandle;
+        private readonly ThreadLocal<Dictionary<HWND, Window>> _windowsByWindowHandle;
         private ValueLazy<ushort> _classAtom;
         private ValueLazy<GCHandle> _nativeHandle;
         private State _state;
 
-        /// <summary>Initializes a new instance of the <see cref="Win32WindowProvider" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="WindowProvider" /> class.</summary>
         /// <param name="monitorProvider">An <see cref="IMonitorProvider" /> implementation.</param>
-        public Win32WindowProvider(IMonitorProvider monitorProvider)
+        public WindowProvider(IMonitorProvider monitorProvider)
         {
             _monitorProvider = monitorProvider;
             _classAtom = new ValueLazy<ushort>(RegisterClass);
             _nativeHandle = new ValueLazy<GCHandle>(() => GCHandle.Alloc(this, GCHandleType.Normal));
-            _windowsByWindowHandle = new ThreadLocal<Dictionary<HWND, Win32Window>>(true);
+            _windowsByWindowHandle = new ThreadLocal<Dictionary<HWND, Window>>(true);
 
             _state.Transition(Initialized);
         }
@@ -63,31 +63,31 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
         }
 
         /// <inheritdoc />
-        ~Win32WindowProvider()
+        ~WindowProvider()
         {
             Dispose(false);
         }
 
-        /// <summary>Creates a new <see cref="Win32Window" /> object.</summary>
-        /// <param name="beforeCreationDelegate">A delegate that can be used to configure the returned <see cref="Win32Window" /> object.</param>
+        /// <summary>Creates a new <see cref="Window" /> object.</summary>
+        /// <param name="beforeCreationDelegate">A delegate that can be used to configure the returned <see cref="Window" /> object.</param>
         /// <param name="beforeMessageProcessingDelegate">A delegate invoked before a message is processed.</param>
         /// <param name="afterMessageProcessingDelegate">A delegate invoked after a message is processed.</param>
-        /// <returns>Returns the new <see cref="Win32Window" />.</returns>
-        public Win32Window CreateWindow(
-            Action<Win32Window>? beforeCreationDelegate = null,
+        /// <returns>Returns the new <see cref="Window" />.</returns>
+        public Window CreateWindow(
+            Action<Window>? beforeCreationDelegate = null,
             WindowMessageHandlerDelegate? beforeMessageProcessingDelegate = null,
             WindowMessageHandlerDelegate? afterMessageProcessingDelegate = null)
         {
             _state.ThrowIfDisposingOrDisposed();
 
-            Dictionary<HWND, Win32Window>? windowsByWindowHandle = _windowsByWindowHandle.Value;
+            Dictionary<HWND, Window>? windowsByWindowHandle = _windowsByWindowHandle.Value;
 
             if (windowsByWindowHandle is null)
             {
-                _windowsByWindowHandle.Value = windowsByWindowHandle = new Dictionary<HWND, Win32Window>(4);
+                _windowsByWindowHandle.Value = windowsByWindowHandle = new Dictionary<HWND, Window>(4);
             }
 
-            var window = new Win32Window(_monitorProvider, this, beforeCreationDelegate, beforeMessageProcessingDelegate, afterMessageProcessingDelegate);
+            var window = new Window(_monitorProvider, this, beforeCreationDelegate, beforeMessageProcessingDelegate, afterMessageProcessingDelegate);
 
             Assert(windowsByWindowHandle.TryAdd(window.Handle, window), "Failed to track new window.");
 
@@ -176,16 +176,16 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
                     userData = GetWindowLongPtrW(hWnd, GWLP_USERDATA);
                 }
 
-                Win32WindowProvider? windowProvider = null;
-                Dictionary<HWND, Win32Window>? windowsByWindowHandle = null;
-                Win32Window? window = null;
+                WindowProvider? windowProvider = null;
+                Dictionary<HWND, Window>? windowsByWindowHandle = null;
+                Window? window = null;
                 var forwardMessage = false;
                 nint result;
 
                 if (userData != IntPtr.Zero)
                 {
                     // Retrieve the window provider from the native handle
-                    windowProvider = (Win32WindowProvider)GCHandle.FromIntPtr(userData).Target!;
+                    windowProvider = (WindowProvider)GCHandle.FromIntPtr(userData).Target!;
                     windowsByWindowHandle = windowProvider._windowsByWindowHandle.Value;
                     forwardMessage = windowsByWindowHandle?.TryGetValue(hWnd, out window) == true;
                 }
@@ -215,9 +215,9 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
             }
         }
 
-        private static Win32Window RemoveWindow(Dictionary<HWND, Win32Window> windowsByWindowHandle, HWND windowHandle)
+        private static Window RemoveWindow(Dictionary<HWND, Window> windowsByWindowHandle, HWND windowHandle)
         {
-            windowsByWindowHandle.Remove(windowHandle, out Win32Window? window);
+            windowsByWindowHandle.Remove(windowHandle, out Window? window);
 
             if (windowsByWindowHandle.Count == 0)
             {
@@ -236,7 +236,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Interop
                 return;
             }
 
-            foreach (Dictionary<HWND, Win32Window> windowsByWindowHandle in _windowsByWindowHandle.Values)
+            foreach (Dictionary<HWND, Window> windowsByWindowHandle in _windowsByWindowHandle.Values)
             {
                 var windowHandles = windowsByWindowHandle.Keys;
 

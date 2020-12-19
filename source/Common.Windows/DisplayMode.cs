@@ -1,4 +1,4 @@
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>Display modes the render window can be configured to use.</summary>
     public enum DisplayMode

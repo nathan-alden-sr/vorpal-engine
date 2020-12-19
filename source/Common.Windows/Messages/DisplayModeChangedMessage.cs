@@ -1,7 +1,4 @@
-using NathanAldenSr.VorpalEngine.Common.Interop;
-using NathanAldenSr.VorpalEngine.Common.Messaging;
-
-namespace NathanAldenSr.VorpalEngine.Common.Messages
+namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 {
     /// <summary>Indicates that the render window's display mode changed.</summary>
     public readonly struct DisplayModeChangedMessage : IMessage

@@ -1,6 +1,4 @@
-using NathanAldenSr.VorpalEngine.Common.Messaging;
-
-namespace NathanAldenSr.VorpalEngine.Common.Messages
+namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 {
     /// <summary>Indicates the render window's activation state has changed.</summary>
     public readonly struct RenderWindowActivationChangedMessage : IMessage

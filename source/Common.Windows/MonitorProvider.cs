@@ -4,12 +4,12 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.InteropServices;
 using TerraFX.Interop;
-using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
+using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    /// <summary>Queries the operating system for monitors currently attached to the primary graphics device.</summary>
+    /// <summary>Queries Windows for monitors currently attached to the primary graphics device.</summary>
     public class MonitorProvider : IMonitorProvider
     {
         private readonly object _lockObject = new();

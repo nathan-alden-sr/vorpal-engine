@@ -5,7 +5,7 @@ using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 namespace NathanAldenSr.VorpalEngine.Common
 {
     /// <summary>Allows for generic specialization of numeric operations.</summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the value.</typeparam>
     public readonly struct Numeric<T> : IEquatable<Numeric<T>>
         where T : struct
     {

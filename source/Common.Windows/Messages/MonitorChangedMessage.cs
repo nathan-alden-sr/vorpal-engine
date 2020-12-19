@@ -1,7 +1,4 @@
-using NathanAldenSr.VorpalEngine.Common.Interop;
-using NathanAldenSr.VorpalEngine.Common.Messaging;
-
-namespace NathanAldenSr.VorpalEngine.Common.Messages
+namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 {
     /// <summary>Indicates the monitor the render window is primarily located on has changed.</summary>
     public readonly struct MonitorChangedMessage : IMessage

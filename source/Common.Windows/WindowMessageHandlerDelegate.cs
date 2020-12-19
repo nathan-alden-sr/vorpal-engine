@@ -1,6 +1,6 @@
 using TerraFX.Interop;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>A delegate that handles window messages.</summary>
     /// <param name="windowHandle">The window handle the message was sent to.</param>

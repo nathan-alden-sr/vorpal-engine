@@ -1,4 +1,4 @@
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>Window states.</summary>
     public enum WindowState

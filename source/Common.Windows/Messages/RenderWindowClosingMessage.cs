@@ -1,6 +1,4 @@
-using NathanAldenSr.VorpalEngine.Common.Messaging;
-
-namespace NathanAldenSr.VorpalEngine.Common.Messages
+namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 {
     /// <summary>Indicates the render window is closing.</summary>
     public readonly struct RenderWindowClosingMessage : IMessage

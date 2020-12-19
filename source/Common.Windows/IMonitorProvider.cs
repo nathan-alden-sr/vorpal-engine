@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace NathanAldenSr.VorpalEngine.Common.Interop
+namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    /// <summary>Represents a way to query the operating system for monitors currently attached to the primary graphics device.</summary>
+    /// <summary>Represents a way to query Windows for monitors currently attached to the primary graphics device.</summary>
     public interface IMonitorProvider
     {
         /// <summary>Get a set of monitors currently attached to the primary graphics device.</summary>
