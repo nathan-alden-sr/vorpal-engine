@@ -3,34 +3,34 @@ namespace NathanAldenSr.VorpalEngine.Input.Mouse
     /// <summary>Mouse buttons.</summary>
     public enum Button : byte
     {
-        /// <summary>The left mouse button, or <see cref="One" />.</summary>
+        /// <summary>The left mouse button. This value is the same as <see cref="One" />.</summary>
         Left,
 
-        /// <summary>The right mouse button, or <see cref="Two" />.</summary>
+        /// <summary>The right mouse button. This value is the same as <see cref="Two" />.</summary>
         Right,
 
-        /// <summary>The middle mouse button, or <see cref="Three" />.</summary>
+        /// <summary>The middle mouse button. This value is the same as <see cref="Three" />.</summary>
         Middle,
 
-        /// <summary>The X1 button, or <see cref="Four" />.</summary>
+        /// <summary>The X1 button. This value is the same as <see cref="Four" />.</summary>
         X1,
 
-        /// <summary>The X2 button, or <see cref="Five" />.</summary>
+        /// <summary>The X2 button. This value is the same as <see cref="Five" />.</summary>
         X2,
 
-        /// <summary>The first mouse button, or <see cref="Left" />.</summary>
+        /// <summary>The first mouse button. This value is the same as <see cref="Left" />.</summary>
         One = Left,
 
-        /// <summary>The second mouse button, or <see cref="Right" />.</summary>
+        /// <summary>The second mouse button. This value is the same as <see cref="Right" />.</summary>
         Two = Right,
 
-        /// <summary>The third mouse button, or <see cref="Middle" />.</summary>
+        /// <summary>The third mouse button. This value is the same as <see cref="Middle" />.</summary>
         Three = Middle,
 
-        /// <summary>The fourth mouse button, or <see cref="X1" />.</summary>
+        /// <summary>The fourth mouse button. This value is the same as <see cref="X1" />.</summary>
         Four = X1,
 
-        /// <summary>The fifth mouse button, or <see cref="X2" />.</summary>
+        /// <summary>The fifth mouse button. This value is the same as <see cref="X2" />.</summary>
         Five = X2
     }
 }
