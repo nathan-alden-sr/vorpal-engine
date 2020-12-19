@@ -85,7 +85,10 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 
             uint rawInputDeviceCount;
 
-            GetRawInputDeviceList(null, &rawInputDeviceCount, (uint)sizeof(RAWINPUTDEVICELIST));
+            ThrowExternalExceptionIf(
+                GetRawInputDeviceList(null, &rawInputDeviceCount, (uint)sizeof(RAWINPUTDEVICELIST)),
+                a => a == unchecked((uint)-1),
+                nameof(GetRawInputDeviceList));
 
             RAWINPUTDEVICELIST* pRawInputDeviceList = stackalloc RAWINPUTDEVICELIST[(int)rawInputDeviceCount];
 
