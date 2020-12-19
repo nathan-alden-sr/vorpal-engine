@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Input.Mouse.RawInput", "sou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Input.Keyboard", "source\Input.Keyboard\Input.Keyboard.csproj", "{780CD37D-9975-44FF-9B04-BAA7BE9560C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Input.Controllers.Hid", "source\Input.Controllers.Hid\Input.Controllers.Hid.csproj", "{A87C350A-5108-4203-8C82-64B657951717}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{780CD37D-9975-44FF-9B04-BAA7BE9560C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{780CD37D-9975-44FF-9B04-BAA7BE9560C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{780CD37D-9975-44FF-9B04-BAA7BE9560C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A87C350A-5108-4203-8C82-64B657951717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A87C350A-5108-4203-8C82-64B657951717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A87C350A-5108-4203-8C82-64B657951717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A87C350A-5108-4203-8C82-64B657951717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{F45D0F5B-D168-46A0-A753-BF0F821D9F95} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 		{5B278882-3F38-4D5E-8467-4C084B5EC15B} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 		{780CD37D-9975-44FF-9B04-BAA7BE9560C9} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
+		{A87C350A-5108-4203-8C82-64B657951717} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD27B47D-5064-4409-93B6-69D1BA97D44A}
