@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyName>$(CanonicalRootNamespace).Engine.Repositories</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Engine.Repositories</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.Configuration\Engine.Configuration.csproj" />
+    <ProjectReference Include="..\Input.Controller.Hid\Input.Controller.Hid.csproj" />
+    <ProjectReference Include="..\Input.Controller.XInput\Input.Controller.XInput.csproj" />
+  </ItemGroup>
+
+</Project>
