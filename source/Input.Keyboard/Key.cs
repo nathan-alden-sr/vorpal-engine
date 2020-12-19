@@ -7,7 +7,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Keyboard
 {
     /// <summary></summary>
     /// <remarks>Some duplicates are commented out to prevent dictionary key violations.</remarks>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum Key : byte
     {

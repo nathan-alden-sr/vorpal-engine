@@ -29,7 +29,7 @@ namespace NathanAldenSr.VorpalEngine.Logging
         private readonly Serilog.Core.Logger? _logger;
         private State _state;
 
-        /// <summary>Initializes a new instance of the <see cref="Logger" /> type.</summary>
+        /// <summary>Initializes a new instance of the <see cref="Logger" /> class.</summary>
         /// <param name="configuration">A Serilog logger configuration.</param>
         public Logger(LoggerConfiguration configuration)
         {

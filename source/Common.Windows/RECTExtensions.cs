@@ -4,7 +4,7 @@ using TerraFX.Interop;
 namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>Extensions for the <see cref="RECT" /> struct.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class RECTExtensions
     {

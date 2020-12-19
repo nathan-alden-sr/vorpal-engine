@@ -9,7 +9,7 @@ namespace NathanAldenSr.VorpalEngine.Logging
     {
         private readonly NestedContext _context;
 
-        /// <summary>Initializes a new instance of the <see cref="ContextLogger"/> type.</summary>
+        /// <summary>Initializes a new instance of the <see cref="ContextLogger"/> class.</summary>
         /// <param name="context">A nested context.</param>
         public ContextLogger(NestedContext context)
         {
