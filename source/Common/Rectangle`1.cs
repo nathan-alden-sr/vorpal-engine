@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using TerraFX.Interop;
 
@@ -243,57 +242,48 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to the specified value.</summary>
         /// <param name="location">The new location of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to <paramref name="location" />.</returns>
-        [Pure]
         public Rectangle<T> WithLocation(Vector2<T> location) => new(location, Size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to the specified x- and y-dimensions.</summary>
         /// <param name="x">The new x-dimension of the rectangle.</param>
         /// <param name="y">The new y-dimension of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to the specified x- and y-dimensinons.</returns>
-        [Pure]
         public Rectangle<T> WithLocation(T x, T y) => WithLocation(new Vector2<T>(x, y));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to the specified value.</summary>
         /// <param name="size">The new size of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to <paramref name="size" />.</returns>
-        [Pure]
         public Rectangle<T> WithSize(Vector2<T> size) => new(Location, size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to the specified width and height.</summary>
         /// <param name="width">The new width of the rectangle.</param>
         /// <param name="height">The new height of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to the specified width and height.</returns>
-        [Pure]
         public Rectangle<T> WithSize(T width, T height) => WithSize(new Vector2<T>(width, height));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="X" /> set to the specified value.</summary>
         /// <param name="x">The new x-dimension of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="X" /> set to <paramref name="x" />.</returns>
-        [Pure]
         public Rectangle<T> WithX(T x) => new(new Vector2<T>(x, Y), Size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Y" /> set to the specified value.</summary>
         /// <param name="y">The new y-dimension of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Y" /> set to <paramref name="y" />.</returns>
-        [Pure]
         public Rectangle<T> WithY(T y) => new(new Vector2<T>(X, y), Size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Width" /> set to the specified value.</summary>
         /// <param name="width">The new width of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Width" /> set to <paramref name="width" />.</returns>
-        [Pure]
         public Rectangle<T> WithWidth(T width) => new(Location, new Vector2<T>(width, Height));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Height" /> set to the specified value.</summary>
         /// <param name="height">The new height of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Height" /> set to <paramref name="height" />.</returns>
-        [Pure]
         public Rectangle<T> WithHeight(T height) => new(Location, new Vector2<T>(Width, height));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> where the center of the current rectangle is <paramref name="center" />.</summary>
         /// <param name="center">The vector to center on.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> whose center is the same as <paramref name="center" />.</returns>
-        [Pure]
         public Rectangle<T> CenterOn(Vector2<T> center)
         {
             if (typeof(T) == typeof(int))
@@ -323,7 +313,6 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// </summary>
         /// <param name="rectangle">The rectangle to center on.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> whose center is the same as the center of <paramref name="rectangle" />.</returns>
-        [Pure]
         public Rectangle<T> CenterOn(Rectangle<T> rectangle) => CenterOn(rectangle.Center);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> from left/top/right/bottom values.</summary>
