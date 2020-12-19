@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyName>$(CanonicalRootNamespace).Input.Mouse.Legacy</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Input.Mouse.Legacy</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Input.Mouse\Input.Mouse.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+  </ItemGroup>
+
+</Project>
