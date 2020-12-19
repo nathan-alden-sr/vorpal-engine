@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "source\Logging\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Windows", "source\Common.Windows\Common.Windows.csproj", "{F45D0F5B-D168-46A0-A753-BF0F821D9F95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Input.Mouse.RawInput", "source\Input.Mouse.RawInput\Input.Mouse.RawInput.csproj", "{5B278882-3F38-4D5E-8467-4C084B5EC15B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{F45D0F5B-D168-46A0-A753-BF0F821D9F95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F45D0F5B-D168-46A0-A753-BF0F821D9F95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F45D0F5B-D168-46A0-A753-BF0F821D9F95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B278882-3F38-4D5E-8467-4C084B5EC15B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B278882-3F38-4D5E-8467-4C084B5EC15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B278882-3F38-4D5E-8467-4C084B5EC15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B278882-3F38-4D5E-8467-4C084B5EC15B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{B7AEDD1F-591D-4D63-9859-AAC5B40C9EC4} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 		{8843B1A2-9CB8-4637-8259-CEFE462C99C0} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 		{F45D0F5B-D168-46A0-A753-BF0F821D9F95} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
+		{5B278882-3F38-4D5E-8467-4C084B5EC15B} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD27B47D-5064-4409-93B6-69D1BA97D44A}
