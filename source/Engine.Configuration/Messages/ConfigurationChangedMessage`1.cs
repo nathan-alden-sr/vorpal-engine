@@ -7,7 +7,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Configuration.Messages
     public readonly struct ConfigurationChangedMessage<T> : IMessage
         where T : Configuration
     {
-        /// <summary>Initializes a new instance of the <see cref="ConfigurationChangedMessage{TConfiguration}" /> struct.</summary>
+        /// <summary>Initializes a new instance of the <see cref="ConfigurationChangedMessage{T}" /> struct.</summary>
         /// <param name="oldConfiguration">The old configuration.</param>
         /// <param name="newConfiguration">The new configuration.</param>
         /// <param name="counter">A value that uniquely identifies this particular configuration.</param>

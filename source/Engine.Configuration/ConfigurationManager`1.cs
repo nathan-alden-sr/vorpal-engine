@@ -17,7 +17,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Configuration
         private readonly object _lockObject = new();
         private ulong _counter;
 
-        /// <summary>Initializes a new instance of the <see cref="ConfigurationManager{TConfiguration}" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="ConfigurationManager{T}" /> class.</summary>
         /// <param name="configurationFileManager">An <see cref="IConfigurationFileManager" /> implementation.</param>
         /// <param name="gameIdentifier">A game identifier.</param>
         /// <param name="defaultConfigurationFactoryDelegate">A delegate that returns a default configuration when invoked.</param>
