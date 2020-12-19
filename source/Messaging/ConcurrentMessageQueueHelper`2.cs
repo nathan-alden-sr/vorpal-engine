@@ -72,14 +72,14 @@ namespace NathanAldenSr.VorpalEngine.Messaging
         }
 
         /// <summary>Publishes a message.</summary>
-        /// <typeparam name="TMessage">The type of message to publish.</typeparam>
+        /// <typeparam name="T">The type of message to publish.</typeparam>
         /// <returns>This object.</returns>
-        public ConcurrentMessageQueueHelper<TMessageBase, TThread> Publish<TMessage>()
-            where TMessage : TMessageBase, new()
+        public ConcurrentMessageQueueHelper<TMessageBase, TThread> Publish<T>()
+            where T : TMessageBase, new()
         {
             _state.ThrowIfDisposingOrDisposed();
 
-            _concurrentMessageQueue.Publish<TMessage>(_context);
+            _concurrentMessageQueue.Publish<T>(_context);
 
             return this;
         }

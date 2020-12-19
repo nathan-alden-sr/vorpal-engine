@@ -6,14 +6,14 @@ namespace NathanAldenSr.VorpalEngine.Engine.Messaging
     public interface IMessagePublisherHelper
     {
         /// <summary>Publishes a message.</summary>
-        /// <typeparam name="TMessage">The type of message to publish.</typeparam>
+        /// <typeparam name="T">The type of message to publish.</typeparam>
         /// <param name="message">The message to publish.</param>
-        MessageQueueHelper Publish<TMessage>(TMessage message)
-            where TMessage : IMessage;
+        MessageQueueHelper Publish<T>(T message)
+            where T : IMessage;
 
         /// <summary>Publishes a message.</summary>
-        /// <typeparam name="TMessage">The type of message to publish.</typeparam>
-        MessageQueueHelper Publish<TMessage>()
-            where TMessage : IMessage, new();
+        /// <typeparam name="T">The type of message to publish.</typeparam>
+        MessageQueueHelper Publish<T>()
+            where T : IMessage, new();
     }
 }

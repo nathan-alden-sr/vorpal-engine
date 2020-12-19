@@ -15,9 +15,9 @@ using WindowsRender = NathanAldenSr.VorpalEngine.Engine.Configuration.WindowsRen
 namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
 {
     /// <summary>A Windows window that renders the game and receives input messages.</summary>
-    /// <typeparam name="TConfiguration">The type of configuration.</typeparam>
-    public class RenderWindow<TConfiguration> : IRenderWindow
-        where TConfiguration : Configuration.Configuration
+    /// <typeparam name="T">The type of configuration.</typeparam>
+    public class RenderWindow<T> : IRenderWindow
+        where T : Configuration.Configuration
     {
         private readonly Counter _ignoreClientSizeChanges;
         private readonly ContextLogger? _logger;
@@ -60,12 +60,12 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
         public RenderWindow(
             IMessageQueue messageQueue,
             IMonitorProvider monitorProvider,
-            Configuration.IConfigurationManager<TConfiguration> configurationManager,
+            Configuration.IConfigurationManager<T> configurationManager,
             WindowProvider windowProvider,
             Action<Window>? windowConfigurationDelegate = null,
             NestedContext context = default)
         {
-            context = context.Push<RenderWindow<TConfiguration>>();
+            context = context.Push<RenderWindow<T>>();
 
             _messageQueueHelper = messageQueue.ToHelper(context);
             _monitorProvider = monitorProvider;
@@ -74,7 +74,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
 
             // Position and configure the window using configuration
 
-            TConfiguration configuration = configurationManager.GetConfiguration();
+            T configuration = configurationManager.GetConfiguration();
             WindowsRender windowsRender = configuration.Windows().Render();
             Configuration.Vector2<int> resolution =
                 windowsRender.Resolution ??

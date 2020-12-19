@@ -11,12 +11,12 @@ namespace NathanAldenSr.VorpalEngine.Messaging
         where TThread : struct, Enum
     {
         /// <summary>Subscribes to messages.</summary>
-        /// <param name="handlerDelegate">A delegate that will handle messages of type <typeparamref name="TMessage" />.</param>
-        /// <param name="thread">The logical thread that will handle messages of type <typeparamref name="TMessage" />.</param>
+        /// <param name="handlerDelegate">A delegate that will handle messages of type <typeparamref name="T" />.</param>
+        /// <param name="thread">The logical thread that will handle messages of type <typeparamref name="T" />.</param>
         /// <param name="context">The subscriber's nested context.</param>
         /// <returns>A subscription receipt that can be used to unsubscribe later.</returns>
-        ISubscriptionReceipt Subscribe<TMessage>(MessageHandlerDelegate<TMessage> handlerDelegate, TThread thread, NestedContext context = default)
-            where TMessage : TMessageBase;
+        ISubscriptionReceipt Subscribe<T>(MessageHandlerDelegate<T> handlerDelegate, TThread thread, NestedContext context = default)
+            where T : TMessageBase;
 
         /// <summary>Unsubscribes from subscriptions.</summary>
         /// <param name="subscriptionReceipts">A set of subscription receipts.</param>

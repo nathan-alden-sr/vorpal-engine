@@ -36,8 +36,8 @@ namespace NathanAldenSr.VorpalEngine.Engine.Messaging
         }
 
         /// <inheritdoc />
-        public MessageQueueHelper Publish<TMessage>(TMessage message)
-            where TMessage : IMessage
+        public MessageQueueHelper Publish<T>(T message)
+            where T : IMessage
         {
             _state.ThrowIfDisposingOrDisposed();
 
@@ -47,12 +47,12 @@ namespace NathanAldenSr.VorpalEngine.Engine.Messaging
         }
 
         /// <inheritdoc />
-        public MessageQueueHelper Publish<TMessage>()
-            where TMessage : IMessage, new()
+        public MessageQueueHelper Publish<T>()
+            where T : IMessage, new()
         {
             _state.ThrowIfDisposingOrDisposed();
 
-            _concurrentMessageQueueHelper.Publish<TMessage>();
+            _concurrentMessageQueueHelper.Publish<T>();
 
             return this;
         }
@@ -70,11 +70,11 @@ namespace NathanAldenSr.VorpalEngine.Engine.Messaging
         }
 
         /// <summary>Subscribes to a message.</summary>
-        /// <typeparam name="TMessage">The type of message to subscribe to.</typeparam>
+        /// <typeparam name="T">The type of message to subscribe to.</typeparam>
         /// <param name="handlerDelegate">A delegate to invoke when handling messages.</param>
         /// <returns>This object.</returns>
-        public MessageQueueHelper Subscribe<TMessage>(MessageHandlerDelegate<TMessage> handlerDelegate)
-            where TMessage : IMessage
+        public MessageQueueHelper Subscribe<T>(MessageHandlerDelegate<T> handlerDelegate)
+            where T : IMessage
         {
             _state.ThrowIfDisposingOrDisposed();
 

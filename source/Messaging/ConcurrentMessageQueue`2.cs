@@ -43,10 +43,10 @@ namespace NathanAldenSr.VorpalEngine.Messaging
         public event MessageUnsubscribedDelegate? MessageUnsubscribed;
 
         /// <inheritdoc />
-        public void Publish<TMessage>(TMessage message, NestedContext context = default)
-            where TMessage : TMessageBase
+        public void Publish<T>(T message, NestedContext context = default)
+            where T : TMessageBase
         {
-            Type messageType = typeof(TMessage);
+            Type messageType = typeof(T);
             bool hasSubscribers = _subscriptionReceiptsByMessageType.TryGetValue(messageType, out ConcurrentDictionary<Subscription, byte>? subscriptions);
 
             // Notify observers that a message is about to be published
@@ -69,7 +69,7 @@ namespace NathanAldenSr.VorpalEngine.Messaging
                             // Notify observers that a message is being handled
                             MessageHandling?.Invoke(message, subscription.Context);
 
-                            ((MessageHandlerDelegate<TMessage>)subscription.HandlerDelegate)(message);
+                            ((MessageHandlerDelegate<T>)subscription.HandlerDelegate)(message);
 
                             // Notify observers that a message was handled
                             MessageHandled?.Invoke(message, subscription.Context);
@@ -81,10 +81,10 @@ namespace NathanAldenSr.VorpalEngine.Messaging
         }
 
         /// <inheritdoc />
-        public void Publish<TMessage>(NestedContext context = default)
-            where TMessage : TMessageBase, new()
+        public void Publish<T>(NestedContext context = default)
+            where T : TMessageBase, new()
         {
-            Publish(new TMessage(), context);
+            Publish(new T(), context);
         }
 
         /// <inheritdoc />
