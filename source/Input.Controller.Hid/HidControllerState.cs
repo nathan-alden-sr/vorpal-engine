@@ -1,4 +1,4 @@
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     internal struct HidControllerState
     {

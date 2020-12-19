@@ -3,14 +3,10 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <AssemblyName>$(CanonicalRootNamespace).Input.Controllers.Hid</AssemblyName>
-    <RootNamespace>$(CanonicalRootNamespace).Input.Controllers.Hid</RootNamespace>
+    <AssemblyName>$(CanonicalRootNamespace).Input.Controller.Hid</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Input.Controller.Hid</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.19041-beta2-421722498" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Windows\Common.Windows.csproj" />

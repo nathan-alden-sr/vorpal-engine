@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>Defines changes in state between two <see cref="HidControllerState" /> objects.</summary>
     public struct HidControllerStateChanges

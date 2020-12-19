@@ -9,7 +9,7 @@ using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>Manages HID controller input.</summary>
     public class HidControllerManager : IHidControllerManager

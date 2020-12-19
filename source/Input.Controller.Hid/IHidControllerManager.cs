@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TerraFX.Interop;
 
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>Represents the management of HID controller input.</summary>
     public interface IHidControllerManager

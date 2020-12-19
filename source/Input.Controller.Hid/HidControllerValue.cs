@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>The value of A HID value.</summary>
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]

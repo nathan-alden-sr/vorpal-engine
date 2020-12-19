@@ -1,4 +1,4 @@
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>Represents a repository of HID controllers.</summary>
     public interface IHidControllerRepository

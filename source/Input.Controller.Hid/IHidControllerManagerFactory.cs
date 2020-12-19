@@ -1,6 +1,6 @@
 using NathanAldenSr.VorpalEngine.Common;
 
-namespace NathanAldenSr.VorpalEngine.Input.Controllers.Hid
+namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
     /// <summary>A factory for creating <see cref="IHidControllerManager" /> objects.</summary>
     public interface IHidControllerManagerFactory
