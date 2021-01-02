@@ -4,8 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>$(CanonicalRootNamespace).Samples.XInput</AssemblyName>
-    <RootNamespace>$(CanonicalRootNamespace).Samples.XInput</RootNamespace>
+    <AssemblyName>$(CanonicalRootNamespace).Samples.XInputControllerTest</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Samples.XInputControllerTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,11 +4,11 @@ using Moq;
 using NathanAldenSr.VorpalEngine.Input.Controller.XInput;
 using NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers;
 
-namespace NathanAldenSr.VorpalEngine.Samples.XInput
+namespace NathanAldenSr.VorpalEngine.Samples.XInputControllerTest
 {
     internal static class Program
     {
-        private static readonly ConsoleHelper ConsoleHelper = new("XInput Test Application", 130, 25);
+        private static readonly ConsoleHelper ConsoleHelper = new("XInput Controller Test Application", 130, 32);
 
         private static async Task Main()
         {
