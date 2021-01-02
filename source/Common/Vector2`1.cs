@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 
 namespace NathanAldenSr.VorpalEngine.Common
@@ -48,11 +49,13 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <summary>Creates a new <see cref="Vector2{T}" /> instance with <see cref="X" /> set to the specified value.</summary>
         /// <param name="value">The new value of the x-dimension.</param>
         /// <returns>A new <see cref="Vector2{T}" /> instance with <see cref="X" /> set to <paramref name="value" />.</returns>
+        [Pure]
         public Vector2<T> WithX(T value) => new(value, Y);
 
         /// <summary>Creates a new <see cref="Vector2{T}" /> instance with <see cref="Y" /> set to the specified value.</summary>
         /// <param name="value">The new value of the y-dimension.</param>
         /// <returns>A new <see cref="Vector2{T}" /> instance with <see cref="Y" /> set to <paramref name="value" />.</returns>
+        [Pure]
         public Vector2<T> WithY(T value) => new(X, value);
 
         /// <summary>Compares two <see cref="Vector2{T}" /> objects to determine equality.</summary>

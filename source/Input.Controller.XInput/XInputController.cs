@@ -25,12 +25,15 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
             switch (result)
             {
                 case ERROR_SUCCESS:
+                    _stateChanges.IsConnected = true;
                     break;
                 case ERROR_DEVICE_NOT_CONNECTED:
+                    _stateChanges.IsConnected = false;
                     stateChanges = _stateChanges;
                     return false;
                 default:
                     ThrowExternalException(result, nameof(XInputGetState));
+                    _stateChanges.IsConnected = false;
                     stateChanges = _stateChanges;
                     return false;
             }

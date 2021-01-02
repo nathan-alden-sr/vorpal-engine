@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 
@@ -73,6 +74,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         /// <summary>Determines if a button is down.</summary>
         /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
         /// <returns><see langword="true" /> if the button is down; otherwise, <see langword="false" />.</returns>
+        [Pure]
         public bool IsButtonDown(byte buttonIndex)
         {
             ValidateButtonIndex(buttonIndex);
@@ -83,6 +85,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         /// <summary>Determines if a button is up.</summary>
         /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
         /// <returns><see langword="true" /> if the button is up; otherwise, <see langword="false" />.</returns>
+        [Pure]
         public bool IsButtonUp(byte buttonIndex)
         {
             ValidateButtonIndex(buttonIndex);
@@ -93,6 +96,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         /// <summary>Determines if a button was pressed.</summary>
         /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
         /// <returns><see langword="true" /> if the button was pressed; otherwise, <see langword="false" />.</returns>
+        [Pure]
         public bool WasButtonPressed(byte buttonIndex)
         {
             ValidateButtonIndex(buttonIndex);
@@ -103,6 +107,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         /// <summary>Determines if a button was released.</summary>
         /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
         /// <returns><see langword="true" /> if the button was released; otherwise, <see langword="false" />.</returns>
+        [Pure]
         public bool WasButtonReleased(byte buttonIndex)
         {
             ValidateButtonIndex(buttonIndex);

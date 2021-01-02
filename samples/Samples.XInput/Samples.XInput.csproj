@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>$(CanonicalRootNamespace).Samples.XInput</AssemblyName>
+    <RootNamespace>$(CanonicalRootNamespace).Samples.XInput</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.15.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\Input.Controller.XInput\Input.Controller.XInput.csproj" />
+    <ProjectReference Include="..\Samples.ConsoleHelpers\Samples.ConsoleHelpers.csproj" />
+  </ItemGroup>
+
+</Project>

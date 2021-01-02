@@ -11,6 +11,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
         public XInputControllerStateChanges(byte index)
         {
             Index = index;
+            IsConnected = false;
             DownButtonStates = 0;
             PressedButtonStates = 0;
             ReleasedButtonStates = 0;
@@ -24,6 +25,9 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
 
         /// <summary>Gets the index of the controller.</summary>
         public byte Index { get; }
+
+        /// <summary>Gets a value indicating if the controller is connected.</summary>
+        public bool IsConnected { get; internal set; }
 
         internal ushort DownButtonStates { get; set; }
         internal ushort PressedButtonStates { get; set; }
