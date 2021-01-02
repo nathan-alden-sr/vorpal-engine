@@ -7,7 +7,7 @@ namespace NathanAldenSr.VorpalEngine.Configuration.Paths
     {
         /// <summary>Gets paths for a particular identifier.</summary>
         /// <param name="identifier">An identifier.</param>
-        /// <returns>Returns an interface that represents paths for the specified identifier.</returns>
+        /// <returns>An interface that represents paths for the specified identifier.</returns>
         IIdentifierPaths GetIdentifierPaths(Identifier identifier);
     }
 }

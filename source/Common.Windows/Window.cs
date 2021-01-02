@@ -427,7 +427,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         }
 
         /// <summary>Gets the monitor that <see cref="Handle" /> is on, defaulting to the nearest monitor.</summary>
-        /// <returns>Returns the monitor that <see cref="Handle" /> is on, defaulting to the nearest monitor.</returns>
+        /// <returns>The monitor that <see cref="Handle" /> is on, defaulting to the nearest monitor.</returns>
         public Monitor GetMonitor() => Monitor.From(Handle);
 
         /// <summary>Sets the specified type of bounds of the window.</summary>
@@ -708,7 +708,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         /// <param name="message">The window message being processed.</param>
         /// <param name="wParam">A <c>WPARAM</c> value.</param>
         /// <param name="lParam">An <c>LPARAM</c> value.</param>
-        /// <returns>Returns the message processing result.</returns>
+        /// <returns>The message processing result.</returns>
         internal nint HandleWindowMessage(uint message, nuint wParam, nint lParam)
         {
             ThrowIfCurrentThreadIsNotSuppliedThread(_ownerThread);

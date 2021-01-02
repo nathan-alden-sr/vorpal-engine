@@ -16,7 +16,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         ///     The serial number of the HID controller. A <see langword="null" /> value means the serial number is
         ///     unknown.
         /// </param>
-        /// <returns>Returns a tuple containing the index of the HID controller and values indicating whether the controller is enabled.</returns>
+        /// <returns>A tuple containing the index of the HID controller and values indicating whether the controller is enabled.</returns>
         (uint index, bool? enabled, bool enabledDefault) AddHidController(string? manufacturer, string? productName, string? serialNumber);
     }
 }

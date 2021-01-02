@@ -72,7 +72,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         /// <param name="beforeCreationDelegate">A delegate that can be used to configure the returned <see cref="Window" /> object.</param>
         /// <param name="beforeMessageProcessingDelegate">A delegate invoked before a message is processed.</param>
         /// <param name="afterMessageProcessingDelegate">A delegate invoked after a message is processed.</param>
-        /// <returns>Returns the new <see cref="Window" />.</returns>
+        /// <returns>The new <see cref="Window" />.</returns>
         public Window CreateWindow(
             Action<Window>? beforeCreationDelegate = null,
             WindowMessageHandlerDelegate? beforeMessageProcessingDelegate = null,

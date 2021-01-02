@@ -21,7 +21,6 @@ namespace NathanAldenSr.VorpalEngine.Common
 
         /// <summary>Initializes a new instance of the <see cref="ValueLazy{T}" /> struct.</summary>
         /// <param name="valueFactoryDelegate">A delegate that creates the value when invoked.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="valueFactoryDelegate" /> is <see langword="null" />.</exception>
         public ValueLazy(Func<T> valueFactoryDelegate)
         {
             Unsafe.SkipInit(out this);
@@ -89,8 +88,6 @@ namespace NathanAldenSr.VorpalEngine.Common
 
         /// <summary>Resets the instance so the value can be recreated.</summary>
         /// <param name="valueFactoryDelegate">A delegate that creates the value when invoked.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="valueFactoryDelegate" /> is <see langword="null" />.</exception>
-        /// <exception cref="ObjectDisposedException">The lazy value has been disposed.</exception>
         public void Reset(Func<T> valueFactoryDelegate)
         {
             _state.ThrowIfDisposingOrDisposed();

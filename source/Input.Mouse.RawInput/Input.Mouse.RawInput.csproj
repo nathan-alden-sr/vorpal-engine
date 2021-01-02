@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
 </Project>
