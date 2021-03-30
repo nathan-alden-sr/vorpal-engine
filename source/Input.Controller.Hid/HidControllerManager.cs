@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NathanAldenSr.VorpalEngine.Common;
 using NathanAldenSr.VorpalEngine.Logging;
 using TerraFX.Interop;
-using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
 using static TerraFX.Interop.Windows;
 
@@ -44,11 +44,11 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
                  * that configured HID controllers are still connected.
                  */
 
-                RemoveDisconnectedHidControllers();
+                RemoveDisconnectedControllers();
 
                 IntPtr? fileHandle = OpenRawInputDevice(deviceHandle);
 
-                controller = ConfigureHidController(deviceHandle, fileHandle);
+                controller = ConfigureController(deviceHandle, fileHandle);
             }
 
             controller?.UpdateState(rawInput);
@@ -58,15 +58,18 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         public IReadOnlyCollection<uint> StateChangeIndexes => _hidControllersByIndex.Keys;
 
         /// <inheritdoc />
-        public bool TryCalculateStateChanges(uint index, out HidControllerStateChanges stateChanges)
+        public bool TryGetState(uint index, [NotNullWhen(true)] out IHidController? controller, out HidControllerState state)
         {
-            if (_hidControllersByIndex.TryGetValue(index, out HidController? controller))
+            if (_hidControllersByIndex.TryGetValue(index, out HidController? hidController))
             {
-                return controller.TryCalculateStateChanges(out stateChanges);
+                controller = hidController;
+                
+                return hidController.TryGetState(out state);
             }
 
-            ThrowArgumentOutOfRangeException(nameof(index), index);
-            stateChanges = default;
+            controller = null;
+            state = default;
+            
             return false;
         }
 
@@ -79,7 +82,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
             }
         }
 
-        private unsafe void RemoveDisconnectedHidControllers()
+        private unsafe void RemoveDisconnectedControllers()
         {
             // Retrieve the current list of HID devices
 
@@ -109,7 +112,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
             foreach (HidController controller in
                 _hidControllersByHandle
                     .Values
-                    .Where(a => a is object && !validDeviceHandles.Contains(a.DeviceHandle))
+                    .Where(a => a is not null && !validDeviceHandles.Contains(a.DeviceHandle))
                     .Select(a => a!)
                     .ToImmutableArray())
             {
@@ -153,7 +156,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
             return null;
         }
 
-        private unsafe HidController? ConfigureHidController(IntPtr deviceHandle, IntPtr? fileHandle)
+        private unsafe HidController? ConfigureController(IntPtr deviceHandle, IntPtr? fileHandle)
         {
             HidController? controller = null;
 

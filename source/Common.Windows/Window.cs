@@ -280,7 +280,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
                 _icon = value;
 
-                if (_smallIcon is object)
+                if (_smallIcon is not null)
                 {
                     _smallIcon.Dispose();
                     _smallIcon = null;
@@ -717,7 +717,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
             _beforeMessageHandledDelegate?.Invoke(Handle, message, wParam, lParam, ref result);
 
-            if (result is object)
+            if (result is not null)
             {
                 return result.Value;
             }
@@ -973,10 +973,10 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
                         (ushort*)_windowProvider.ClassAtom,
                         (ushort*)pTitle,
                         _windowStyles,
-                        bounds is object ? bounds.Value.X : CW_USEDEFAULT,
-                        bounds is object ? bounds.Value.Y : CW_USEDEFAULT,
-                        bounds is object ? bounds.Value.Width : CW_USEDEFAULT,
-                        bounds is object ? bounds.Value.Height : CW_USEDEFAULT,
+                        bounds?.X ?? CW_USEDEFAULT,
+                        bounds?.Y ?? CW_USEDEFAULT,
+                        bounds?.Width ?? CW_USEDEFAULT,
+                        bounds?.Height ?? CW_USEDEFAULT,
                         IntPtr.Zero,
                         IntPtr.Zero,
                         ModuleHandle,
@@ -992,7 +992,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         {
             RECT rect;
 
-            ThrowExternalExceptionIfFalse(
+            ThrowExternalExceptionIfFALSE(
                 AdjustWindowRectEx(&rect, _windowStyles, FALSE, _windowExStyles),
                 nameof(AdjustWindowRectEx));
 
@@ -1041,7 +1041,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
                     break;
             }
 
-            ThrowExternalExceptionIfFalse(
+            ThrowExternalExceptionIfFALSE(
                 SetWindowPos(Handle, IntPtr.Zero, adjustedBounds.X, adjustedBounds.Y, adjustedBounds.Width, adjustedBounds.Height, 0),
                 nameof(SetWindowPos));
         }
@@ -1061,7 +1061,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
             Icon? icon = _iconVisible ? _icon : null;
 
-            if (icon is object)
+            if (icon is not null)
             {
                 if (_smallIcon is null)
                 {
@@ -1075,7 +1075,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
                     }
                 }
 
-                if (_smallIcon is object)
+                if (_smallIcon is not null)
                 {
                     SendMessageW(windowHandle, WM_SETICON, ICON_SMALL, _smallIcon.Handle);
                 }
@@ -1094,7 +1094,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
             uint windowStyles = 0;
             uint windowExStyles = 0;
 
-            if (windowHandle is object)
+            if (windowHandle is not null)
             {
                 // Remove all styles set by the code below
                 // GetWindowLongPtrW can return 0 if the style is actually 0, so don't check for errors
@@ -1197,7 +1197,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         }
 
         private HWND? ResolveWindowHandle(HWND? windowHandle) =>
-            (windowHandle is object && windowHandle.Value != HWND.NULL ? windowHandle.Value : (HWND?)null) ??
+            (windowHandle is not null && windowHandle.Value != HWND.NULL ? windowHandle.Value : (HWND?)null) ??
             (_windowHandle.IsCreated ? _windowHandle.Value : (HWND?)null);
 
         private void DisposeWindowHandle()
@@ -1208,7 +1208,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
             if (_windowHandle.IsCreated)
             {
-                ThrowExternalExceptionIfFalse(
+                ThrowExternalExceptionIfFALSE(
                     DestroyWindow(Handle),
                     nameof(DestroyWindow));
             }

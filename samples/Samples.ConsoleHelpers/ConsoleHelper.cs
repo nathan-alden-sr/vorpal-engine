@@ -10,14 +10,14 @@ namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private readonly Queue<ConsoleContent> _contents = new();
-        private readonly int _height;
+        private readonly int _bufferHeight;
         private readonly StringBuilder _stringBuilder = new();
         private readonly int _width;
 
-        public ConsoleHelper(string title, int width, int height)
+        public ConsoleHelper(string title, int width, int windowHeight, int bufferHeight)
         {
             _width = width;
-            _height = height;
+            _bufferHeight = bufferHeight;
 
             IntPtr standardOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             uint dwMode;
@@ -30,8 +30,8 @@ namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
 
             Console.Title = title;
             Console.CursorVisible = false;
-            Console.SetWindowSize(width, height);
-            Console.SetBufferSize(width, height);
+            Console.SetWindowSize(width, windowHeight);
+            Console.SetBufferSize(width, bufferHeight);
 
             Console.CancelKeyPress += (_, _) => _cancellationTokenSource.Cancel();
         }
@@ -47,7 +47,7 @@ namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
 
         public void WriteLine(ConsoleContent content)
         {
-            if (_contents.Count == _height)
+            if (_contents.Count == _bufferHeight)
             {
                 _contents.Dequeue();
             }
@@ -57,17 +57,11 @@ namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
 
         public void Render()
         {
-            int lines = _height;
-
             _stringBuilder.Clear();
 
             void Append(string text = "")
             {
                 _stringBuilder.Append(text);
-                if (--lines > 0)
-                {
-                    _stringBuilder.AppendLine();
-                }
             }
 
             Console.SetCursorPosition(0, 0);
@@ -78,14 +72,8 @@ namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
                 Append(content.Copy().PadRight(_width).Render());
             }
 
-            // Fill the remaining lines with empty space
-            while (lines > 0)
-            {
-                Append(new string(' ', _width));
-            }
-
             Console.SetCursorPosition(0, 0);
-            Console.Write(_stringBuilder.ToString());
+            Console.Out.Write(_stringBuilder);
         }
     }
 }

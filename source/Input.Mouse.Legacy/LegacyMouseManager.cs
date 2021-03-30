@@ -13,7 +13,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Mouse.Legacy
         {
             var newLocation = new Vector2<int>(LOWORD((uint)lParam), HIWORD((uint)lParam));
 
-            if (_oldLocation is object)
+            if (_oldLocation is not null)
             {
                 RelativeLocationXDelta += newLocation.X - _oldLocation.Value.X;
                 RelativeLocationYDelta += newLocation.Y - _oldLocation.Value.Y;

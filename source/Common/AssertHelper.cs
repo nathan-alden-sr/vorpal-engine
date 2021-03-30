@@ -58,7 +58,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         [Conditional("DEBUG")]
         public static void AssertNotNull<T>([NotNull] T? @object, string? objectName = null)
             where T : class =>
-            Assert(@object is object, $"{(objectName is object ? objectName : "An object")} is null.");
+            Assert(@object is not null, $"{objectName ?? "An object"} is null.");
 
         /// <summary>Asserts that <paramref name="object" /> is not <see langword="null" />.</summary>
         /// <typeparam name="T">The type of the object.</typeparam>
@@ -67,7 +67,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         [Conditional("DEBUG")]
         public static void AssertNotNull<T>([NotNull] T? @object, string? objectName = null)
             where T : struct =>
-            Assert(@object is object, $"{(objectName is object ? objectName : "An object")} is null.");
+            Assert(@object is not null, $"{objectName ?? "An object"} is null.");
 
         /// <summary>Asserts that <paramref name="pointer" /> is not <see langword="null" />.</summary>
         /// <typeparam name="T">The type of the pointer.</typeparam>
@@ -76,6 +76,6 @@ namespace NathanAldenSr.VorpalEngine.Common
         [Conditional("DEBUG")]
         public static unsafe void AssertNotNull<T>(T* pointer, string? pointerName = null)
             where T : unmanaged =>
-            Assert(pointer != null, $"{(pointerName is object ? pointerName : "A pointer")} is null.");
+            Assert(pointer != null, $"{pointerName ?? "A pointer"} is null.");
     }
 }

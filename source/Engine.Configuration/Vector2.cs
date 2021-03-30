@@ -28,14 +28,14 @@ namespace NathanAldenSr.VorpalEngine.Engine.Configuration
         /// <summary>Implicitly converts a <see cref="Vector2{Y}" /> to a <see cref="VorpalEngine.Common.Vector2{T}" />.</summary>
         /// <param name="value">The <see cref="Vector2{Y}" /> to convert.</param>
         public static implicit operator VorpalEngine.Common.Vector2<T>?(Vector2<T>? value) =>
-            value is object
+            value is not null
                 ? new VorpalEngine.Common.Vector2<T>(value.Value.X, value.Value.Y)
                 : (VorpalEngine.Common.Vector2<T>?)null;
 
         /// <summary>Implicitly converts a <see cref="VorpalEngine.Common.Vector2{T}" /> to a <see cref="Vector2{Y}" />.</summary>
         /// <param name="value">The <see cref="VorpalEngine.Common.Vector2{T}" /> to convert.</param>
         public static implicit operator Vector2<T>?(VorpalEngine.Common.Vector2<T>? value) =>
-            value is object
+            value is not null
                 ? new Vector2<T>
                   {
                       X = value.Value.X,

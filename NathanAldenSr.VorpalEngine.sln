@@ -70,6 +70,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ConsoleHelpers", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.XInputControllerTest", "samples\Samples.XInputControllerTest\Samples.XInputControllerTest.csproj", "{DEA19625-A815-450F-BE3A-08147E532FC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.HidControllerTest", "samples\Samples.HidControllerTest\Samples.HidControllerTest.csproj", "{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +162,10 @@ Global
 		{DEA19625-A815-450F-BE3A-08147E532FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA19625-A815-450F-BE3A-08147E532FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEA19625-A815-450F-BE3A-08147E532FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +192,7 @@ Global
 		{FAFE409E-391C-40E5-BF1B-0AA4131E881B} = {664F9835-7B90-405B-A5C4-A8F6DB34D152}
 		{406C5C7C-61E2-45F4-ABD9-8B5EB01DD1A7} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
 		{DEA19625-A815-450F-BE3A-08147E532FC1} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
+		{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD27B47D-5064-4409-93B6-69D1BA97D44A}

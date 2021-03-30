@@ -41,7 +41,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RestoreSources>
       https://api.nuget.org/v3/index.json;
-      https://pkgs.dev.azure.com/tagoo/terrafx/_packaging/terrafx/nuget/v3/index.json
+      https://pkgs.terrafx.dev/index.json
     </RestoreSources>
   </PropertyGroup>
 

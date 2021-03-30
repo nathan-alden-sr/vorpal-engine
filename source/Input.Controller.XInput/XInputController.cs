@@ -7,8 +7,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
     internal class XInputController
     {
         private XINPUT_STATE? _oldState;
-        private uint? _previousPacketNumber;
-        private XInputControllerStateChanges _stateChanges;
+        private XInputControllerState _state;
 
         public XInputController(byte index)
         {
@@ -17,7 +16,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
 
         public byte Index { get; }
 
-        public unsafe bool TryCalculateStateChanges(out XInputControllerStateChanges stateChanges)
+        public unsafe bool TryGetState(out XInputControllerState state)
         {
             XINPUT_STATE newState;
             uint result = XInputGetState(Index, &newState);
@@ -25,44 +24,49 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
             switch (result)
             {
                 case ERROR_SUCCESS:
-                    _stateChanges.IsConnected = true;
                     break;
                 case ERROR_DEVICE_NOT_CONNECTED:
-                    _stateChanges.IsConnected = false;
-                    stateChanges = _stateChanges;
+                    state = default;
+
                     return false;
                 default:
                     ThrowExternalException(result, nameof(XInputGetState));
-                    _stateChanges.IsConnected = false;
-                    stateChanges = _stateChanges;
+                    state = default;
+                    
                     return false;
             }
 
-            // Calculations can be skipped if there were no changes since the last time CalculateStateChanges was called
-            if (_oldState is null || _previousPacketNumber == newState.dwPacketNumber)
+            // Recalculate fields if there were updates since the last state retrieval
+            if (_oldState is not null && newState.dwPacketNumber > _oldState.Value.dwPacketNumber)
+            {
+                _state.UpdateCounter++;
+                _state.HasChanged = true;
+                _state.DownButtonStates = newState.Gamepad.wButtons;
+                _state.PressedButtonStates = (ushort)(~_oldState.Value.Gamepad.wButtons & newState.Gamepad.wButtons);
+                _state.ReleasedButtonStates = (ushort)(~_oldState.Value.Gamepad.wButtons & newState.Gamepad.wButtons);
+                _state.LeftThumbXAxis = (_oldState.Value.Gamepad.sThumbLX, newState.Gamepad.sThumbLX);
+                _state.LeftThumbYAxis = (_oldState.Value.Gamepad.sThumbLY, newState.Gamepad.sThumbLY);
+                _state.RightThumbXAxis = (_oldState.Value.Gamepad.sThumbRX, newState.Gamepad.sThumbRX);
+                _state.RightThumbYAxis = (_oldState.Value.Gamepad.sThumbRY, newState.Gamepad.sThumbRY);
+                _state.LeftTrigger = (_oldState.Value.Gamepad.bLeftTrigger, newState.Gamepad.bLeftTrigger);
+                _state.RightTrigger = (_oldState.Value.Gamepad.bRightTrigger, newState.Gamepad.bRightTrigger);
+            }
+            // Default state values are unreliable, so fail if the state has never been updated
+            else if (_oldState is null)
             {
                 _oldState = newState;
-                stateChanges = _stateChanges;
+                state = default;
+
                 return false;
             }
+            // The state has not changed since the last state retrieval
+            else
+            {
+                _oldState = newState;
+                _state.HasChanged = false;
+            }
 
-            _previousPacketNumber = newState.dwPacketNumber;
-
-            _stateChanges.DownButtonStates = newState.Gamepad.wButtons;
-            _stateChanges.PressedButtonStates = (ushort)(~_oldState.Value.Gamepad.wButtons & newState.Gamepad.wButtons);
-            _stateChanges.ReleasedButtonStates = (ushort)(~_oldState.Value.Gamepad.wButtons & newState.Gamepad.wButtons);
-            _stateChanges.LeftThumbXAxis = (_oldState.Value.Gamepad.sThumbLX, newState.Gamepad.sThumbLX);
-            _stateChanges.LeftThumbYAxis = (_oldState.Value.Gamepad.sThumbLY, newState.Gamepad.sThumbLY);
-            _stateChanges.RightThumbXAxis = (_oldState.Value.Gamepad.sThumbRX, newState.Gamepad.sThumbRX);
-            _stateChanges.RightThumbYAxis = (_oldState.Value.Gamepad.sThumbRY, newState.Gamepad.sThumbRY);
-            _stateChanges.LeftTrigger = (_oldState.Value.Gamepad.bLeftTrigger, newState.Gamepad.bLeftTrigger);
-            _stateChanges.RightTrigger = (_oldState.Value.Gamepad.bRightTrigger, newState.Gamepad.bRightTrigger);
-
-            // The new state becomes the old state
-
-            _oldState = newState;
-
-            stateChanges = _stateChanges;
+            state = _state;
 
             return true;
         }

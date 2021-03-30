@@ -25,7 +25,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
                     }
                 };
 
-            ThrowExternalExceptionIfFalse(
+            ThrowExternalExceptionIfFALSE(
                 GetMonitorInfoW(monitorHandle, (MONITORINFO*)&monitorInfo),
                 nameof(GetMonitorInfoW));
 

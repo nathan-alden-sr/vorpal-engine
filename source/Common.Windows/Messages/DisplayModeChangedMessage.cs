@@ -20,7 +20,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
 
         /// <inheritdoc />
         public string Description =>
-            OldDisplayMode is object
+            OldDisplayMode is not null
                 ? $"Display mode changed from {OldDisplayMode.Value} to {NewDisplayMode}"
                 : $"Display mode changed to {NewDisplayMode}";
     }

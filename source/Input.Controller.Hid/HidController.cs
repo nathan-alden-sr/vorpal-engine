@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 using TerraFX.Interop;
 using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 using static NathanAldenSr.VorpalEngine.Common.Windows.ExceptionHelper;
@@ -10,12 +9,11 @@ using static TerraFX.Interop.Windows;
 
 namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
-    internal class HidController
+    internal class HidController : IHidController
     {
         private const int MaximumButtonCount = 32;
         private HidControllerState _newState;
         private HidControllerState _oldState;
-        private HidControllerStateChanges _stateChanges;
 
         public HidController(
             IntPtr deviceHandle,
@@ -28,7 +26,6 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
             ushort minimumButtonNumber,
             ushort maximumButtonNumber)
         {
-            _stateChanges = new HidControllerStateChanges(index);
             DeviceHandle = deviceHandle;
             Index = index;
             ButtonCapabilities = buttonCapabilities;
@@ -39,6 +36,8 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
             ButtonCount = (byte)(maximumButtonNumber - minimumButtonNumber + 1);
             ButtonMask = (1u << ButtonCount) - 1;
             ValueCount = (byte)valueCapabilities.Length;
+            _oldState = new HidControllerState(index);
+            _newState = new HidControllerState(index);
 
             var buttonIndexesByButtonNumber = new Dictionary<ushort, byte>();
             var buttonNumbersByButtonIndex = new Dictionary<byte, ushort>();
@@ -61,17 +60,17 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
         }
 
         public IntPtr DeviceHandle { get; }
-        public uint Index { get; }
         public HIDP_BUTTON_CAPS ButtonCapabilities { get; }
         public IReadOnlyList<HIDP_VALUE_CAPS> ValueCapabilities { get; }
+        public uint ButtonMask { get; }
+        public IReadOnlyDictionary<ushort, byte> ButtonIndexesByButtonNumber { get; }
+        public IReadOnlyDictionary<byte, ushort> ButtonNumbersByButtonIndex { get; }
+        public uint Index { get; }
         public string? Manufacturer { get; }
         public string? ProductName { get; }
         public string? SerialNumber { get; }
         public byte ButtonCount { get; }
-        public uint ButtonMask { get; }
         public byte ValueCount { get; }
-        public IReadOnlyDictionary<ushort, byte> ButtonIndexesByButtonNumber { get; }
-        public IReadOnlyDictionary<byte, ushort> ButtonNumbersByButtonIndex { get; }
 
         public unsafe void UpdateState(RAWINPUT* rawInput)
         {
@@ -114,32 +113,19 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
                 a => a != HIDP_STATUS_SUCCESS,
                 nameof(HidP_GetUsages));
 
-            _newState.ButtonStates = 0;
+            _newState.DownButtonStates = 0;
 
             for (var i = 0; i < usageCount; i++)
             {
-                _newState.ButtonStates |= (uint)(1 << (pUsages[i] - ButtonCapabilities.Anonymous.Range.UsageMin));
+                _newState.DownButtonStates |= (uint)(1 << (pUsages[i] - ButtonCapabilities.Anonymous.Range.UsageMin));
             }
-
-            _newState.HatSwitch.IsValid = false;
-            _newState.DirectionalPadUp.IsValid = false;
-            _newState.DirectionalPadDown.IsValid = false;
-            _newState.DirectionalPadLeft.IsValid = false;
-            _newState.DirectionalPadRight.IsValid = false;
-            _newState.XAxis.IsValid = false;
-            _newState.YAxis.IsValid = false;
-            _newState.ZAxis.IsValid = false;
-            _newState.XAxisRotation.IsValid = false;
-            _newState.YAxisRotation.IsValid = false;
-            _newState.ZAxisRotation.IsValid = false;
 
             // Get value states
 
             for (var i = 0; i < ValueCount; i++)
             {
-                uint value;
-
                 HIDP_VALUE_CAPS valueCapability = ValueCapabilities[i];
+                uint value;
 
                 ThrowExternalExceptionIf(
                     HidP_GetUsageValue(
@@ -154,98 +140,90 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
                     a => a != HIDP_STATUS_SUCCESS,
                     nameof(HidP_GetUsageValue));
 
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                void SetStateValue(ref HidControllerStateValue stateValueField, uint newValue)
-                {
-                    stateValueField =
-                        new HidControllerStateValue(
-                            valueCapability.LogicalMin,
-                            valueCapability.LogicalMax,
-                            // It's not clear what to do for relative values if there is no previous value, so assume adding to zero is okay
-                            unchecked((int)(valueCapability.IsAbsolute == TRUE ? newValue : stateValueField.Value + newValue)));
-                }
+                static HidControllerStateValue CalculateState(in HIDP_VALUE_CAPS valueCapability, uint value, in HidControllerStateValue stateValue) =>
+                    new(
+                        // Handles so-called "null" HID values
+                        value >= valueCapability.LogicalMin && value <= valueCapability.LogicalMax,
+                        valueCapability.LogicalMin,
+                        valueCapability.LogicalMax,
+                        // It's not clear what to do for relative values if there is no previous value, so assume adding to zero is okay
+                        (int)(valueCapability.IsAbsolute == TRUE ? value : stateValue.Value + value));
 
                 switch (valueCapability.Anonymous.Range.UsageMin)
                 {
                     case HID_USAGE_GENERIC_HATSWITCH:
-                        SetStateValue(ref _newState.HatSwitch, value);
+                        _newState.HatSwitchStateValue = CalculateState(in valueCapability, value, in _newState.HatSwitchStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_UP:
-                        SetStateValue(ref _newState.DirectionalPadUp, value);
+                        _newState.DirectionalPadUpStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadUpStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_DOWN:
-                        SetStateValue(ref _newState.DirectionalPadDown, value);
+                        _newState.DirectionalPadDownStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadDownStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_LEFT:
-                        SetStateValue(ref _newState.DirectionalPadLeft, value);
+                        _newState.DirectionalPadLeftStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadLeftStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_RIGHT:
-                        SetStateValue(ref _newState.DirectionalPadRight, value);
+                        _newState.DirectionalPadRightStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadRightStateValue);
                         break;
                     case HID_USAGE_GENERIC_X:
-                        SetStateValue(ref _newState.XAxis, value);
+                        _newState.XAxisStateValue = CalculateState(in valueCapability, value, in _newState.XAxisStateValue);
                         break;
                     case HID_USAGE_GENERIC_Y:
-                        SetStateValue(ref _newState.YAxis, value);
+                        _newState.YAxisStateValue = CalculateState(in valueCapability, value, in _newState.YAxisStateValue);
                         break;
                     case HID_USAGE_GENERIC_Z:
-                        SetStateValue(ref _newState.ZAxis, value);
+                        _newState.ZAxisStateValue = CalculateState(in valueCapability, value, in _newState.ZAxisStateValue);
                         break;
                     case HID_USAGE_GENERIC_RX:
-                        SetStateValue(ref _newState.XAxisRotation, value);
+                        _newState.XAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.XAxisRotationStateValue);
                         break;
                     case HID_USAGE_GENERIC_RY:
-                        SetStateValue(ref _newState.YAxisRotation, value);
+                        _newState.YAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.YAxisRotationStateValue);
                         break;
                     case HID_USAGE_GENERIC_RZ:
-                        SetStateValue(ref _newState.ZAxisRotation, value);
+                        _newState.ZAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.ZAxisRotationStateValue);
                         break;
                 }
             }
 
-            _newState.IsValid = true;
+            _newState.UpdateCounter++;
+            _newState.HasChanged = true;
         }
 
-        public bool TryCalculateStateChanges(out HidControllerStateChanges stateChanges)
+        public bool TryGetState(out HidControllerState state)
         {
-            bool isValid = _oldState.IsValid && _newState.IsValid;
-
-            if (isValid)
+            // Default state values are unreliable, so fail if the state has never been updated
+            if (_newState.UpdateCounter == 0)
             {
-                static (HidControllerValue oldValue, HidControllerValue newValue) GetHidControllerValues(
-                    in HidControllerStateValue oldStateValue,
-                    in HidControllerStateValue newStateValue) =>
-                    (new HidControllerValue(oldStateValue.LogicalMinimum, oldStateValue.LogicalMaximum, oldStateValue.Value),
-                     new HidControllerValue(newStateValue.LogicalMinimum, newStateValue.LogicalMaximum, newStateValue.Value));
+                state = default;
 
-                // Calculate state changes
-
-                _stateChanges.DownButtonStates = _newState.ButtonStates;
-                _stateChanges.PressedButtonStates = ~_oldState.ButtonStates & _newState.ButtonStates;
-                _stateChanges.ReleasedButtonStates = _oldState.ButtonStates & ~_newState.ButtonStates & ButtonMask;
-                _stateChanges.HatSwitch = GetHidControllerValues(in _oldState.HatSwitch, in _newState.HatSwitch);
-                _stateChanges.DirectionalPadUp = GetHidControllerValues(in _oldState.DirectionalPadUp, in _newState.DirectionalPadUp);
-                _stateChanges.DirectionalPadDown = GetHidControllerValues(in _oldState.DirectionalPadDown, in _newState.DirectionalPadDown);
-                _stateChanges.DirectionalPadLeft = GetHidControllerValues(in _oldState.DirectionalPadLeft, in _newState.DirectionalPadLeft);
-                _stateChanges.DirectionalPadRight = GetHidControllerValues(in _oldState.DirectionalPadRight, in _newState.DirectionalPadRight);
-                _stateChanges.XAxis = GetHidControllerValues(in _oldState.XAxis, in _newState.XAxis);
-                _stateChanges.YAxis = GetHidControllerValues(in _oldState.YAxis, in _newState.YAxis);
-                _stateChanges.ZAxis = GetHidControllerValues(in _oldState.ZAxis, in _newState.ZAxis);
-                _stateChanges.XAxisRotation = GetHidControllerValues(in _oldState.XAxisRotation, in _newState.XAxisRotation);
-                _stateChanges.YAxisRotation = GetHidControllerValues(in _oldState.YAxisRotation, in _newState.YAxisRotation);
-                _stateChanges.ZAxisRotation = GetHidControllerValues(in _oldState.ZAxisRotation, in _newState.ZAxisRotation);
-            }
-            if (_newState.IsValid)
-            {
-                // The new state becomes the old state and the new state is reset
-
-                _oldState = _newState;
-                _newState.Reset();
+                return false;
             }
 
-            stateChanges = isValid ? _stateChanges : default;
+            // Recalculate fields if there were updates since the last state retrieval
+            if (_newState.UpdateCounter > _oldState.UpdateCounter)
+            {
+                _newState.PressedButtonStates = ~_oldState.PressedButtonStates & _newState.PressedButtonStates;
+                _newState.ReleasedButtonStates = _oldState.ReleasedButtonStates & ~_newState.ReleasedButtonStates & ButtonMask;
+                _newState.HatSwitch = (_oldState.HatSwitchStateValue, _newState.HatSwitchStateValue);
+                _newState.DirectionalPadUp = (_oldState.DirectionalPadUpStateValue, _newState.DirectionalPadUpStateValue);
+                _newState.DirectionalPadDown = (_oldState.DirectionalPadDownStateValue, _newState.DirectionalPadDownStateValue);
+                _newState.DirectionalPadLeft = (_oldState.DirectionalPadLeftStateValue, _newState.DirectionalPadLeftStateValue);
+                _newState.DirectionalPadRight = (_oldState.DirectionalPadRightStateValue, _newState.DirectionalPadRightStateValue);
+                _newState.XAxis = (_oldState.XAxisStateValue, _newState.XAxisStateValue);
+                _newState.YAxis = (_oldState.YAxisStateValue, _newState.YAxisStateValue);
+                _newState.ZAxis = (_oldState.ZAxisStateValue, _newState.ZAxisStateValue);
+                _newState.XAxisRotation = (_oldState.XAxisRotationStateValue, _newState.XAxisRotationStateValue);
+                _newState.YAxisRotation = (_oldState.YAxisRotationStateValue, _newState.YAxisRotationStateValue);
+                _newState.ZAxisRotation = (_oldState.ZAxisRotationStateValue, _newState.ZAxisRotationStateValue);
+            }
 
-            return isValid;
+            _newState.HasChanged = _oldState.UpdateCounter != _newState.UpdateCounter;
+            _oldState = _newState;
+            state = _newState;
+
+            return true;
         }
     }
 }

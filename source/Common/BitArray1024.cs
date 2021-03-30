@@ -117,7 +117,7 @@ namespace NathanAldenSr.VorpalEngine.Common
 
         /// <summary>Sets all bits to the specified value.</summary>
         /// <param name="value">The new value for all bits.</param>
-        public void SetAll(bool value) => Unsafe.InitBlock(ref Unsafe.As<int, byte>(ref _data[0]), value ? 0b11111111 : 0, SizeInBytes);
+        public void SetAll(bool value) => Unsafe.InitBlock(ref Unsafe.As<int, byte>(ref _data[0]), value ? (byte)0b11111111 : (byte)0, SizeInBytes);
 
         /// <summary>Performs a bitwise AND between this instance and <paramref name="bitArray" />, mutating this instance.</summary>
         /// <param name="bitArray">The bit array to AND with this instance.</param>

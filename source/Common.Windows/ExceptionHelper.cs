@@ -197,7 +197,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         /// <param name="result">The result of the method invocation.</param>
         /// <param name="methodName">The name of the method that returned a result.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ThrowExternalExceptionIfFalse(int result, string methodName)
+        public static void ThrowExternalExceptionIfFALSE(int result, string methodName)
         {
             if (result == FALSE)
             {
@@ -212,7 +212,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
         /// <param name="result">The result of the method invocation.</param>
         /// <param name="methodName">The name of the method that returned a result.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ThrowExternalExceptionIfFalse(uint result, string methodName)
+        public static void ThrowExternalExceptionIfFALSE(uint result, string methodName)
         {
             if (result == FALSE)
             {

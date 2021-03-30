@@ -32,20 +32,21 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
         }
 
         /// <inheritdoc />
-        public IReadOnlyCollection<byte> StateChangeIndexes { get; } =
+        public IReadOnlyCollection<byte> ControllerIndexes { get; } =
             Enumerable.Range(MinimumIndex, MaximumIndex - MinimumIndex + 1).Select(a => (byte)a).ToImmutableArray();
 
         /// <inheritdoc />
-        public bool TryCalculateStateChanges(byte index, out XInputControllerStateChanges stateChanges)
+        public bool TryGetState(byte index, out XInputControllerState state)
         {
             ValidateIndex(index);
 
-            if (_xInputControllersByIndex.TryGetValue(index, out XInputController? controller) && controller is object)
+            if (_xInputControllersByIndex.TryGetValue(index, out XInputController? controller) && controller is not null)
             {
-                return controller.TryCalculateStateChanges(out stateChanges);
+                return controller.TryGetState(out state);
             }
 
-            stateChanges = default;
+            state = default;
+            
             return false;
         }
 

@@ -1,20 +1,36 @@
+using System.Diagnostics;
+
 namespace NathanAldenSr.VorpalEngine.Input.Controller.Hid
 {
-    internal struct HidControllerStateValue
+    /// <summary>The value of A HID value.</summary>
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+    public readonly struct HidControllerStateValue
     {
-        public HidControllerStateValue(int logicalMinimum, int logicalMaximum, int value)
+        /// <summary>Initializes a new instance of the <see cref="HidControllerStateValue" /> struct.</summary>
+        /// <param name="isValid">Indicates whether the value is valid.</param>
+        /// <param name="logicalMinimum">The logical minimum value.</param>
+        /// <param name="logicalMaximum">The logical maximum value.</param>
+        /// <param name="value">The value of the HID value.</param>
+        public HidControllerStateValue(bool isValid, int logicalMinimum, int logicalMaximum, int value)
         {
-            // Handles so-called "null" HID values
-            IsValid = value >= logicalMinimum && value <= logicalMaximum;
-
+            IsValid = isValid;
             LogicalMinimum = logicalMinimum;
             LogicalMaximum = logicalMaximum;
             Value = value;
         }
 
-        public bool IsValid;
-        public int LogicalMinimum;
-        public int LogicalMaximum;
-        public int Value;
+        /// <summary>Gets a value indicating if this value is valid.</summary>
+        public bool IsValid { get; }
+
+        /// <summary>The logical minimum value.</summary>
+        public int LogicalMinimum { get; }
+
+        /// <summary>The logical maximum value.</summary>
+        public int LogicalMaximum { get; }
+
+        /// <summary>Gets the value of the HID value.</summary>
+        public int Value { get; }
+
+        private string DebuggerDisplay => $"IsValid = {IsValid}, Minimum = {LogicalMinimum}, Maximum = {LogicalMaximum}, Value = {Value}";
     }
 }

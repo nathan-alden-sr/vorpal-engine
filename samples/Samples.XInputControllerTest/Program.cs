@@ -30,18 +30,18 @@ namespace NathanAldenSr.VorpalEngine.Samples.XInputControllerTest
             {
                 ConsoleHelper.Clear();
 
-                foreach (byte index in xInputControllerManager.StateChangeIndexes)
+                foreach (byte index in xInputControllerManager.ControllerIndexes)
                 {
-                    xInputControllerManager.TryCalculateStateChanges(index, out XInputControllerStateChanges changes);
+                    bool stateIsValid = xInputControllerManager.TryGetState(index, out XInputControllerState state);
 
                     ConsoleHelper.WriteLine(
                         new ConsoleContent()
-                            .FormatText(changes.IsConnected ? TextFormat.BrightForegroundGreen : TextFormat.Default)
-                            .Text($"XInput controller {index + 1} is {(changes.IsConnected ? "connected" : "disconnected")}")
+                            .FormatText(stateIsValid ? TextFormat.BrightForegroundGreen : TextFormat.Default)
+                            .Text($"XInput controller {index + 1} state is {(stateIsValid ? $"valid (update counter: {state.UpdateCounter})" : "invalid")}")
                             .FormatText(TextFormat.Default));
                     ConsoleHelper.WriteLine();
 
-                    if (!changes.IsConnected)
+                    if (!stateIsValid)
                     {
                         continue;
                     }
@@ -68,7 +68,7 @@ namespace NathanAldenSr.VorpalEngine.Samples.XInputControllerTest
 
                     foreach ((XInputControllerButton button, string label) in directionalPads)
                     {
-                        if (changes.IsButtonDown(button))
+                        if (state.IsButtonDown(button))
                         {
                             content.FormatText(TextFormat.Negative);
                         }
@@ -83,12 +83,12 @@ namespace NathanAldenSr.VorpalEngine.Samples.XInputControllerTest
 
                     content = new ConsoleContent();
 
-                    content.Text(changes.LeftThumbXAxis.NewValue.ToString().PadRight(17));
-                    content.Text(changes.LeftThumbYAxis.NewValue.ToString().PadRight(17));
-                    content.Text(changes.LeftTrigger.NewValue.ToString().PadRight(12));
-                    content.Text(changes.RightThumbXAxis.NewValue.ToString().PadRight(17));
-                    content.Text(changes.RightThumbYAxis.NewValue.ToString().PadRight(17));
-                    content.Text(changes.RightTrigger.NewValue.ToString());
+                    content.Text(state.LeftThumbXAxis.NewValue.ToString().PadRight(17));
+                    content.Text(state.LeftThumbYAxis.NewValue.ToString().PadRight(17));
+                    content.Text(state.LeftTrigger.NewValue.ToString().PadRight(12));
+                    content.Text(state.RightThumbXAxis.NewValue.ToString().PadRight(17));
+                    content.Text(state.RightThumbYAxis.NewValue.ToString().PadRight(17));
+                    content.Text(state.RightTrigger.NewValue.ToString());
 
                     ConsoleHelper.WriteLine(content);
                     ConsoleHelper.WriteLine();

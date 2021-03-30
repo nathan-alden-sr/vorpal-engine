@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
-    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.19041-beta2-421722498" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.19041-beta2-662237551" />
   </ItemGroup>
 
   <ItemGroup>

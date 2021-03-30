@@ -214,7 +214,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
                                     showCmd = SW_SHOWNORMAL
                                 };
 
-                            ThrowExternalExceptionIfFalse(
+                            ThrowExternalExceptionIfFALSE(
                                 SetWindowPlacement(_window.Handle, &windowPlacement),
                                 nameof(SetWindowPlacement));
                             break;
@@ -292,7 +292,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
                     };
             }
 
-            ThrowExternalExceptionIfFalse(
+            ThrowExternalExceptionIfFALSE(
                 TerraFX.Interop.Windows.RegisterRawInputDevices(pRawInputDevices, (uint)usages.Length, (uint)sizeof(RAWINPUTDEVICE)),
                 nameof(TerraFX.Interop.Windows.RegisterRawInputDevices));
         }
@@ -338,7 +338,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
         {
             fixed (WINDOWPLACEMENT* pCachedWindowPlacement = &_cachedWindowPlacement)
             {
-                ThrowExternalExceptionIfFalse(
+                ThrowExternalExceptionIfFALSE(
                     GetWindowPlacement(_window.Handle, pCachedWindowPlacement),
                     nameof(GetWindowPlacement));
             }
@@ -348,7 +348,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
         {
             fixed (WINDOWPLACEMENT* pCachedWindowPlacement = &_cachedWindowPlacement)
             {
-                ThrowExternalExceptionIfFalse(
+                ThrowExternalExceptionIfFALSE(
                     SetWindowPlacement(_window.Handle, pCachedWindowPlacement),
                     nameof(SetWindowPlacement));
             }
@@ -409,7 +409,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
 
             Vector2<int> center = _window.ClientBounds.Center;
 
-            ThrowExternalExceptionIfFalse(
+            ThrowExternalExceptionIfFALSE(
                 SetCursorPos(center.X, center.Y),
                 nameof(SetCursorPos));
         }
@@ -491,7 +491,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
         {
             if (_mouseCaptured)
             {
-                ThrowExternalExceptionIfFalse(
+                ThrowExternalExceptionIfFALSE(
                     ReleaseCapture(),
                     nameof(ReleaseCapture));
             }

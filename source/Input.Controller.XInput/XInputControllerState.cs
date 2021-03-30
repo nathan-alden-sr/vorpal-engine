@@ -1,17 +1,17 @@
 using System.Diagnostics.Contracts;
-using TerraFX.Interop;
 
 namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
 {
-    /// <summary>Defines changes in state between two <see cref="XINPUT_STATE" /> objects.</summary>
-    public struct XInputControllerStateChanges
+    /// <summary>Defines the state of an XInput controller.</summary>
+    public struct XInputControllerState
     {
-        /// <summary>Initializes a new instance of the <see cref="XInputControllerStateChanges" /> struct.</summary>
+        /// <summary>Initializes a new instance of the <see cref="XInputControllerState" /> struct.</summary>
         /// <param name="index">The index of the XInput controller.</param>
-        public XInputControllerStateChanges(byte index)
+        public XInputControllerState(byte index)
         {
             Index = index;
-            IsConnected = false;
+            UpdateCounter = 0;
+            HasChanged = false;
             DownButtonStates = 0;
             PressedButtonStates = 0;
             ReleasedButtonStates = 0;
@@ -23,15 +23,18 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
             RightTrigger = (0, 0);
         }
 
-        /// <summary>Gets the index of the controller.</summary>
+        internal ushort DownButtonStates;
+        internal ushort PressedButtonStates;
+        internal ushort ReleasedButtonStates;
+
+        /// <summary>Gets the index of the XInput controller.</summary>
         public byte Index { get; }
+        
+        /// <summary>Gets the number of times the XInput controller state has been updated.</summary>
+        public ulong UpdateCounter { get; internal set; }
 
-        /// <summary>Gets a value indicating if the controller is connected.</summary>
-        public bool IsConnected { get; internal set; }
-
-        internal ushort DownButtonStates { get; set; }
-        internal ushort PressedButtonStates { get; set; }
-        internal ushort ReleasedButtonStates { get; set; }
+        /// <summary>Gets a value indicating if the XInput controller state changed since the last state check.</summary>
+        public bool HasChanged { get; internal set; }
 
         /// <summary>Gets a tuple containing the old and new left thumb x-axis values.</summary>
         public (short OldValue, short NewValue) LeftThumbXAxis { get; internal set; }
