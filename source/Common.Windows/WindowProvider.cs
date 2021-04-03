@@ -119,7 +119,6 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
             fixed (char* pClassName = className)
             {
-                var wndProc = (delegate* unmanaged<IntPtr, uint, nuint, nint, nint>)&WindowProc;
                 var windowClass =
                     new WNDCLASSEXW
                     {
@@ -131,7 +130,7 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
                         hIcon = IntPtr.Zero,
                         hIconSm = IntPtr.Zero,
                         hInstance = ModuleHandle,
-                        lpfnWndProc = wndProc,
+                        lpfnWndProc = &WindowProc,
                         lpszClassName = (ushort*)pClassName,
                         lpszMenuName = null,
                         style = CS_OWNDC

@@ -59,10 +59,8 @@ namespace NathanAldenSr.VorpalEngine.Common.Windows
 
                 try
                 {
-                    var enumProc = (delegate* unmanaged<IntPtr, IntPtr, RECT*, nint, int>)&MonitorEnumProc;
-
                     ThrowExternalExceptionIfFALSE(
-                        EnumDisplayMonitors(IntPtr.Zero, null, enumProc, GCHandle.ToIntPtr(monitorsHandle)),
+                        EnumDisplayMonitors(IntPtr.Zero, null, &MonitorEnumProc, GCHandle.ToIntPtr(monitorsHandle)),
                         nameof(EnumDisplayMonitors));
                 }
                 finally
