@@ -39,10 +39,6 @@
     <PackageProjectUrl>$(RepositoryRootUrl)</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RestoreSources>
-      https://api.nuget.org/v3/index.json;
-      https://pkgs.terrafx.dev/index.json
-    </RestoreSources>
   </PropertyGroup>
 
   <!-- Miscellaneous -->

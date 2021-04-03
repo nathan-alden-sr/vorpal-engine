@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{AC3D1AFC
 		Directory.Build.targets = Directory.Build.targets
 		LICENSE.md = LICENSE.md
 		NathanAldenSr.VorpalEngine.snk = NathanAldenSr.VorpalEngine.snk
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}"
@@ -70,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ConsoleHelpers", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.XInputControllerTest", "samples\Samples.XInputControllerTest\Samples.XInputControllerTest.csproj", "{DEA19625-A815-450F-BE3A-08147E532FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.HidControllerTest", "samples\Samples.HidControllerTest\Samples.HidControllerTest.csproj", "{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.HidControllerTest", "samples\Samples.HidControllerTest\Samples.HidControllerTest.csproj", "{81EFCFF5-CE7A-4CDF-87AD-D6C4D69E8169}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
