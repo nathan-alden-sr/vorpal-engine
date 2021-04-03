@@ -8,21 +8,25 @@ namespace NathanAldenSr.VorpalEngine.Common
     /// <summary>Defines a rectangle with <see cref="float" /> components.</summary>
     /// <remarks>Inspired by <a href="https://github.com/terrafx">TerraFX</a>.</remarks>
     /// <typeparam name="T">The type of each dimension of the rectangle.</typeparam>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public readonly struct Rectangle<T> : IEquatable<Rectangle<T>>, IFormattable
-        where T : struct
+        where T : unmanaged
     {
         /// <summary>Defines a <see cref="Rectangle{T}" /> where all components are <see cref="Numeric{T}.Empty" />.</summary>
         public static readonly Rectangle<T> Empty = new(Numeric<T>.Empty, Numeric<T>.Empty, Numeric<T>.Empty, Numeric<T>.Empty);
+
+        private readonly Vector2<T> _location;
+        private readonly Vector2<T> _size;
 
         /// <summary>Initializes a new instance of the <see cref="Rectangle{T}" /> struct.</summary>
         /// <param name="location">The location of the rectangle.</param>
         /// <param name="size">The size of the rectangle.</param>
         public Rectangle(Vector2<T> location, Vector2<T> size)
         {
-            Location = location;
-            Size = size;
+            _location = location;
+            _size = size;
         }
 
         /// <summary>Initializes a new instance of the <see cref="Rectangle{T}" /> struct.</summary>
@@ -32,27 +36,27 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <param name="height">The height of the rectangle.</param>
         public Rectangle(T x, T y, T width, T height)
         {
-            Location = new Vector2<T>(x, y);
-            Size = new Vector2<T>(width, height);
+            _location = new Vector2<T>(x, y);
+            _size = new Vector2<T>(width, height);
         }
 
         /// <summary>Gets the location of the rectangle.</summary>
-        public Vector2<T> Location { get; }
+        public Vector2<T> Location => _location;
 
         /// <summary>Gets the size of the rectangle.</summary>
-        public Vector2<T> Size { get; }
+        public Vector2<T> Size => _size;
 
         /// <summary>Gets the x-dimension of the location of the rectangle.</summary>
-        public T X => Location.X;
+        public T X => _location.X;
 
         /// <summary>Gets the y-dimension of the location of the rectangle.</summary>
-        public T Y => Location.Y;
+        public T Y => _location.Y;
 
         /// <summary>Gets the width of the rectangle.</summary>
-        public T Width => Size.X;
+        public T Width => _size.X;
 
         /// <summary>Gets the height of the rectangle.</summary>
-        public T Height => Size.Y;
+        public T Height => _size.Y;
 
         /// <summary>Gets the x-dimension of the location of the rectangle.</summary>
         public T Left => X;
@@ -70,7 +74,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         public bool IsEmpty => this == Empty;
 
         /// <summary>Gets the location of the rectangle at the top-left.</summary>
-        public Vector2<T> TopLeft => Location;
+        public Vector2<T> TopLeft => _location;
 
         /// <summary>Gets the location of the rectangle at the top-center.</summary>
         public Vector2<T> TopCenter
@@ -183,7 +187,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise,
         ///     <see langword="false" />.
         /// </returns>
-        public static bool operator ==(Rectangle<T> left, Rectangle<T> right) => left.Location == right.Location && left.Size == right.Size;
+        public static bool operator ==(Rectangle<T> left, Rectangle<T> right) => left._location == right._location && left._size == right._size;
 
         /// <summary>Compares two <see cref="Rectangle{T}" /> objects to determine inequality.</summary>
         /// <param name="left">The <see cref="Rectangle{T}" /> to compare with <paramref name="right" />.</param>
@@ -192,13 +196,13 @@ namespace NathanAldenSr.VorpalEngine.Common
         ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise,
         ///     <see langword="false" />.
         /// </returns>
-        public static bool operator !=(Rectangle<T> left, Rectangle<T> right) => left.Location != right.Location || left.Size != right.Size;
+        public static bool operator !=(Rectangle<T> left, Rectangle<T> right) => left._location != right._location || left._size != right._size;
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to the specified value.</summary>
         /// <param name="location">The new location of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to <paramref name="location" />.</returns>
         [Pure]
-        public Rectangle<T> WithLocation(Vector2<T> location) => new(location, Size);
+        public Rectangle<T> WithLocation(Vector2<T> location) => new(location, _size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Location" /> set to the specified x- and y-dimensions.</summary>
         /// <param name="x">The new x-dimension of the rectangle.</param>
@@ -211,7 +215,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <param name="size">The new size of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to <paramref name="size" />.</returns>
         [Pure]
-        public Rectangle<T> WithSize(Vector2<T> size) => new(Location, size);
+        public Rectangle<T> WithSize(Vector2<T> size) => new(_location, size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Size" /> set to the specified width and height.</summary>
         /// <param name="width">The new width of the rectangle.</param>
@@ -224,25 +228,25 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <param name="x">The new x-dimension of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="X" /> set to <paramref name="x" />.</returns>
         [Pure]
-        public Rectangle<T> WithX(T x) => new(new Vector2<T>(x, Y), Size);
+        public Rectangle<T> WithX(T x) => new(new Vector2<T>(x, Y), _size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Y" /> set to the specified value.</summary>
         /// <param name="y">The new y-dimension of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Y" /> set to <paramref name="y" />.</returns>
         [Pure]
-        public Rectangle<T> WithY(T y) => new(new Vector2<T>(X, y), Size);
+        public Rectangle<T> WithY(T y) => new(new Vector2<T>(X, y), _size);
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Width" /> set to the specified value.</summary>
         /// <param name="width">The new width of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Width" /> set to <paramref name="width" />.</returns>
         [Pure]
-        public Rectangle<T> WithWidth(T width) => new(Location, new Vector2<T>(width, Height));
+        public Rectangle<T> WithWidth(T width) => new(_location, new Vector2<T>(width, Height));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> with <see cref="Height" /> set to the specified value.</summary>
         /// <param name="height">The new height of the rectangle.</param>
         /// <returns>A new <see cref="Rectangle{T}" /> with <see cref="Height" /> set to <paramref name="height" />.</returns>
         [Pure]
-        public Rectangle<T> WithHeight(T height) => new(Location, new Vector2<T>(Width, height));
+        public Rectangle<T> WithHeight(T height) => new(_location, new Vector2<T>(Width, height));
 
         /// <summary>Creates a new <see cref="Rectangle{T}" /> where the center of the current rectangle is <paramref name="center" />.</summary>
         /// <param name="center">The vector to center on.</param>

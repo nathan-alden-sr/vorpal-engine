@@ -6,9 +6,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Keyboard
     /// <summary>Represents keyboard state changes since the last time the keyboard state was calculated.</summary>
     public struct KeyboardStateChanges
     {
-#pragma warning disable 649
         private Bitmap256GroupsWith4StateBits _stateBitmap;
-#pragma warning restore 649
 
         /// <summary>Determines whether a key is down.</summary>
         /// <param name="key">The key to test.</param>

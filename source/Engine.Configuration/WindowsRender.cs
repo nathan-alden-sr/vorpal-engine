@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace NathanAldenSr.VorpalEngine.Engine.Configuration
 {
     /// <summary>Render window configuration</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class WindowsRender
     {
         /// <summary>Gets or sets the device name of the display on which the render window appears.</summary>

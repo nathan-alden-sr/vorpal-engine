@@ -16,10 +16,9 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem.UnitTests.ComponentSe
 
             for (var i = 0; i < componentSet.Count; i++)
             {
-                Component<char> component = componentSet[i];
+                char component = componentSet[i];
 
-                component.Id.Should().Be(i);
-                component.Value.Should().Be((char)('A' + i));
+                component.Should().Be((char)('A' + i));
             }
         }
 

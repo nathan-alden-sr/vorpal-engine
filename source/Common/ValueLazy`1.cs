@@ -14,7 +14,6 @@ namespace NathanAldenSr.VorpalEngine.Common
     {
         private const int Creating = Initialized + 1;
         private const int Created = Creating + 1;
-
         private Func<T>? _valueFactory;
         private T _value;
         private State _state;

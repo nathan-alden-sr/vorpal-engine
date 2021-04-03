@@ -12,6 +12,7 @@ namespace NathanAldenSr.VorpalEngine.Input.Controller.XInput
         public XInputController(byte index)
         {
             Index = index;
+            _state = new XInputControllerState(index);
         }
 
         public byte Index { get; }

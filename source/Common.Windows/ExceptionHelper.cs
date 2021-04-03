@@ -8,8 +8,8 @@ using static TerraFX.Interop.Windows;
 namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>Helper methods for exceptions.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public static class ExceptionHelper
     {
         /// <summary>Throws an <see cref="ExternalException" /> for a specific Win32 error.</summary>

@@ -8,7 +8,7 @@ namespace NathanAldenSr.VorpalEngine.Common
     /// <typeparam name="T">A numeric type used to represent each component of the vector.</typeparam>
     /// <remarks>Inspired by <a href="https://github.com/terrafx">TerraFX</a>.</remarks>
     public readonly struct Vector2<T> : IEquatable<Vector2<T>>, IFormattable
-        where T : struct
+        where T : unmanaged
     {
         private readonly Numeric<T> _x;
         private readonly Numeric<T> _y;
@@ -50,13 +50,13 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <param name="value">The new value of the x-dimension.</param>
         /// <returns>A new <see cref="Vector2{T}" /> instance with <see cref="X" /> set to <paramref name="value" />.</returns>
         [Pure]
-        public Vector2<T> WithX(T value) => new(value, Y);
+        public Vector2<T> WithX(T value) => new(value, _y);
 
         /// <summary>Creates a new <see cref="Vector2{T}" /> instance with <see cref="Y" /> set to the specified value.</summary>
         /// <param name="value">The new value of the y-dimension.</param>
         /// <returns>A new <see cref="Vector2{T}" /> instance with <see cref="Y" /> set to <paramref name="value" />.</returns>
         [Pure]
-        public Vector2<T> WithY(T value) => new(X, value);
+        public Vector2<T> WithY(T value) => new(_x, value);
 
         /// <summary>Compares two <see cref="Vector2{T}" /> objects to determine equality.</summary>
         /// <param name="left">The <see cref="Vector2{T}" /> to compare with <paramref name="right" />.</param>
@@ -83,7 +83,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         public bool Equals(Vector2<T> other) => this == other;
 
         /// <inheritdoc />
-        public override int GetHashCode() => HashCode.Combine(X, Y);
+        public override int GetHashCode() => HashCode.Combine(_x, _y);
 
         /// <inheritdoc />
         public override string ToString() => ToString(null, null);
@@ -95,12 +95,12 @@ namespace NathanAldenSr.VorpalEngine.Common
 
             if (typeof(T) == typeof(int))
             {
-                return $"<{((int)(object)X).ToString(format, formatProvider)}{separator} {((int)(object)Y).ToString(format, formatProvider)}>";
+                return $"<{((int)(object)_x).ToString(format, formatProvider)}{separator} {((int)(object)_y).ToString(format, formatProvider)}>";
             }
             // ReSharper disable once ConvertIfStatementToReturnStatement
             if (typeof(T) == typeof(float))
             {
-                return $"<{((float)(object)X).ToString(format, formatProvider)}{separator} {((float)(object)Y).ToString(format, formatProvider)}>";
+                return $"<{((float)(object)_x).ToString(format, formatProvider)}{separator} {((float)(object)_y).ToString(format, formatProvider)}>";
             }
 
             return default!;

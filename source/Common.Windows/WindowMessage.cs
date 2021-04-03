@@ -5,8 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class WindowMessage
     {
         public static readonly WindowMessage MN_GETHMENU = new(nameof(MN_GETHMENU), TerraFX.Interop.Windows.MN_GETHMENU);

@@ -15,12 +15,11 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem.UnitTests.ComponentSe
             componentSet.Add(1, 'B');
             componentSet.Add(2, 'C');
 
-            ReadOnlySpan<Component<char>> all = componentSet.GetAll();
+            ReadOnlySpan<char> all = componentSet.GetAll();
 
             for (var i = 0; i < componentSet.Count; i++)
             {
-                all[i].Id.Should().Be(i);
-                all[i].Value.Should().Be(componentSet[i].Value);
+                all[i].Should().Be(componentSet[i]);
             }
         }
     }

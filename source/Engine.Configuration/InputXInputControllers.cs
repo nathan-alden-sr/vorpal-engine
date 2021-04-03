@@ -6,9 +6,9 @@ using NathanAldenSr.VorpalEngine.Configuration;
 namespace NathanAldenSr.VorpalEngine.Engine.Configuration
 {
     /// <summary>XInput controller configuration.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class InputXInputControllers
     {
         private IList<InputXInputControllersController>? _controllers;

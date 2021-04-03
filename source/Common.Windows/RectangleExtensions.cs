@@ -4,14 +4,14 @@ using TerraFX.Interop;
 namespace NathanAldenSr.VorpalEngine.Common.Windows
 {
     /// <summary>Extensions for the <see cref="Rectangle{T}" /> class.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public static class RectangleExtensions
     {
         /// <summary>Implicitly converts a <see cref="Rectangle{T}" /> to a <see cref="RECT" />.</summary>
         /// <param name="value">The <see cref="Rectangle{T}" /> to convert.</param>
         public static RECT ToRECT<T>(this Rectangle<T> value)
-            where T : struct
+            where T : unmanaged
         {
             if (typeof(T) == typeof(int))
             {

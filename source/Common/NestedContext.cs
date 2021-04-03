@@ -1,13 +1,17 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NathanAldenSr.VorpalEngine.Common
 {
     /// <summary>A breadcrumb of contexts useful for logging purposes.</summary>
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+    [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public readonly struct NestedContext
     {
         private const string DefaultSeparator = "->";
+        private readonly string? _description;
         private readonly string? _separator;
 
         /// <summary>Initializes a new instance of the <see cref="NestedContext" /> struct.</summary>
@@ -40,12 +44,12 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             separator ??= DefaultSeparator;
 
-            Description = $"{description}{(!string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(context) ? separator : "")}{context}";
+            _description = $"{description}{(!string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(context) ? separator : "")}{context}";
             _separator = separator;
         }
 
         /// <summary>Gets a description of the context with each context separated by the separator string.</summary>
-        public string? Description { get; }
+        public string? Description => _description;
 
         /// <summary>Gets a valid indicating whether the context is empty.</summary>
         public bool IsEmpty => string.IsNullOrEmpty(Description);

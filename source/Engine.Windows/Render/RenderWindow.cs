@@ -41,9 +41,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
 
         private DisplayMode _displayMode;
         private Monitor _monitor;
-#pragma warning disable 414
         private bool _mouseCaptured;
-#pragma warning restore 414
         private State _state;
         private bool _wasShown;
 
@@ -321,7 +319,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render
                     _cachedAllowMinimize,
                     _cachedAllowMaximize);
 
-                if (_cachedClientBounds is object)
+                if (_cachedClientBounds is not null)
                 {
                     _window.ClientBounds = _cachedClientBounds.Value;
                     _cachedClientBounds = null;

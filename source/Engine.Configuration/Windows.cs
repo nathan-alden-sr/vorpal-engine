@@ -6,6 +6,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Configuration
     /// <summary>Window configuration.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class Windows
     {
         /// <summary>Gets or sets render window configuration. Use <see cref="Render" /> for finer-grained control over this property.</summary>

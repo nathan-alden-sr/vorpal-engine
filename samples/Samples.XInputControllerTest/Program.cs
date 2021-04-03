@@ -8,7 +8,7 @@ namespace NathanAldenSr.VorpalEngine.Samples.XInputControllerTest
 {
     internal static class Program
     {
-        private static readonly ConsoleHelper ConsoleHelper = new("XInput Controller Test Application", 130, 32);
+        private static readonly ConsoleHelper ConsoleHelper = new("XInput Controller Test Application", 130, 32, 32);
 
         private static async Task Main()
         {

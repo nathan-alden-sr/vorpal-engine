@@ -11,7 +11,6 @@ namespace NathanAldenSr.VorpalEngine.Common
         private const int Fields = BitsPerGroup * Groups / BitsPerField;
         private const int GroupsPerField = BitsPerField / BitsPerGroup;
         private const int GroupMask = (1 << BitsPerGroup) - 1;
-
 #pragma warning disable 649
         private fixed uint _data[Fields];
 #pragma warning restore 649

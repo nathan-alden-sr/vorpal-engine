@@ -10,15 +10,24 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
     /// <typeparam name="T">The type of component.</typeparam>
     public class ComponentSet<T>
     {
-        private readonly ListEx<Component<T>> _dense;
-        private readonly ListEx<int?> _sparse;
+        private const int InvalidComponentId = -1;
+
+        // Stores the actual components
+        // Every non-null element in _sparse maps to an element in _dense
+        // T component = _dense[_sparse[componentId]];
+        private readonly ListEx<T> _dense;
+
+        // Stores indexes into the dense list
+        // The index of each element in _sparse maps to a component ID
+        // int denseIndex = _sparse[componentId];
+        private readonly ListEx<int> _sparse;
 
         /// <summary>Initializes a new instance of the <see cref="ComponentSet{T}" /> class.</summary>
         /// <param name="capacity">The initial capacity of the internal lists.</param>
         public ComponentSet(int capacity = 0)
         {
-            _sparse = new ListEx<int?>(capacity);
-            _dense = new ListEx<Component<T>>(capacity);
+            _sparse = new ListEx<int>(capacity);
+            _dense = new ListEx<T>(capacity);
         }
 
         /// <summary>Gets the number of components in the set.</summary>
@@ -27,45 +36,50 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
         /// <summary>Gets the component with the specified ID.</summary>
         /// <param name="id">The ID of the component.</param>
         /// <returns>The component with the specified ID.</returns>
-        public ref Component<T> this[int id] => ref Get(id);
+        public ref T this[int id] => ref GetRef(id);
 
         /// <summary>Gets a reference to the component with the specified ID.</summary>
         /// <param name="id">The ID of the component.</param>
         /// <returns>A reference to a component.</returns>
-        public ref Component<T> Get(int id)
+        public ref T GetRef(int id)
         {
-            int? denseIndex = _sparse[id];
-
-            if (denseIndex is null)
+            if (id < 0)
             {
-                ExceptionHelper.ThrowArgumentException("Invalid ID.", nameof(id));
+                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(id), id);
             }
 
-            return ref _dense.RefIndex(denseIndex.Value);
+            int denseIndex = _sparse[id];
+
+            if (denseIndex < 0)
+            {
+                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(denseIndex), denseIndex);
+            }
+
+            return ref _dense.GetRef(denseIndex);
         }
 
         /// <summary>Gets a span of all components.</summary>
         /// <returns>A span of all components.</returns>
-        public ReadOnlySpan<Component<T>> GetAll() => _dense.AsSpan();
+        public Span<T> GetAll() => _dense.AsSpan();
 
         /// <summary>Adds a component to the set.</summary>
+        /// <param name="id">The ID of the component.</param>
         /// <param name="component">The component to add.</param>
-        public void Add(Component<T> component)
+        public void Add(int id, T component)
         {
-            if (component.Id < 0)
+            if (id < 0)
             {
-                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(component.Id), component.Id);
+                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(id), id);
             }
 
-            if (component.Id < _sparse.Count)
+            if (id < _sparse.Count)
             {
-                // Dense indexes may be invalid
-                int? denseIndex = _sparse[component.Id];
+                int denseIndex = _sparse[id];
 
-                if (denseIndex is not null)
+                if (denseIndex >= 0)
                 {
                     // The dense index is valid, so set its tuple
-                    _dense[denseIndex.Value] = component;
+                    _dense[denseIndex] = component;
                 }
                 else
                 {
@@ -73,36 +87,36 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
                     _dense.Add(component);
 
                     // Track the new dense index
-                    _sparse[component.Id] = _dense.Count - 1;
+                    _sparse[id] = _dense.Count - 1;
                 }
             }
             else
             {
                 // Add the new ID and value
                 _dense.Add(component);
-                _sparse.AddRange(component.Id - _sparse.Count + 1);
+                _sparse.AddRange(id - _sparse.Count + 1);
                 _sparse[^1] = _dense.Count - 1;
             }
         }
 
         /// <summary>Adds a component to the set.</summary>
+        /// <param name="id">The ID of the component.</param>
         /// <param name="component">The component to add.</param>
-        public void Add(in Component<T> component)
+        public void Add(int id, in T component)
         {
-            if (component.Id < 0)
+            if (id < 0)
             {
-                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(component.Id), component.Id);
+                ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(id), id);
             }
 
-            if (component.Id < _sparse.Count)
+            if (id < _sparse.Count)
             {
-                // Dense indexes may be invalid
-                int? denseIndex = _sparse[component.Id];
+                int denseIndex = _sparse[id];
 
-                if (denseIndex is not null)
+                if (denseIndex >= 0)
                 {
                     // The dense index is valid, so set its tuple
-                    _dense[denseIndex.Value] = component;
+                    _dense[denseIndex] = component;
                 }
                 else
                 {
@@ -110,32 +124,16 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
                     _dense.Add(component);
 
                     // Track the new dense index
-                    _sparse[component.Id] = _dense.Count - 1;
+                    _sparse[id] = _dense.Count - 1;
                 }
             }
             else
             {
                 // Add the new ID and value
                 _dense.Add(component);
-                _sparse.AddRange(component.Id - _sparse.Count + 1);
+                _sparse.AddRange(id - _sparse.Count + 1);
                 _sparse[^1] = _dense.Count - 1;
             }
-        }
-
-        /// <summary>Adds a component to the set.</summary>
-        /// <param name="id">The ID of the component.</param>
-        /// <param name="value">The value of the component.</param>
-        public void Add(int id, T value)
-        {
-            Add(new Component<T>(id, value));
-        }
-
-        /// <summary>Adds a component to the set.</summary>
-        /// <param name="id">The ID of the component.</param>
-        /// <param name="value">The value of the component.</param>
-        public void Add(int id, in T value)
-        {
-            Add(new Component<T>(id, value));
         }
 
         /// <summary>Removes a component from the set.</summary>
@@ -153,31 +151,21 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
                 return false;
             }
 
-            int? denseIndex = _sparse[id];
+            int denseIndex = _sparse[id];
 
-            if (denseIndex is null)
+            if (denseIndex < 0)
             {
                 return false;
             }
 
             // The dense index for the supplied ID is no longer valid
-            _sparse[id] = null;
+            _sparse[id] = InvalidComponentId;
 
             // Remove the dense tuple
-            _dense.RemoveAt(denseIndex.Value);
+            _dense.RemoveAt(denseIndex);
 
             return true;
         }
-
-        /// <summary>Removes a component from the set.</summary>
-        /// <param name="component">The component to remove.</param>
-        /// <returns><see langword="true" /> if the component was removed; otherwise, <see langword="false" />.</returns>
-        public bool Remove(Component<T> component) => Remove(component.Id);
-
-        /// <summary>Removes a component from the set.</summary>
-        /// <param name="component">The component to remove.</param>
-        /// <returns><see langword="true" /> if the component was removed; otherwise, <see langword="false" />.</returns>
-        public bool Remove(in Component<T> component) => Remove(component.Id);
 
         /// <summary>Removes all components from the set.</summary>
         public void Clear()
@@ -203,17 +191,7 @@ namespace NathanAldenSr.VorpalEngine.EntityComponentSystem
                 ExceptionHelper.ThrowArgumentOutOfRangeException(nameof(id), id);
             }
 
-            return id < _sparse.Count && _sparse[id] is not null;
+            return id < _sparse.Count && _sparse[id] != InvalidComponentId;
         }
-
-        /// <summary>Determines if the set contains a component.</summary>
-        /// <param name="component">The component to check.</param>
-        /// <returns><see langword="true" /> if the component exists in the set; otherwise, <see langword="false" />.</returns>
-        public bool Contains(Component<T> component) => Contains(component.Id);
-
-        /// <summary>Determines if the set contains a component.</summary>
-        /// <param name="component">The component to check.</param>
-        /// <returns><see langword="true" /> if the component exists in the set; otherwise, <see langword="false" />.</returns>
-        public bool Contains(in Component<T> component) => Contains(component.Id);
     }
 }

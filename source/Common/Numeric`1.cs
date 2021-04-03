@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using static NathanAldenSr.VorpalEngine.Common.ExceptionHelper;
 
@@ -6,8 +7,10 @@ namespace NathanAldenSr.VorpalEngine.Common
 {
     /// <summary>Allows for generic specialization of numeric operations.</summary>
     /// <typeparam name="T">The type of the value.</typeparam>
+    [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public readonly struct Numeric<T> : IEquatable<Numeric<T>>
-        where T : struct
+        where T : unmanaged
     {
         /// <summary>A <see cref="Numeric{T}" /> with an empty value.</summary>
         public static readonly Numeric<T> Empty = GetEmpty();
@@ -18,13 +21,16 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <summary>A <see cref="Numeric{T}" /> with a value of one.</summary>
         public static readonly Numeric<T> One = GetOne();
 
+        /// <summary>Gets the value.</summary>
+        private readonly T _value;
+
         /// <summary>Initializes a new instance of the <see cref="Numeric{T}" /> struct.</summary>
         /// <param name="value">A value.</param>
         public Numeric(T value)
         {
             ThrowForUnsupportedType();
 
-            Value = value;
+            _value = value;
         }
 
         /// <summary>Gets a value determining if <typeparamref name="T" /> is a supported type.</summary>
@@ -35,7 +41,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         }
 
         /// <summary>Gets the value.</summary>
-        public T Value { get; }
+        public T Value => _value;
 
         /// <summary>Implicitly converts a <typeparamref name="T" /> to a <see cref="Numeric{T}" />.</summary>
         /// <param name="value">The <typeparamref name="T" /> to convert.</param>
@@ -43,7 +49,7 @@ namespace NathanAldenSr.VorpalEngine.Common
 
         /// <summary>Implicitly converts a <see cref="Numeric{T}" /> to a <typeparamref name="T" />.</summary>
         /// <param name="value">The <see cref="Numeric{T}" /> to convert.</param>
-        public static implicit operator T(Numeric<T> value) => value.Value;
+        public static implicit operator T(Numeric<T> value) => value._value;
 
         /// <summary>Adds the value contained in <paramref name="left" /> to <paramref name="right" />.</summary>
         /// <param name="left">The left-hand operand.</param>
@@ -54,11 +60,11 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)((int)(object)left.Value + (int)(object)right);
+                return (T)(object)((int)(object)left._value + (int)(object)right);
             }
             if (typeof(T) == typeof(float))
             {
-                return (T)(object)((float)(object)left.Value + (float)(object)right);
+                return (T)(object)((float)(object)left._value + (float)(object)right);
             }
 
             return default;
@@ -73,11 +79,11 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)((int)(object)left.Value - (int)(object)right);
+                return (T)(object)((int)(object)left._value - (int)(object)right);
             }
             if (typeof(T) == typeof(float))
             {
-                return (T)(object)((float)(object)left.Value - (float)(object)right);
+                return (T)(object)((float)(object)left._value - (float)(object)right);
             }
 
             return default;
@@ -92,11 +98,11 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)((int)(object)left.Value * (int)(object)right);
+                return (T)(object)((int)(object)left._value * (int)(object)right);
             }
             if (typeof(T) == typeof(float))
             {
-                return (T)(object)((float)(object)left.Value * (float)(object)right);
+                return (T)(object)((float)(object)left._value * (float)(object)right);
             }
 
             return default;
@@ -111,11 +117,11 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)((int)(object)left.Value / (int)(object)right);
+                return (T)(object)((int)(object)left._value / (int)(object)right);
             }
             if (typeof(T) == typeof(float))
             {
-                return (T)(object)((float)(object)left.Value / (float)(object)right);
+                return (T)(object)((float)(object)left._value / (float)(object)right);
             }
 
             return default;
@@ -130,11 +136,11 @@ namespace NathanAldenSr.VorpalEngine.Common
         {
             if (typeof(T) == typeof(int))
             {
-                return (T)(object)((int)(object)left.Value % (int)(object)right);
+                return (T)(object)((int)(object)left._value % (int)(object)right);
             }
             if (typeof(T) == typeof(float))
             {
-                return (T)(object)((float)(object)left.Value % (float)(object)right);
+                return (T)(object)((float)(object)left._value % (float)(object)right);
             }
 
             return default;
@@ -153,11 +159,11 @@ namespace NathanAldenSr.VorpalEngine.Common
 
             if (typeof(T) == typeof(int))
             {
-                return (int)(object)left.Value == (int)(object)right.Value;
+                return (int)(object)left._value == (int)(object)right._value;
             }
             if (typeof(T) == typeof(float))
             {
-                return (float)(object)left.Value == (float)(object)right.Value;
+                return (float)(object)left._value == (float)(object)right._value;
             }
 
             return default;
@@ -179,10 +185,10 @@ namespace NathanAldenSr.VorpalEngine.Common
         public bool Equals(Numeric<T> other) => this == other;
 
         /// <inheritdoc />
-        public override int GetHashCode() => Value.GetHashCode();
+        public override int GetHashCode() => _value.GetHashCode();
 
         /// <inheritdoc />
-        public override string ToString() => Value.ToString()!;
+        public override string ToString() => _value.ToString()!;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void ThrowForUnsupportedType()

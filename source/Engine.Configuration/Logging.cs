@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace NathanAldenSr.VorpalEngine.Engine.Configuration
 {
     /// <summary>Logging configuration.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class Logging
     {
         /// <summary>Gets or sets a value determining whether logging is enabled.</summary>

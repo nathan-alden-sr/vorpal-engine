@@ -6,9 +6,9 @@ using NathanAldenSr.VorpalEngine.Configuration;
 namespace NathanAldenSr.VorpalEngine.Engine.Configuration
 {
     /// <summary>HID controllers configuration.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public class InputHidControllers
     {
         private IList<InputHidControllersController>? _controllers;

@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace NathanAldenSr.VorpalEngine.Engine.Configuration
 {
     /// <summary>Base class for configuration.</summary>
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("Style", "IDE1006:Naming Styles")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
     public abstract class Configuration
     {
         /// <summary>Gets or sets input configuration.</summary>

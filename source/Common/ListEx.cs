@@ -38,8 +38,8 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <returns>The item at the specified index.</returns>
         public T this[int index]
         {
-            get => RefIndex(index);
-            set => RefIndex(index) = value;
+            get => GetRef(index);
+            set => GetRef(index) = value;
         }
 
         /// <summary>Gets the number of items in the list.</summary>
@@ -144,7 +144,7 @@ namespace NathanAldenSr.VorpalEngine.Common
         /// <summary>Gets a reference to the item at the specified index.</summary>
         /// <param name="index">The index of the item.</param>
         /// <returns>A reference to the item at the specified index.</returns>
-        public ref T RefIndex(int index)
+        public ref T GetRef(int index)
         {
             if (index < 0 || index >= Count)
             {
