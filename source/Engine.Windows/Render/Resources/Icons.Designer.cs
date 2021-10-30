@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render.Resources {
+namespace VorpalEngine.Engine.Windows.Render.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace NathanAldenSr.VorpalEngine.Engine.Windows.Render.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NathanAldenSr.VorpalEngine.Engine.Windows.Render.Resources.Icons", typeof(Icons).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VorpalEngine.Engine.Windows.Render.Resources.Icons", typeof(Icons).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

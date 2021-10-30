@@ -1,37 +1,36 @@
 using FluentAssertions;
 using Xunit;
 
-namespace NathanAldenSr.VorpalEngine.EntityComponentSystem.UnitTests.ComponentSetTests
+namespace VorpalEngine.EntityComponentSystem.UnitTests.ComponentSetTests;
+
+public sealed class WhenAddingComponents
 {
-    public class WhenAddingComponents
+    [Fact]
+    public void MustAssociateValueWithId()
     {
-        [Fact]
-        public void MustAssociateValueWithId()
+        ComponentSet<char> componentSet = new();
+
+        componentSet.Add(0, 'A');
+        componentSet.Add(1, 'B');
+        componentSet.Add(2, 'C');
+
+        for (var i = 0; i < componentSet.Count; i++)
         {
-            ComponentSet<char> componentSet = new();
+            char component = componentSet[i];
 
-            componentSet.Add(0, 'A');
-            componentSet.Add(1, 'B');
-            componentSet.Add(2, 'C');
-
-            for (var i = 0; i < componentSet.Count; i++)
-            {
-                char component = componentSet[i];
-
-                component.Should().Be((char)('A' + i));
-            }
+            component.Should().Be((char)('A' + i));
         }
+    }
 
-        [Fact]
-        public void MustAdjustCount()
-        {
-            ComponentSet<char> componentSet = new();
+    [Fact]
+    public void MustAdjustCount()
+    {
+        ComponentSet<char> componentSet = new();
 
-            componentSet.Add(0, 'A');
-            componentSet.Add(1, 'B');
-            componentSet.Add(2, 'C');
+        componentSet.Add(0, 'A');
+        componentSet.Add(1, 'B');
+        componentSet.Add(2, 'C');
 
-            componentSet.Count.Should().Be(3);
-        }
+        componentSet.Count.Should().Be(3);
     }
 }

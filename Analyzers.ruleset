@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Analyzers" Description="Disables annoying or buggy Roslyn analyzers" ToolsVersion="16.0">
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
+    <Rule Id="IDE0130" Action="None" />
+  </Rules>
+</RuleSet>

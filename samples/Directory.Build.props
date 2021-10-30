@@ -1,0 +1,16 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Silk.NET.Maths" IsImplicitlyDefined="true" />
+    <PackageReference Include="TerraFX" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), '^net\d+\.\d+-windows$'))">
+    <PackageReference Include="TerraFX.Interop.Windows" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="DotNet.ReproducibleBuilds" IsImplicitlyDefined="true" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

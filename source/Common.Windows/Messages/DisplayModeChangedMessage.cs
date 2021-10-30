@@ -1,34 +1,31 @@
-using System.Diagnostics.CodeAnalysis;
+// Copyright (c) Nathan Alden, Sr. and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
+using VorpalEngine.Common.Messaging;
+
+namespace VorpalEngine.Common.Windows.Messages;
+
+/// <summary>Indicates that the render window's display mode changed.</summary>
+public readonly struct DisplayModeChangedMessage : IMessage
 {
-    /// <summary>Indicates that the render window's display mode changed.</summary>
-    [SuppressMessage("ReSharper", "ConvertToAutoPropertyWhenPossible")]
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
-    public readonly struct DisplayModeChangedMessage : IMessage
+    /// <summary>Initializes a new instance of the <see cref="DisplayModeChangedMessage" /> struct.</summary>
+    /// <param name="oldDisplayMode">The old display mode. A <see langword="null" /> value means the old display mode is unknown.</param>
+    /// <param name="newDisplayMode">The new display mode.</param>
+    public DisplayModeChangedMessage(DisplayMode? oldDisplayMode, DisplayMode newDisplayMode)
     {
-        private readonly DisplayMode? _oldDisplayMode;
-        private readonly DisplayMode _newDisplayMode;
-
-        /// <summary>Initializes a new instance of the <see cref="DisplayModeChangedMessage" /> struct.</summary>
-        /// <param name="oldDisplayMode">The old display mode. A <see langword="null" /> value means the old display mode is unknown.</param>
-        /// <param name="newDisplayMode">The new display mode.</param>
-        public DisplayModeChangedMessage(DisplayMode? oldDisplayMode, DisplayMode newDisplayMode)
-        {
-            _oldDisplayMode = oldDisplayMode;
-            _newDisplayMode = newDisplayMode;
-        }
-
-        /// <summary>Gets the old display mode. A <see langword="null" /> value means the old display mode is unknown.</summary>
-        public DisplayMode? OldDisplayMode => _oldDisplayMode;
-
-        /// <summary>Gets the new display mode.</summary>
-        public DisplayMode NewDisplayMode => _newDisplayMode;
-
-        /// <inheritdoc />
-        public string Description =>
-            _oldDisplayMode is not null
-                ? $"Display mode changed from {_oldDisplayMode.Value} to {_newDisplayMode}"
-                : $"Display mode changed to {_newDisplayMode}";
+        OldDisplayMode = oldDisplayMode;
+        NewDisplayMode = newDisplayMode;
     }
+
+    /// <summary>Gets the old display mode. A <see langword="null" /> value means the old display mode is unknown.</summary>
+    public DisplayMode? OldDisplayMode { get; }
+
+    /// <summary>Gets the new display mode.</summary>
+    public DisplayMode NewDisplayMode { get; }
+
+    /// <inheritdoc />
+    public string Description
+        => OldDisplayMode is not null
+               ? $"Display mode changed from {OldDisplayMode.Value} to {NewDisplayMode}"
+               : $"Display mode changed to {NewDisplayMode}";
 }

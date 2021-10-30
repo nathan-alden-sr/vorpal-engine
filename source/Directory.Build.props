@@ -1,15 +1,24 @@
 <Project>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\NathanAldenSr.VorpalEngine.snk</AssemblyOriginatorKeyFile>
+    <!-- Strong naming is disabled due to Silk.NET not being strong-named -->
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\VorpalEngine.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorPublicKey>0024000004800000940000000602000000240000525341310004000001000100f9d443a9d48aa7663aa86f5c335b327050acce94d4bf7fc61f7ed86191147b85924d14e6527e4613750723de9354e99eaf5a34065d603a771b1adffea7bd054001b3f710bec42e81c1af14dd7c6a2546a222dbe4069ab6e2855ec9db4abe7444ea0d74db4a11f47b8e3c8ab0675698c923dae9f01f0a7441cb989ec65bdf16e7</AssemblyOriginatorPublicKey>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileDirectory)..\Directory.Build.props</MSBuildAllProjects>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="Silk.NET.Maths" IsImplicitlyDefined="true" />
+    <PackageReference Include="TerraFX" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), '^net\d+\.\d+-windows$'))">
+    <PackageReference Include="TerraFX.Interop.Windows" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="DotNet.ReproducibleBuilds" IsImplicitlyDefined="true" PrivateAssets="all" />
   </ItemGroup>
 </Project>

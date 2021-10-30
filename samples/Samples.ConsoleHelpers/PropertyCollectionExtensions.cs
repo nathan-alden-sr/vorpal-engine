@@ -1,9 +1,17 @@
-﻿using System.Data;
+// Copyright (c) Nathan Alden, Sr. and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-namespace NathanAldenSr.VorpalEngine.Samples.ConsoleHelpers
+using System.Data;
+using static TerraFX.Utilities.ExceptionUtilities;
+
+namespace VorpalEngine.Samples.ConsoleHelpers;
+
+public static class PropertyCollectionExtensions
 {
-    public static class PropertyCollectionExtensions
+    public static void Add(this PropertyCollection propertyCollection, (object Key, object? Value) item)
     {
-        public static void Add(this PropertyCollection propertyCollection, (object Key, object? Value) item) => propertyCollection.Add(item.Key, item.Value);
+        ThrowIfNull(propertyCollection, nameof(propertyCollection));
+
+        propertyCollection.Add(item.Key, item.Value);
     }
 }

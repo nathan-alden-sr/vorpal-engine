@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
+
+    <ProjectReference Include="..\Engine.Configuration\VorpalEngine.Engine.Configuration.csproj" />
+    <ProjectReference Include="..\Input.Controller.Hid\VorpalEngine.Input.Controller.Hid.csproj" />
+    <ProjectReference Include="..\Input.Controller.XInput\VorpalEngine.Input.Controller.XInput.csproj" />
+    <ProjectReference Include="..\Input.Keyboard\VorpalEngine.Input.Keyboard.csproj" />
+    <ProjectReference Include="..\Input.Mouse.Legacy\VorpalEngine.Input.Mouse.Legacy.csproj" />
+    <ProjectReference Include="..\Input.Mouse.RawInput\VorpalEngine.Input.Mouse.RawInput.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Render\Resources\Icons.Designer.cs">
+      <DependentUpon>Icons.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
+    <EmbeddedResource Update="Render\Resources\Icons.resx">
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

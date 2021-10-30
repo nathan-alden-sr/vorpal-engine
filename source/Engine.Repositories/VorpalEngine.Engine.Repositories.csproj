@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.Configuration\VorpalEngine.Engine.Configuration.csproj" />
+    <ProjectReference Include="..\Input.Controller.Hid\VorpalEngine.Input.Controller.Hid.csproj" />
+    <ProjectReference Include="..\Input.Controller.XInput\VorpalEngine.Input.Controller.XInput.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

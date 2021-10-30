@@ -1,91 +1,108 @@
+// Copyright (c) Nathan Alden, Sr. and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
+
 using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using NathanAldenSr.VorpalEngine.Common;
-using NathanAldenSr.VorpalEngine.Configuration.Paths;
+using VorpalEngine.Common;
+using VorpalEngine.Configuration.Paths;
+using static TerraFX.Utilities.ExceptionUtilities;
 
-namespace NathanAldenSr.VorpalEngine.Configuration.ConfigurationFiles
+namespace VorpalEngine.Configuration.ConfigurationFiles;
+
+/// <summary>Loads and saves configuration files.</summary>
+public sealed class ConfigurationFileManager : IConfigurationFileManager
 {
-    /// <summary>Loads and saves configuration files.</summary>
-    public class ConfigurationFileManager : IConfigurationFileManager
-    {
-        private static readonly JsonSerializerOptions JsonSerializerOptions =
-            new()
-            {
-                Converters =
-                {
-                    new JsonStringEnumConverter()
-                },
-                IgnoreNullValues = true,
-                IgnoreReadOnlyProperties = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
-
-        private readonly IIdentifierPaths _identifierPaths;
-
-        /// <summary>Initializes a new instance of the <see cref="ConfigurationFileManager" /> class.</summary>
-        /// <param name="identifierPaths">A <see cref="IIdentifierPaths" /> implementation.</param>
-        public ConfigurationFileManager(IIdentifierPaths identifierPaths)
+    /// <summary>Default JSON serializer options.</summary>
+    public static readonly JsonSerializerOptions DefaultJsonSerializerOptions =
+        new()
         {
-            _identifierPaths = identifierPaths;
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            },
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            IgnoreReadOnlyProperties = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+
+    private readonly IIdentifierPaths _identifierPaths;
+
+    /// <summary>Initializes a new instance of the <see cref="ConfigurationFileManager" /> class.</summary>
+    /// <param name="identifierPaths">A <see cref="IIdentifierPaths" /> implementation.</param>
+    /// <param name="options">
+    ///     JSON serializer options. <see cref="DefaultJsonSerializerOptions" /> will be used if
+    ///     <paramref name="options" /> is <see langword="null" />.
+    /// </param>
+    public ConfigurationFileManager(IIdentifierPaths identifierPaths, JsonSerializerOptions? options = null)
+    {
+        ThrowIfNull(identifierPaths, nameof(identifierPaths));
+
+        _identifierPaths = identifierPaths;
+        JsonSerializerOptions = options ?? new JsonSerializerOptions(DefaultJsonSerializerOptions);
+    }
+
+    /// <inheritdoc />
+    public JsonSerializerOptions JsonSerializerOptions { get; }
+
+    /// <inheritdoc />
+    public T LoadConfiguration<T>(Identifier identifier, Func<T> defaultConfigurationFactoryDelegate)
+        where T : class
+    {
+        ThrowIfNull(identifier, nameof(identifier));
+        ThrowIfNull(defaultConfigurationFactoryDelegate, nameof(defaultConfigurationFactoryDelegate));
+
+        T SaveDefaultConfiguration()
+        {
+            T defaultConfiguration = defaultConfigurationFactoryDelegate();
+
+            SaveConfiguration(identifier, defaultConfiguration);
+
+            return defaultConfiguration;
         }
 
-        /// <inheritdoc />
-        public JsonSerializerOptions GetJsonSerializerOptions() => new(JsonSerializerOptions);
+        T configuration;
 
-        /// <inheritdoc />
-        public T LoadConfiguration<T>(Identifier identifier, Func<T> defaultConfigurationFactoryDelegate)
-            where T : class
+        if (!File.Exists(_identifierPaths.ConfigurationFilePath))
         {
-            T SaveDefaultConfiguration()
+            configuration = SaveDefaultConfiguration();
+        }
+        else
+        {
+            try
             {
-                T defaultConfiguration = defaultConfigurationFactoryDelegate();
+                string json = File.ReadAllText(_identifierPaths.ConfigurationFilePath);
 
-                SaveConfiguration(identifier, defaultConfiguration);
-
-                return defaultConfiguration;
+                configuration = JsonSerializer.Deserialize<T>(json, JsonSerializerOptions) ?? SaveDefaultConfiguration();
             }
-
-            T configuration;
-
-            if (!File.Exists(_identifierPaths.ConfigurationFilePath))
+            catch
             {
                 configuration = SaveDefaultConfiguration();
             }
-            else
-            {
-                try
-                {
-                    string json = File.ReadAllText(_identifierPaths.ConfigurationFilePath);
-
-                    configuration = JsonSerializer.Deserialize<T>(json, JsonSerializerOptions) ?? SaveDefaultConfiguration();
-                }
-                catch
-                {
-                    configuration = SaveDefaultConfiguration();
-                }
-            }
-
-            return configuration;
         }
 
-        /// <inheritdoc />
-        public T LoadConfiguration<T>(Identifier identifier)
-            where T : class, new()
-        {
-            return LoadConfiguration(identifier, () => new T());
-        }
+        return configuration;
+    }
 
-        /// <inheritdoc />
-        public void SaveConfiguration<T>(Identifier identifier, T configuration)
-            where T : class
-        {
-            string json = JsonSerializer.Serialize(configuration, JsonSerializerOptions);
+    /// <inheritdoc />
+    public T LoadConfiguration<T>(Identifier identifier)
+        where T : class, new()
+    {
+        return LoadConfiguration(identifier, () => new T());
+    }
 
-            File.WriteAllText(_identifierPaths.ConfigurationFilePath, json, Encoding.UTF8);
-        }
+    /// <inheritdoc />
+    public void SaveConfiguration<T>(Identifier identifier, T configuration)
+        where T : class
+    {
+        ThrowIfNull(identifier, nameof(identifier));
+        ThrowIfNull(configuration, nameof(configuration));
+
+        string json = JsonSerializer.Serialize(configuration, JsonSerializerOptions);
+
+        File.WriteAllText(_identifierPaths.ConfigurationFilePath, json, Encoding.UTF8);
     }
 }

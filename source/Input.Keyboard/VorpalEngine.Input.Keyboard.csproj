@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\VorpalEngine.Common.csproj" />
+    <ProjectReference Include="..\Logging\VorpalEngine.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

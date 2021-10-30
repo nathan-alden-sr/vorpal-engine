@@ -1,11 +1,13 @@
-using NathanAldenSr.VorpalEngine.Common;
-using NathanAldenSr.VorpalEngine.Engine.Common;
-using NathanAldenSr.VorpalEngine.Messaging;
+// Copyright (c) Nathan Alden, Sr. and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-namespace NathanAldenSr.VorpalEngine.Engine.Messaging
+using VorpalEngine.Common.Messaging;
+using VorpalEngine.Engine.Common;
+using VorpalEngine.Messaging;
+
+namespace VorpalEngine.Engine.Messaging;
+
+/// <inheritdoc cref="IMessageSubscriber{TMessageBase,TThread}" />
+public interface IMessageSubscriber : IMessageSubscriber<IMessage, EngineThread>
 {
-    /// <inheritdoc cref="IMessageSubscriber{TMessageBase,TThread}" />
-    public interface IMessageSubscriber : IMessageSubscriber<IMessage, EngineThread>
-    {
-    }
 }

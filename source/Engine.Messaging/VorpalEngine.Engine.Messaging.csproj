@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.Common\VorpalEngine.Engine.Common.csproj" />
+    <ProjectReference Include="..\Messaging\VorpalEngine.Messaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

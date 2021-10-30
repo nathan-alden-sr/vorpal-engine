@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Input.Mouse\VorpalEngine.Input.Mouse.csproj" />
+    <ProjectReference Include="..\Logging\VorpalEngine.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\nuget\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

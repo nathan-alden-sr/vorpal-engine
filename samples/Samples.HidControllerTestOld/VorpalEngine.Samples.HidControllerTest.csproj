@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\Input.Controller.Hid\VorpalEngine.Input.Controller.Hid.csproj" />
+    <ProjectReference Include="..\Samples.ConsoleHelpers\VorpalEngine.Samples.ConsoleHelpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -3,6 +3,18 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
+insert_final_newline = false
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{config,csproj,json,props,ps1,resx,targets,yml}]
+indent_size = 2
 
 [*.sln]
 end_of_line = crlf
+indent_style = tab
+
+[*.cs]
+dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper
+file_header_template = Copyright (c) Nathan Alden, Sr. and Contributors.\nLicensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.

@@ -1,36 +1,35 @@
-using System.Diagnostics.CodeAnalysis;
+// Copyright (c) Nathan Alden, Sr. and Contributors.
+// Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-namespace NathanAldenSr.VorpalEngine.Common.Windows.Messages
+using Silk.NET.Maths;
+using VorpalEngine.Common.Messaging;
+
+namespace VorpalEngine.Common.Windows.Messages;
+
+/// <summary>Indicates the resolution has changed.</summary>
+public readonly struct ResolutionChangedMessage : IMessage
 {
-    /// <summary>Indicates the resolution has changed.</summary>
-    [SuppressMessage("ReSharper", "ConvertToAutoPropertyWhenPossible")]
-    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
-    public readonly struct ResolutionChangedMessage : IMessage
+    /// <summary>Initializes a new instance of the <see cref="ResolutionChangedMessage" /> struct.</summary>
+    /// <param name="oldResolution">The old resolution. A <see langword="null" /> value means the old resolution is unknown.</param>
+    /// <param name="newResolution">The new resolution.</param>
+    public ResolutionChangedMessage(Vector2D<int>? oldResolution, Vector2D<int> newResolution)
     {
-        private readonly Vector2<int>? _oldResolution;
-        private readonly Vector2<int> _newResolution;
-
-        /// <summary>Initializes a new instance of the <see cref="ResolutionChangedMessage" /> struct.</summary>
-        /// <param name="oldResolution">The old resolution. A <see langword="null" /> value means the old resolution is unknown.</param>
-        /// <param name="newResolution">The new resolution.</param>
-        public ResolutionChangedMessage(Vector2<int>? oldResolution, Vector2<int> newResolution)
-        {
-            _oldResolution = oldResolution;
-            _newResolution = newResolution;
-        }
-
-        /// <summary>Gets the old resolution. A <see langword="null" /> value means the old resolution is unknown.</summary>
-        public Vector2<int>? OldResolution => _oldResolution;
-
-        /// <summary>Gets the new resolution.</summary>
-        public Vector2<int> NewResolution => _newResolution;
-
-        /// <inheritdoc />
-        public string Description =>
-            _oldResolution is not null
-                ? $"Resolution changed from {GetDescription(_oldResolution.Value)} to {GetDescription(_newResolution)}"
-                : $"Resolution changed to {GetDescription(_newResolution)}";
-
-        private static string GetDescription(Vector2<int> resolution) => $"{resolution.X}w {resolution.Y}h";
+        OldResolution = oldResolution;
+        NewResolution = newResolution;
     }
+
+    /// <summary>Gets the old resolution. A <see langword="null" /> value means the old resolution is unknown.</summary>
+    public Vector2D<int>? OldResolution { get; }
+
+    /// <summary>Gets the new resolution.</summary>
+    public Vector2D<int> NewResolution { get; }
+
+    /// <inheritdoc />
+    public string Description
+        => OldResolution is not null
+               ? $"Resolution changed from {GetDescription(OldResolution.Value)} to {GetDescription(NewResolution)}"
+               : $"Resolution changed to {GetDescription(NewResolution)}";
+
+    private static string GetDescription(Vector2D<int> resolution)
+        => $"{resolution.X}w {resolution.Y}h";
 }

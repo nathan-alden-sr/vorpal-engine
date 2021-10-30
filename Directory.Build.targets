@@ -1,45 +1,23 @@
-﻿<Project>
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory).msbuild\DotNetVersionHelper.targets" />
+
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU5105</NoWarn>
   </PropertyGroup>
 
-  <!-- Canonical version information -->
+  <!-- Versioning -->
 
-  <PropertyGroup>
-    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <CanonicalVersionPrefix>1.0.0</CanonicalVersionPrefix>
-    <CanonicalVersionPrefix Condition="'$(CI_RUN_ID)' == ''">$(CanonicalVersionPrefix).0</CanonicalVersionPrefix>
-    <CanonicalVersionPrefix Condition="'$(CI_RUN_ID)' != ''">$(CanonicalVersionPrefix).$(CI_RUN_ID)</CanonicalVersionPrefix>
-    <CanonicalVersionSuffix>beta</CanonicalVersionSuffix>
-    <CanonicalSourceRevisionId Condition="'$(CI_SHA)' != ''">$(GITHUB_SHA)</CanonicalSourceRevisionId>
-  </PropertyGroup>
-
-  <!-- Append pr# suffix if there is a pull request -->
-
-  <PropertyGroup Condition="'$(CI_EVENT_NAME)' == 'pull_request'">
-    <CanonicalVersionSuffix Condition="'$(CanonicalVersionSuffix)' != ''">$(CanonicalVersionSuffix)-</CanonicalVersionSuffix>
-    <CanonicalVersionSuffix>$(CanonicalVersionSuffix)pr</CanonicalVersionSuffix>
-  </PropertyGroup>
-
-  <!-- Append dev suffix if "develop" is the source branch -->
-
-  <PropertyGroup Condition="'$(CI_ACTION_REF_NAME)' == 'develop'">
-    <CanonicalVersionSuffix Condition="'$(CanonicalVersionSuffix)' != ''">$(CanonicalVersionSuffix)-</CanonicalVersionSuffix>
-    <CanonicalVersionSuffix>$(CanonicalVersionSuffix)dev</CanonicalVersionSuffix>
-  </PropertyGroup>
-
-  <!-- .NET assembly versions -->
-
-  <PropertyGroup>
-    <!-- Only use major.minor (e.g., 1.2) and append .0.0 -->
-    <AssemblyVersion>$([System.Version]::Parse($(CanonicalVersionPrefix)).ToString(2)).0.0</AssemblyVersion>
-
-    <!-- Only use major.minor.patch (e.g., 1.2.3) and append .0 -->
-    <FileVersion>$([System.Version]::Parse($(CanonicalVersionPrefix)).ToString(3)).0</FileVersion>
-
-    <!-- Use all components (e.g., 1.2.3.123456-alpha-pr-dev+0123456789abcdef0123456789abcdef01234567) -->
-    <InformationalVersion>$(CanonicalVersionPrefix)</InformationalVersion>
-    <InformationalVersion Condition="'$(CanonicalVersionSuffix)' != ''">$(InformationalVersion)-$(CanonicalVersionSuffix)</InformationalVersion>
-    <InformationalVersion Condition="'$(CanonicalSourceRevisionId)' != ''">$(InformationalVersion)+$(CanonicalSourceRevisionId)</InformationalVersion>
-  </PropertyGroup>
+  <Target Name="Version" BeforeTargets="BeforeCompile;GenerateNuspec">
+    <DotNetVersionHelper
+      VersionPrefix="$(VersionPrefix)"
+      VersionSuffix="$(VersionSuffix)"
+      BuildNumber="$(BUILD_BUILDNUMBER)"
+      GitCommitHash="$(BUILD_SOURCEVERSION)"
+      PullRequestId="$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)">
+      <Output TaskParameter="PackageVersion" PropertyName="PackageVersion" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
+      <Output TaskParameter="FileVersion" PropertyName="FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="InformationalVersion" />
+    </DotNetVersionHelper>
+  </Target>
 </Project>
