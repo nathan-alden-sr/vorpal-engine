@@ -1,7 +1,6 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System.Collections.Generic;
 using VorpalEngine.Input.Controller.Hid;
 
 namespace VorpalEngine.Samples.HidControllerTest;

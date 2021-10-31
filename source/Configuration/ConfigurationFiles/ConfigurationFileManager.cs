@@ -1,14 +1,11 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using VorpalEngine.Common;
 using VorpalEngine.Configuration.Paths;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Configuration.ConfigurationFiles;
 

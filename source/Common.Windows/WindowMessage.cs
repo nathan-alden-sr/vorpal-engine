@@ -3,7 +3,6 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 #pragma warning disable 1591
 

@@ -1,11 +1,8 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-using System.IO;
 using VorpalEngine.Common;
 using static System.IO.Path;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Configuration.Paths;
 

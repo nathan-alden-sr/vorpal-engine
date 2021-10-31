@@ -44,6 +44,7 @@
     <LangVersion>preview</LangVersion>
     <Features>strict</Features>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
     <MinClientVersion>4.3</MinClientVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -60,4 +61,12 @@
     <DebugType>full</DebugType>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
+
+  <!-- Global usings -->
+
+  <ItemGroup>
+    <Using Include="System.Collections.Immutable" />
+    <Using Include="TerraFX.Utilities.AssertionUtilities" Static="true" />
+    <Using Include="TerraFX.Utilities.ExceptionUtilities" Static="true" />
+  </ItemGroup>
 </Project>

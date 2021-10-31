@@ -1,15 +1,11 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using TerraFX.Interop;
 using VorpalEngine.Common;
 using VorpalEngine.Logging;
 using static TerraFX.Interop.Windows;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Input.Controller.XInput;
 

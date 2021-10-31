@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Moq;
 using VorpalEngine.Input.Controller.XInput;
 using VorpalEngine.Samples.ConsoleHelpers;

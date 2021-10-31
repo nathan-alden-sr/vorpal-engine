@@ -1,14 +1,10 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Serilog;
 using Serilog.Events;
 using TerraFX.Threading;
-using static TerraFX.Utilities.AssertionUtilities;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Logging;
 

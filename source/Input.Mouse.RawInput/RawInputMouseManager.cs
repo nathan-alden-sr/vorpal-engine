@@ -3,7 +3,6 @@
 
 using TerraFX.Interop;
 using static TerraFX.Interop.Windows;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Input.Mouse.RawInput;
 

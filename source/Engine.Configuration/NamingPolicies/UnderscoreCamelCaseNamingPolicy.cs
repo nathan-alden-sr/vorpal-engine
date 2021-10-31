@@ -2,7 +2,6 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Text.Json;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Engine.Configuration.NamingPolicies;
 

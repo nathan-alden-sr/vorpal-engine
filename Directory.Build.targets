@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="$(MSBuildThisFileDirectory).msbuild\DotNetVersionHelper.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)build\msbuild\DotNetVersionHelper.targets" />
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU5105</NoWarn>

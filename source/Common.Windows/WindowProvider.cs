@@ -2,16 +2,11 @@
 // Based on source code copyright (c) Tanner Gooding and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
 using TerraFX;
 using TerraFX.Interop;
 using TerraFX.Threading;
 using static TerraFX.Interop.Windows;
-using static TerraFX.Utilities.AssertionUtilities;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Common.Windows;
 

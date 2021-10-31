@@ -88,11 +88,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{2C56F0
 		media\images\pear.svg = media\images\pear.svg
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".msbuild", ".msbuild", "{FD35BDA3-9E66-4E53-8063-4E9CD7B7D6CD}"
-	ProjectSection(SolutionItems) = preProject
-		.msbuild\DotNetVersionHelper.targets = .msbuild\DotNetVersionHelper.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{7A66AB87-7743-4ACC-BA7F-A4F102FFD679}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{581CC2AF-DA2C-47FA-9AB5-63A9EF6446D1}"
@@ -101,6 +96,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{581CC2AF
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VorpalEngine.Common.Messaging", "source\Common.Messaging\VorpalEngine.Common.Messaging.csproj", "{064BD557-2D93-4064-A863-B1E34F14CCC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "msbuild", "msbuild", "{47301C62-8751-4FE1-BB18-6C6748E2086B}"
+	ProjectSection(SolutionItems) = preProject
+		build\msbuild\DotNetVersionHelper.targets = build\msbuild\DotNetVersionHelper.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -230,6 +230,7 @@ Global
 		{2C56F06A-AB9F-4848-956A-EC6FBE83AA1D} = {BCF503E6-737F-49A5-92A0-0D8B5B7AAC2D}
 		{581CC2AF-DA2C-47FA-9AB5-63A9EF6446D1} = {7A66AB87-7743-4ACC-BA7F-A4F102FFD679}
 		{064BD557-2D93-4064-A863-B1E34F14CCC8} = {24F1FCF9-1AA9-4F87-8AB2-08795D4ACC91}
+		{47301C62-8751-4FE1-BB18-6C6748E2086B} = {7A66AB87-7743-4ACC-BA7F-A4F102FFD679}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD27B47D-5064-4409-93B6-69D1BA97D44A}

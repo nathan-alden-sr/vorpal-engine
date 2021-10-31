@@ -1,13 +1,11 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
 using TerraFX.Threading;
 using VorpalEngine.Common;
 using VorpalEngine.Common.Messaging;
 using VorpalEngine.Engine.Common;
 using VorpalEngine.Messaging;
-using static TerraFX.Utilities.AssertionUtilities;
 
 namespace VorpalEngine.Engine.Messaging;
 

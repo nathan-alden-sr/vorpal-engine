@@ -1,8 +1,6 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-
 namespace VorpalEngine.Messaging;
 
 /// <summary>Represents a concurrent message queue that implements a one-publisher, many-subscribers model.</summary>

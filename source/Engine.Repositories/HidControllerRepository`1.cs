@@ -3,7 +3,6 @@
 
 using VorpalEngine.Engine.Configuration;
 using VorpalEngine.Input.Controller.Hid;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Engine.Repositories;
 

@@ -1,8 +1,6 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System;
-using System.Linq;
 using Silk.NET.Maths;
 using TerraFX;
 using TerraFX.Interop;
@@ -13,8 +11,7 @@ using VorpalEngine.Common.Windows.Messages;
 using VorpalEngine.Engine.Messaging;
 using VorpalEngine.Logging;
 using static TerraFX.Interop.Windows;
-using static TerraFX.Utilities.AssertionUtilities;
-using static TerraFX.Utilities.ExceptionUtilities;
+using Monitor = VorpalEngine.Common.Windows.Monitor;
 using WindowsRender = VorpalEngine.Engine.Configuration.WindowsRender;
 
 namespace VorpalEngine.Engine.Windows.Render;

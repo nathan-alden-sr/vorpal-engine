@@ -1,4 +1,3 @@
-using System;
 using VorpalEngine.Common;
 
 namespace VorpalEngine.Messaging;
