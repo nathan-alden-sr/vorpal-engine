@@ -102,6 +102,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VorpalEngine.Samples.HidCon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VorpalEngine.Samples.XInputControllerTest", "samples\Samples.XInputControllerTest\VorpalEngine.Samples.XInputControllerTest.csproj", "{C3EB2942-4C58-4E35-A95A-B1E86BFA4CDB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VorpalEngine.Samples.EngineTest", "samples\Samples.EngineTest\VorpalEngine.Samples.EngineTest.csproj", "{4272E428-D9E5-4716-B1DC-521758F6BBEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -200,6 +202,10 @@ Global
 		{C3EB2942-4C58-4E35-A95A-B1E86BFA4CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3EB2942-4C58-4E35-A95A-B1E86BFA4CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3EB2942-4C58-4E35-A95A-B1E86BFA4CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4272E428-D9E5-4716-B1DC-521758F6BBEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4272E428-D9E5-4716-B1DC-521758F6BBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4272E428-D9E5-4716-B1DC-521758F6BBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4272E428-D9E5-4716-B1DC-521758F6BBEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -231,6 +237,7 @@ Global
 		{47301C62-8751-4FE1-BB18-6C6748E2086B} = {7A66AB87-7743-4ACC-BA7F-A4F102FFD679}
 		{A7A22FE5-5013-48D9-9DC0-19042410D059} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
 		{C3EB2942-4C58-4E35-A95A-B1E86BFA4CDB} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
+		{4272E428-D9E5-4716-B1DC-521758F6BBEB} = {5F11447C-3089-451A-9D3C-A67E6E1FB9E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD27B47D-5064-4409-93B6-69D1BA97D44A}

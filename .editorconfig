@@ -20,7 +20,7 @@ max_line_length = 130
 
 # XML files
 
-[*.{config,nuspec,props,resx,ruleset,targets,vsct,vsixmanifest}]
+[*.{config,nuspec,props,resx,ruleset,targets,vsct,vsixmanifest,xaml}]
 indent_size = 2
 max_line_length = 130
 
