@@ -32,7 +32,11 @@ public static class Log
 
     /// <inheritdoc cref="ILogger.Write(LogLevel,System.Exception?,string?,object?[])" />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Write(LogLevel level, Exception? exception, string? messageTemplate = null, params object?[] propertyValues)
+    public static void Write(
+        LogLevel level,
+        Exception? exception,
+        string? messageTemplate = null,
+        params object?[] propertyValues)
         => Logger?.Write(level, exception, messageTemplate, propertyValues);
 
     /// <inheritdoc cref="ILogger.Write(LogLevel,string?,object?[])" />

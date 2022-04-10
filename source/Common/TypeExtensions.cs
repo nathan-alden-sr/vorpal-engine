@@ -15,9 +15,9 @@ public static class TypeExtensions
     /// <returns>The type name.</returns>
     public static string GetTypeName(this Type type, bool fullName = false, bool expandGenericArguments = true)
     {
-        ThrowIfNull(type, nameof(type));
+        ThrowIfNull(type);
 
-        StringBuilder stringBuilder = new();
+        var stringBuilder = new StringBuilder();
 
         if (expandGenericArguments)
         {
@@ -25,7 +25,7 @@ public static class TypeExtensions
         }
         else
         {
-            stringBuilder.Append(type.Name);
+            _ = stringBuilder.Append(type.Name);
         }
 
         return stringBuilder.ToString();
@@ -35,25 +35,25 @@ public static class TypeExtensions
     {
         if (fullName)
         {
-            stringBuilder.Append($"{type.Namespace}.");
+            _ = stringBuilder.Append($"{type.Namespace}.");
         }
 
-        int backquoteIndex = type.Name.IndexOf('`');
+        var backquoteIndex = type.Name.IndexOf('`');
 
-        stringBuilder.Append(type.Name[..(backquoteIndex < 0 ? type.Name.Length : backquoteIndex)]);
+        _ = stringBuilder.Append(type.Name[..(backquoteIndex < 0 ? type.Name.Length : backquoteIndex)]);
 
         if (!type.IsGenericType)
         {
             return;
         }
 
-        stringBuilder.Append('<');
+        _ = stringBuilder.Append('<');
 
-        foreach (Type genericArgument in type.GetGenericArguments())
+        foreach (var genericArgument in type.GetGenericArguments())
         {
             TransformType(stringBuilder, genericArgument, fullName);
         }
 
-        stringBuilder.Append('>');
+        _ = stringBuilder.Append('>');
     }
 }

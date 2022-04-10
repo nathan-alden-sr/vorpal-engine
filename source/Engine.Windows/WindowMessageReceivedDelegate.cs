@@ -1,7 +1,7 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
 
 namespace VorpalEngine.Engine.Windows;
 

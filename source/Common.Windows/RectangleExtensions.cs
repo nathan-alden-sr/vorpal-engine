@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Silk.NET.Maths;
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -18,9 +18,12 @@ public static class RectangleExtensions
     {
         if (typeof(T) == typeof(int))
         {
-            return new RECT((int)(object)value.Origin.X, (int)(object)value.Origin.Y, (int)(object)value.Max.X, (int)(object)value.Max.Y);
+            return new RECT(
+                (int)(object)value.Origin.X,
+                (int)(object)value.Origin.Y,
+                (int)(object)value.Max.X,
+                (int)(object)value.Max.Y);
         }
-        // ReSharper disable once ConvertIfStatementToReturnStatement
         if (typeof(T) == typeof(float))
         {
             return new RECT(

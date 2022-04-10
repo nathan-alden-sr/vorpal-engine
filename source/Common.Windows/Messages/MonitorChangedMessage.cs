@@ -13,7 +13,7 @@ public readonly struct MonitorChangedMessage : IMessage
     /// <param name="newMonitor">The new monitor.</param>
     public MonitorChangedMessage(Monitor? oldMonitor, Monitor newMonitor)
     {
-        ThrowIfNull(newMonitor, nameof(newMonitor));
+        ThrowIfNull(newMonitor);
 
         OldMonitor = oldMonitor;
         NewMonitor = newMonitor;
@@ -28,8 +28,8 @@ public readonly struct MonitorChangedMessage : IMessage
     /// <inheritdoc />
     public string Description
         => OldMonitor is not null
-               ? $"Monitor changed from {GetDescription(OldMonitor)} to {GetDescription(NewMonitor)}"
-               : $"Monitor changed to {GetDescription(NewMonitor)}";
+            ? $"Monitor changed from {GetDescription(OldMonitor)} to {GetDescription(NewMonitor)}"
+            : $"Monitor changed to {GetDescription(NewMonitor)}";
 
     private static string GetDescription(Monitor monitor)
         => $"{monitor.DeviceName} {monitor.WorkingArea.Size.X}w {monitor.WorkingArea.Size.Y}h {monitor.BitsPerPixel}bpp";

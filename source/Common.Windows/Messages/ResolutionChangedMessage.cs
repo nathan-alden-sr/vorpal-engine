@@ -27,8 +27,8 @@ public readonly struct ResolutionChangedMessage : IMessage
     /// <inheritdoc />
     public string Description
         => OldResolution is not null
-               ? $"Resolution changed from {GetDescription(OldResolution.Value)} to {GetDescription(NewResolution)}"
-               : $"Resolution changed to {GetDescription(NewResolution)}";
+            ? $"Resolution changed from {GetDescription(OldResolution.Value)} to {GetDescription(NewResolution)}"
+            : $"Resolution changed to {GetDescription(NewResolution)}";
 
     private static string GetDescription(Vector2D<int> resolution)
         => $"{resolution.X}w {resolution.Y}h";

@@ -2,10 +2,14 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Diagnostics.CodeAnalysis;
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
+using TerraFX.Utilities;
 using VorpalEngine.Common;
 using VorpalEngine.Logging;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.FILE;
+using static TerraFX.Interop.Windows.HIDP;
+using static TerraFX.Interop.Windows.OPEN;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Input.Controller.Hid;
 
@@ -23,7 +27,7 @@ public sealed class HidControllerManager : IHidControllerManager
     /// <param name="context">A nested context.</param>
     public HidControllerManager(IHidControllerRepository hidControllerRepository, NestedContext context = default)
     {
-        ThrowIfNull(hidControllerRepository, nameof(hidControllerRepository));
+        ThrowIfNull(hidControllerRepository);
 
         context = context.Push<HidControllerManager>();
 
@@ -34,11 +38,11 @@ public sealed class HidControllerManager : IHidControllerManager
     /// <inheritdoc />
     public unsafe void UpdateState(RAWINPUT* rawInput)
     {
-        ThrowIfNull(rawInput, nameof(rawInput));
+        ThrowIfNull(rawInput);
 
-        IntPtr deviceHandle = rawInput->header.hDevice;
+        var deviceHandle = rawInput->header.hDevice;
 
-        if (!_hidControllersByHandle.TryGetValue(deviceHandle, out HidController? controller))
+        if (!_hidControllersByHandle.TryGetValue(deviceHandle, out var controller))
         {
             /*
              * The user can plug in and unplug devices at any time, causing device handles
@@ -48,7 +52,7 @@ public sealed class HidControllerManager : IHidControllerManager
 
             RemoveDisconnectedControllers();
 
-            IntPtr fileHandle = OpenRawInputDevice(deviceHandle);
+            var fileHandle = OpenRawInputDevice(deviceHandle);
 
             controller = ConfigureController(deviceHandle, fileHandle);
         }
@@ -62,7 +66,7 @@ public sealed class HidControllerManager : IHidControllerManager
     /// <inheritdoc />
     public bool TryGetState(uint index, [NotNullWhen(true)] out IHidController? controller, out HidControllerState state)
     {
-        if (_hidControllersByIndex.TryGetValue(index, out HidController? hidController))
+        if (_hidControllersByIndex.TryGetValue(index, out var hidController))
         {
             controller = hidController;
 
@@ -78,7 +82,7 @@ public sealed class HidControllerManager : IHidControllerManager
     /// <inheritdoc />
     public void InvalidateController(uint index)
     {
-        if (_hidControllersByIndex.Remove(index, out HidController? controller))
+        if (_hidControllersByIndex.Remove(index, out var controller))
         {
             _hidControllersByHandle.Remove(controller.DeviceHandle);
         }
@@ -89,33 +93,33 @@ public sealed class HidControllerManager : IHidControllerManager
         // Retrieve the current list of HID devices
 
         uint rawInputDeviceCount;
-        uint result = GetRawInputDeviceList(null, &rawInputDeviceCount, (uint)sizeof(RAWINPUTDEVICELIST));
+        var result = GetRawInputDeviceList(null, &rawInputDeviceCount, (uint)sizeof(RAWINPUTDEVICELIST));
 
         if (result == unchecked((uint)-1))
         {
-            ThrowExternalException(nameof(GetRawInputDeviceList), unchecked((int)result));
+            ExceptionUtilities.ThrowExternalException(nameof(GetRawInputDeviceList), unchecked((int)result));
         }
 
-        RAWINPUTDEVICELIST* pRawInputDeviceList = stackalloc RAWINPUTDEVICELIST[(int)rawInputDeviceCount];
+        var pRawInputDeviceList = stackalloc RAWINPUTDEVICELIST[(int)rawInputDeviceCount];
 
         result = GetRawInputDeviceList(pRawInputDeviceList, &rawInputDeviceCount, (uint)sizeof(RAWINPUTDEVICELIST));
 
         if (result == unchecked((uint)-1))
         {
-            ThrowExternalException(nameof(GetRawInputDeviceList), unchecked((int)result));
+            ExceptionUtilities.ThrowExternalException(nameof(GetRawInputDeviceList), unchecked((int)result));
         }
 
         // Remove any cached HID controllers that are no longer valid
 
-        HashSet<IntPtr> validDeviceHandles = new();
+        var validDeviceHandles = new HashSet<HANDLE>();
 
         for (var i = 0; i < rawInputDeviceCount; i++)
         {
-            validDeviceHandles.Add(pRawInputDeviceList[i].hDevice);
+            _ = validDeviceHandles.Add(pRawInputDeviceList[i].hDevice);
         }
 
         // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-        foreach (HidController? controller in _hidControllersByHandle.Values)
+        foreach (var controller in _hidControllersByHandle.Values)
         {
             if (controller is null || validDeviceHandles.Contains(controller.DeviceHandle))
             {
@@ -133,41 +137,46 @@ public sealed class HidControllerManager : IHidControllerManager
         }
     }
 
-    private unsafe IntPtr OpenRawInputDevice(IntPtr deviceHandle)
+    private unsafe HANDLE OpenRawInputDevice(HANDLE deviceHandle)
     {
         uint size;
 
-        ThrowIfNotZero(
-            GetRawInputDeviceInfoW(deviceHandle, RIDI_DEVICENAME, null, &size),
-            nameof(GetRawInputDeviceInfoW));
+        ThrowIfNotZero(GetRawInputDeviceInfoW(deviceHandle, RIDI_DEVICENAME, null, &size));
 
-        ushort* pDeviceName = stackalloc ushort[(int)size];
-        uint result = GetRawInputDeviceInfoW(deviceHandle, RIDI_DEVICENAME, pDeviceName, &size);
+        var pDeviceName = stackalloc ushort[(int)size];
+        var result = GetRawInputDeviceInfoW(deviceHandle, RIDI_DEVICENAME, pDeviceName, &size);
 
         if (result == unchecked((uint)-1) || result != size)
         {
-            ThrowExternalException(nameof(GetRawInputDeviceInfoW), unchecked((int)result));
+            ExceptionUtilities.ThrowExternalException(nameof(GetRawInputDeviceInfoW), unchecked((int)result));
         }
 
-        IntPtr fileHandle = CreateFileW(pDeviceName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, null, OPEN_EXISTING, 0, IntPtr.Zero);
+        var fileHandle = CreateFileW(
+            pDeviceName,
+            GENERIC_READ,
+            FILE_SHARE_READ | FILE_SHARE_WRITE,
+            null,
+            OPEN_EXISTING,
+            0,
+            HANDLE.NULL);
 
-        if (fileHandle != INVALID_HANDLE_VALUE)
+        if (fileHandle != HANDLE.INVALID_VALUE)
         {
             return fileHandle;
         }
 
         _logger?.Warning("Failed to determine Raw Input device name for device handle {@DeviceHandle}", deviceHandle);
 
-        return IntPtr.Zero;
+        return HANDLE.NULL;
     }
 
-    private unsafe HidController? ConfigureController(IntPtr deviceHandle, IntPtr fileHandle)
+    private unsafe HidController? ConfigureController(HANDLE deviceHandle, HANDLE fileHandle)
     {
-        ThrowIfZero(deviceHandle, nameof(deviceHandle));
+        ThrowIfNull(deviceHandle);
 
         HidController? controller = null;
 
-        if (fileHandle == IntPtr.Zero)
+        if (fileHandle == HANDLE.NULL)
         {
             _hidControllersByHandle.Add(deviceHandle, null);
             return null;
@@ -177,11 +186,13 @@ public sealed class HidControllerManager : IHidControllerManager
         {
             // Get preparsed data
 
-            IntPtr pPreparsedData;
+            PHIDP_PREPARSED_DATA pPreparsedData;
 
             if (HidD_GetPreparsedData(fileHandle, &pPreparsedData) != TRUE)
             {
-                _logger?.Warning("Failed to retrieve HID controller preparsed data for device handle @{DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller preparsed data for device handle @{DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
@@ -191,7 +202,9 @@ public sealed class HidControllerManager : IHidControllerManager
 
             if (HidP_GetCaps(pPreparsedData, &capabilities) != HIDP_STATUS_SUCCESS)
             {
-                _logger?.Warning("Failed to retrieve HID controller capabilities for device handle @{DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller capabilities for device handle @{DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
@@ -199,61 +212,73 @@ public sealed class HidControllerManager : IHidControllerManager
 
             if (capabilities.NumberInputButtonCaps == 0)
             {
-                _logger?.Warning("Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
-            ushort inputButtonCapabilityCount = capabilities.NumberInputButtonCaps;
-            HIDP_BUTTON_CAPS* pButtonCapabilities = stackalloc HIDP_BUTTON_CAPS[inputButtonCapabilityCount];
+            var inputButtonCapabilityCount = capabilities.NumberInputButtonCaps;
+            var pButtonCapabilities = stackalloc HIDP_BUTTON_CAPS[inputButtonCapabilityCount];
 
-            if (HidP_GetButtonCaps(HIDP_REPORT_TYPE.HidP_Input, pButtonCapabilities, &inputButtonCapabilityCount, pPreparsedData) !=
+            if (HidP_GetButtonCaps(
+                    HIDP_REPORT_TYPE.HidP_Input,
+                    pButtonCapabilities,
+                    &inputButtonCapabilityCount,
+                    pPreparsedData) !=
                 HIDP_STATUS_SUCCESS)
             {
-                _logger?.Warning("Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
-            ushort minimumButtonNumber = pButtonCapabilities->Anonymous.Range.UsageMin;
-            ushort maximumButtonNumber = pButtonCapabilities->Anonymous.Range.UsageMax;
+            var minimumButtonNumber = pButtonCapabilities->Anonymous.Range.UsageMin;
+            var maximumButtonNumber = pButtonCapabilities->Anonymous.Range.UsageMax;
 
             // Get value capabilities
 
             if (capabilities.NumberInputValueCaps == 0)
             {
-                _logger?.Warning("Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller button capabilities for device handle @{DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
-            ushort inputValueCapabilityCount = capabilities.NumberInputValueCaps;
-            HIDP_VALUE_CAPS* pValueCapabilities = stackalloc HIDP_VALUE_CAPS[inputValueCapabilityCount];
+            var inputValueCapabilityCount = capabilities.NumberInputValueCaps;
+            var pValueCapabilities = stackalloc HIDP_VALUE_CAPS[inputValueCapabilityCount];
 
             if (HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, pValueCapabilities, &inputValueCapabilityCount, pPreparsedData) !=
                 HIDP_STATUS_SUCCESS)
             {
-                _logger?.Warning("Failed to retrieve HID controller value capabilities for device handle {@DeviceHandle}", deviceHandle);
+                _logger?.Warning(
+                    "Failed to retrieve HID controller value capabilities for device handle {@DeviceHandle}",
+                    deviceHandle);
                 return null;
             }
 
             // Get identifying information
 
             const int bufferLength = 127;
-            ushort* pBuffer = stackalloc ushort[bufferLength];
+            var pBuffer = stackalloc ushort[bufferLength];
 
-            string? manufacturer =
+            var manufacturer =
                 HidD_GetManufacturerString(fileHandle, pBuffer, sizeof(ushort) * bufferLength) == TRUE
                     ? new string((char*)pBuffer).Trim()
                     : null;
-            string? product =
+            var product =
                 HidD_GetProductString(fileHandle, pBuffer, sizeof(ushort) * bufferLength) == TRUE
                     ? new string((char*)pBuffer).Trim()
                     : null;
-            string? serialNumber =
+            var serialNumber =
                 HidD_GetSerialNumberString(fileHandle, pBuffer, sizeof(ushort) * bufferLength) == TRUE
                     ? new string((char*)pBuffer).Trim()
                     : null;
-            ushort valueCapabilityCount = inputValueCapabilityCount;
-            ReadOnlySpan<HIDP_VALUE_CAPS> valueCapabilities = new(pValueCapabilities, valueCapabilityCount);
-            (uint index, bool? _, bool enabledDefault) = _hidControllerRepository.AddHidController(manufacturer, product, serialNumber);
+            var valueCapabilityCount = inputValueCapabilityCount;
+            var valueCapabilities = new ReadOnlySpan<HIDP_VALUE_CAPS>(pValueCapabilities, valueCapabilityCount);
+            var (index, _, enabledDefault) = _hidControllerRepository.AddHidController(manufacturer, product, serialNumber);
 
             // Do not configure disabled controllers
             if (enabledDefault)

@@ -26,6 +26,6 @@ public readonly struct DisplayModeChangedMessage : IMessage
     /// <inheritdoc />
     public string Description
         => OldDisplayMode is not null
-               ? $"Display mode changed from {OldDisplayMode.Value} to {NewDisplayMode}"
-               : $"Display mode changed to {NewDisplayMode}";
+            ? $"Display mode changed from {OldDisplayMode.Value} to {NewDisplayMode}"
+            : $"Display mode changed to {NewDisplayMode}";
 }

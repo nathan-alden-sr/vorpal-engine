@@ -15,8 +15,8 @@ internal sealed class IconConverter : JsonConverter<Icon>
     /// <inheritdoc />
     public override Icon Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        byte[] bytes = reader.GetBytesFromBase64();
-        using MemoryStream memoryStream = MemoryStreamUtilities.RecyclableMemoryStreamManager.GetStream(bytes);
+        var bytes = reader.GetBytesFromBase64();
+        using var memoryStream = MemoryStreamUtilities.RecyclableMemoryStreamManager.GetStream(bytes);
 
         return new Icon(memoryStream);
     }
@@ -25,10 +25,10 @@ internal sealed class IconConverter : JsonConverter<Icon>
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, Icon value, JsonSerializerOptions options)
     {
-        ThrowIfNull(writer, nameof(writer));
-        ThrowIfNull(value, nameof(value));
+        ThrowIfNull(writer);
+        ThrowIfNull(value);
 
-        using MemoryStream stream = MemoryStreamUtilities.RecyclableMemoryStreamManager.GetStream();
+        using var stream = MemoryStreamUtilities.RecyclableMemoryStreamManager.GetStream();
 
         value.Save(stream);
 

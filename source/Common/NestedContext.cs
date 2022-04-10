@@ -24,7 +24,11 @@ public readonly struct NestedContext
     /// <param name="fullName">A value indicating whether to include types' namespaces.</param>
     /// <param name="expandGenericArguments">A value indicating whether to include generic type arguments.</param>
     /// <param name="separator">The separator to use when combining contexts.</param>
-    public NestedContext(Type context, bool fullName = false, bool expandGenericArguments = true, string separator = DefaultSeparator)
+    public NestedContext(
+        Type context,
+        bool fullName = false,
+        bool expandGenericArguments = true,
+        string separator = DefaultSeparator)
         : this(context.GetTypeName(fullName, expandGenericArguments), separator)
     {
     }
@@ -42,7 +46,8 @@ public readonly struct NestedContext
     {
         separator ??= DefaultSeparator;
 
-        Description = $"{description}{(!string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(context) ? separator : "")}{context}";
+        Description =
+            $"{description}{(!string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(context) ? separator : "")}{context}";
         _separator = separator;
     }
 

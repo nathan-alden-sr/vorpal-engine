@@ -17,18 +17,22 @@ public sealed class HidControllerRepository<T> : IHidControllerRepository
     /// <param name="configurationManager">An <see cref="IConfigurationManager{T}" /> implementation.</param>
     public HidControllerRepository(IConfigurationManager<T> configurationManager)
     {
-        ThrowIfNull(configurationManager, nameof(configurationManager));
+        ThrowIfNull(configurationManager);
 
         _configurationManager = configurationManager;
     }
 
     /// <inheritdoc />
-    public (uint index, bool? enabled, bool enabledDefault) AddHidController(string? manufacturer, string? productName, string? serialNumber)
+    public (uint index, bool? enabled, bool enabledDefault) AddHidController(
+        string? manufacturer,
+        string? productName,
+        string? serialNumber)
     {
         (uint index, bool? enabled, bool enabledDefault) result = default;
 
         _configurationManager.ModifyConfiguration(
-            (configuration, _) => { result = configuration.Input(true).HidControllers(true).Add(manufacturer, productName, serialNumber); });
+            (configuration, _) =>
+                result = configuration.Input(true).HidControllers(true).Add(manufacturer, productName, serialNumber));
 
         return result;
     }

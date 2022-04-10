@@ -22,7 +22,7 @@ public sealed class MessageQueueHelper : IMessagePublisherHelper, IDisposable
     {
         _concurrentMessageQueueHelper = new ConcurrentMessageQueueHelper<IMessage, EngineThread>(messageQueue, context);
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <summary>Disposes the <see cref="MessageQueueHelper" />, releasing all of its unmanaged resources.</summary>
@@ -42,7 +42,7 @@ public sealed class MessageQueueHelper : IMessagePublisherHelper, IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        _concurrentMessageQueueHelper.Publish(message);
+        _ = _concurrentMessageQueueHelper.Publish(message);
 
         return this;
     }
@@ -53,7 +53,7 @@ public sealed class MessageQueueHelper : IMessagePublisherHelper, IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        _concurrentMessageQueueHelper.Publish<T>();
+        _ = _concurrentMessageQueueHelper.Publish<T>();
 
         return this;
     }
@@ -65,7 +65,7 @@ public sealed class MessageQueueHelper : IMessagePublisherHelper, IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        _concurrentMessageQueueHelper.WithThread(thread);
+        _ = _concurrentMessageQueueHelper.WithThread(thread);
 
         return this;
     }
@@ -79,7 +79,7 @@ public sealed class MessageQueueHelper : IMessagePublisherHelper, IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        _concurrentMessageQueueHelper.Subscribe(handlerDelegate);
+        _ = _concurrentMessageQueueHelper.Subscribe(handlerDelegate);
 
         return this;
     }

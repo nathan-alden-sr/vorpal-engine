@@ -14,11 +14,12 @@ public sealed class HidControllerManagerFactory : IHidControllerManagerFactory
     /// <param name="hidControllerRepository">An <see cref="IHidControllerRepository" /> implementation.</param>
     public HidControllerManagerFactory(IHidControllerRepository hidControllerRepository)
     {
-        ThrowIfNull(hidControllerRepository, nameof(hidControllerRepository));
+        ThrowIfNull(hidControllerRepository);
 
         _hidControllerRepository = hidControllerRepository;
     }
 
     /// <inheritdoc />
-    public IHidControllerManager Create(NestedContext context = default) => new HidControllerManager(_hidControllerRepository, context);
+    public IHidControllerManager Create(NestedContext context = default)
+        => new HidControllerManager(_hidControllerRepository, context);
 }

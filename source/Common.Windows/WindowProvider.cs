@@ -4,9 +4,13 @@
 
 using System.Runtime.InteropServices;
 using TerraFX;
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
 using TerraFX.Threading;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.CS;
+using static TerraFX.Interop.Windows.GWLP;
+using static TerraFX.Interop.Windows.IDC;
+using static TerraFX.Interop.Windows.Windows;
+using static TerraFX.Interop.Windows.WM;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -25,14 +29,14 @@ public sealed class WindowProvider : IDisposable
     /// <param name="monitorProvider">An <see cref="IMonitorProvider" /> implementation.</param>
     public WindowProvider(IMonitorProvider monitorProvider)
     {
-        ThrowIfNull(monitorProvider, nameof(monitorProvider));
+        ThrowIfNull(monitorProvider);
 
         _monitorProvider = monitorProvider;
         _classAtom = new ValueLazy<ushort>(RegisterClass);
         _nativeHandle = new ValueLazy<GCHandle>(() => GCHandle.Alloc(this, GCHandleType.Normal));
         _windowsByWindowHandle = new ThreadLocal<Dictionary<HWND, Window>>(true);
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <summary>Gets the class atom of the window.</summary>
@@ -90,24 +94,25 @@ public sealed class WindowProvider : IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        Dictionary<HWND, Window>? windowsByWindowHandle = _windowsByWindowHandle.Value;
+        var windowsByWindowHandle = _windowsByWindowHandle.Value;
 
         if (windowsByWindowHandle is null)
         {
             _windowsByWindowHandle.Value = windowsByWindowHandle = new Dictionary<HWND, Window>(4);
         }
 
-        Window window = new(
-            _monitorProvider,
-            this,
-            beforeCreationDelegate,
-            window =>
-            {
-                window.ApplyWindowStyles();
-                afterCreationDelegate?.Invoke(window);
-            },
-            beforeMessageProcessingDelegate,
-            afterMessageProcessingDelegate);
+        var window =
+            new Window(
+                _monitorProvider,
+                this,
+                beforeCreationDelegate,
+                window =>
+                {
+                    window.ApplyWindowStyles();
+                    afterCreationDelegate?.Invoke(window);
+                },
+                beforeMessageProcessingDelegate,
+                afterMessageProcessingDelegate);
 
         if (windowsByWindowHandle.TryAdd(window.Handle, window))
         {
@@ -140,16 +145,16 @@ public sealed class WindowProvider : IDisposable
 
         fixed (char* pClassName = className)
         {
-            WNDCLASSEXW windowClass =
-                new()
+             var windowClass =
+                new WNDCLASSEXW
                 {
                     cbClsExtra = 0,
                     cbSize = (uint)sizeof(WNDCLASSEXW),
                     cbWndExtra = 0,
-                    hbrBackground = GetStockObject(BLACK_BRUSH),
-                    hCursor = LoadCursorW(IntPtr.Zero, IDC_ARROW),
-                    hIcon = IntPtr.Zero,
-                    hIconSm = IntPtr.Zero,
+                    hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH),
+                    hCursor = LoadCursorW(HINSTANCE.NULL, IDC_ARROW),
+                    hIcon = HICON.NULL,
+                    hIconSm = HICON.NULL,
                     hInstance = ModuleHandle,
                     lpfnWndProc = &WindowProc,
                     lpszClassName = (ushort*)pClassName,
@@ -166,76 +171,71 @@ public sealed class WindowProvider : IDisposable
     }
 
     [UnmanagedCallersOnly]
-    private static nint WindowProc(IntPtr hWnd, uint uMsg, nuint wParam, nint lParam)
+    private static unsafe LRESULT WindowProc(HWND hWnd, uint uMsg, WPARAM wParam, LPARAM lParam)
     {
-        return WindowProcLocal(hWnd, uMsg, wParam, lParam);
+        IntPtr userData;
 
-        static unsafe nint WindowProcLocal(HWND hWnd, uint message, nuint wParam, nint lParam)
+        if (uMsg == WM_CREATE)
         {
-            IntPtr userData;
+            /*
+             * Place the window provider's native handle into the new window's user data
+             * so it can be retrieved when processing subsequent messages.
+             */
 
-            if (message == WM_CREATE)
+            var createStruct = (CREATESTRUCTW*)lParam;
+
+            userData = (nint)createStruct->lpCreateParams;
+
+            _ = SetWindowLongPtrW(hWnd, GWLP_USERDATA, userData);
+        }
+        else
+        {
+            // Retrieve the window provider's native handle
+            userData = GetWindowLongPtrW(hWnd, GWLP_USERDATA);
+        }
+
+        Dictionary<HWND, Window>? windowsByWindowHandle = null;
+        Window? window = null;
+        var forwardMessage = false;
+        nint result;
+
+        if (userData != IntPtr.Zero)
+        {
+            // Retrieve the window provider from the native handle
+
+            var windowProvider = (WindowProvider)GCHandle.FromIntPtr(userData).Target!;
+
+            windowsByWindowHandle = windowProvider._windowsByWindowHandle.Value;
+            forwardMessage = windowsByWindowHandle?.TryGetValue(hWnd, out window) == true;
+        }
+
+        if (forwardMessage)
+        {
+            AssertNotNull(window);
+            AssertNotNull(windowsByWindowHandle);
+
+            result = window.HandleWindowMessage(uMsg, wParam, lParam);
+
+            if (uMsg == WM_DESTROY)
             {
                 /*
-                 * Place the window provider's native handle into the new window's user data
-                 * so it can be retrieved when processing subsequent messages.
+                 * Forward WM_DESTROY to the corresponding window in case the window handle
+                 * was destroyed externally.
                  */
-
-                var createStruct = (CREATESTRUCTW*)lParam;
-
-                userData = (IntPtr)createStruct->lpCreateParams;
-
-                SetWindowLongPtrW(hWnd, GWLP_USERDATA, userData);
+                _ = RemoveWindow(windowsByWindowHandle, hWnd);
             }
-            else
-            {
-                // Retrieve the window provider's native handle
-                userData = GetWindowLongPtrW(hWnd, GWLP_USERDATA);
-            }
-
-            Dictionary<HWND, Window>? windowsByWindowHandle = null;
-            Window? window = null;
-            var forwardMessage = false;
-            nint result;
-
-            if (userData != IntPtr.Zero)
-            {
-                // Retrieve the window provider from the native handle
-
-                var windowProvider = (WindowProvider)GCHandle.FromIntPtr(userData).Target!;
-
-                windowsByWindowHandle = windowProvider._windowsByWindowHandle.Value;
-                forwardMessage = windowsByWindowHandle?.TryGetValue(hWnd, out window) == true;
-            }
-
-            if (forwardMessage)
-            {
-                AssertNotNull(window);
-                AssertNotNull(windowsByWindowHandle);
-
-                result = window.HandleWindowMessage(message, wParam, lParam);
-
-                if (message == WM_DESTROY)
-                {
-                    /*
-                     * Forward WM_DESTROY to the corresponding window in case the window handle
-                     * was destroyed externally.
-                     */
-                    RemoveWindow(windowsByWindowHandle, hWnd);
-                }
-            }
-            else
-            {
-                result = DefWindowProcW(hWnd, message, wParam, lParam);
-            }
-
-            return result;
         }
+        else
+        {
+            result = DefWindowProcW(hWnd, uMsg, wParam, lParam);
+        }
+
+        return result;
     }
 
     private static Window RemoveWindow(Dictionary<HWND, Window> windowsByWindowHandle, HWND windowHandle)
     {
-        windowsByWindowHandle.Remove(windowHandle, out Window? window);
+        _ = windowsByWindowHandle.Remove(windowHandle, out var window);
 
         if (windowsByWindowHandle.Count == 0)
         {
@@ -254,11 +254,11 @@ public sealed class WindowProvider : IDisposable
             return;
         }
 
-        foreach (Dictionary<HWND, Window> windowsByWindowHandle in _windowsByWindowHandle.Values)
+        foreach (var windowsByWindowHandle in _windowsByWindowHandle.Values)
         {
-            Dictionary<HWND, Window>.KeyCollection windowHandles = windowsByWindowHandle.Keys;
+            var windowHandles = windowsByWindowHandle.Keys;
 
-            foreach (HWND windowHandle in windowHandles)
+            foreach (var windowHandle in windowHandles)
             {
                 RemoveWindow(windowsByWindowHandle, windowHandle).Dispose();
             }

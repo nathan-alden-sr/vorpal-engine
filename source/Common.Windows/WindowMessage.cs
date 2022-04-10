@@ -3,6 +3,7 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using TerraFX.Interop.Windows;
 
 #pragma warning disable 1591
 
@@ -11,277 +12,306 @@ namespace VorpalEngine.Common.Windows;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public sealed class WindowMessage
 {
-    public static readonly WindowMessage MN_GETHMENU = new(nameof(MN_GETHMENU), TerraFX.Interop.Windows.MN_GETHMENU);
-    public static readonly WindowMessage WM_ACTIVATE = new(nameof(WM_ACTIVATE), TerraFX.Interop.Windows.WM_ACTIVATE);
-    public static readonly WindowMessage WM_ACTIVATEAPP = new(nameof(WM_ACTIVATEAPP), TerraFX.Interop.Windows.WM_ACTIVATEAPP);
-    public static readonly WindowMessage WM_AFXFIRST = new(nameof(WM_AFXFIRST), TerraFX.Interop.Windows.WM_AFXFIRST);
-    public static readonly WindowMessage WM_AFXLAST = new(nameof(WM_AFXLAST), TerraFX.Interop.Windows.WM_AFXLAST);
-    public static readonly WindowMessage WM_APP = new(nameof(WM_APP), TerraFX.Interop.Windows.WM_APP);
-    public static readonly WindowMessage WM_APPCOMMAND = new(nameof(WM_APPCOMMAND), TerraFX.Interop.Windows.WM_APPCOMMAND);
-    public static readonly WindowMessage WM_ASKCBFORMATNAME = new(nameof(WM_ASKCBFORMATNAME), TerraFX.Interop.Windows.WM_ASKCBFORMATNAME);
-    public static readonly WindowMessage WM_CANCELJOURNAL = new(nameof(WM_CANCELJOURNAL), TerraFX.Interop.Windows.WM_CANCELJOURNAL);
-    public static readonly WindowMessage WM_CANCELMODE = new(nameof(WM_CANCELMODE), TerraFX.Interop.Windows.WM_CANCELMODE);
-    public static readonly WindowMessage WM_CAPTURECHANGED = new(nameof(WM_CAPTURECHANGED), TerraFX.Interop.Windows.WM_CAPTURECHANGED);
-    public static readonly WindowMessage WM_CHANGECBCHAIN = new(nameof(WM_CHANGECBCHAIN), TerraFX.Interop.Windows.WM_CHANGECBCHAIN);
-    public static readonly WindowMessage WM_CHANGEUISTATE = new(nameof(WM_CHANGEUISTATE), TerraFX.Interop.Windows.WM_CHANGEUISTATE);
-    public static readonly WindowMessage WM_CHAR = new(nameof(WM_CHAR), TerraFX.Interop.Windows.WM_CHAR);
-    public static readonly WindowMessage WM_CHARTOITEM = new(nameof(WM_CHARTOITEM), TerraFX.Interop.Windows.WM_CHARTOITEM);
-    public static readonly WindowMessage WM_CHILDACTIVATE = new(nameof(WM_CHILDACTIVATE), TerraFX.Interop.Windows.WM_CHILDACTIVATE);
-    public static readonly WindowMessage WM_CLEAR = new(nameof(WM_CLEAR), TerraFX.Interop.Windows.WM_CLEAR);
-    public static readonly WindowMessage WM_CLIPBOARDUPDATE = new(nameof(WM_CLIPBOARDUPDATE), TerraFX.Interop.Windows.WM_CLIPBOARDUPDATE);
-    public static readonly WindowMessage WM_CLOSE = new(nameof(WM_CLOSE), TerraFX.Interop.Windows.WM_CLOSE);
-    public static readonly WindowMessage WM_COMMAND = new(nameof(WM_COMMAND), TerraFX.Interop.Windows.WM_COMMAND);
-    public static readonly WindowMessage WM_COMMNOTIFY = new(nameof(WM_COMMNOTIFY), TerraFX.Interop.Windows.WM_COMMNOTIFY);
-    public static readonly WindowMessage WM_COMPACTING = new(nameof(WM_COMPACTING), TerraFX.Interop.Windows.WM_COMPACTING);
-    public static readonly WindowMessage WM_COMPAREITEM = new(nameof(WM_COMPAREITEM), TerraFX.Interop.Windows.WM_COMPAREITEM);
-    public static readonly WindowMessage WM_CONTEXTMENU = new(nameof(WM_CONTEXTMENU), TerraFX.Interop.Windows.WM_CONTEXTMENU);
-    public static readonly WindowMessage WM_COPY = new(nameof(WM_COPY), TerraFX.Interop.Windows.WM_COPY);
-    public static readonly WindowMessage WM_COPYDATA = new(nameof(WM_COPYDATA), TerraFX.Interop.Windows.WM_COPYDATA);
-    public static readonly WindowMessage WM_CREATE = new(nameof(WM_CREATE), TerraFX.Interop.Windows.WM_CREATE);
-    public static readonly WindowMessage WM_CTLCOLORBTN = new(nameof(WM_CTLCOLORBTN), TerraFX.Interop.Windows.WM_CTLCOLORBTN);
-    public static readonly WindowMessage WM_CTLCOLORDLG = new(nameof(WM_CTLCOLORDLG), TerraFX.Interop.Windows.WM_CTLCOLORDLG);
-    public static readonly WindowMessage WM_CTLCOLOREDIT = new(nameof(WM_CTLCOLOREDIT), TerraFX.Interop.Windows.WM_CTLCOLOREDIT);
-    public static readonly WindowMessage WM_CTLCOLORLISTBOX = new(nameof(WM_CTLCOLORLISTBOX), TerraFX.Interop.Windows.WM_CTLCOLORLISTBOX);
-    public static readonly WindowMessage WM_CTLCOLORMSGBOX = new(nameof(WM_CTLCOLORMSGBOX), TerraFX.Interop.Windows.WM_CTLCOLORMSGBOX);
-    public static readonly WindowMessage WM_CTLCOLORSCROLLBAR = new(nameof(WM_CTLCOLORSCROLLBAR), TerraFX.Interop.Windows.WM_CTLCOLORSCROLLBAR);
-    public static readonly WindowMessage WM_CTLCOLORSTATIC = new(nameof(WM_CTLCOLORSTATIC), TerraFX.Interop.Windows.WM_CTLCOLORSTATIC);
-    public static readonly WindowMessage WM_CUT = new(nameof(WM_CUT), TerraFX.Interop.Windows.WM_CUT);
-    public static readonly WindowMessage WM_DEADCHAR = new(nameof(WM_DEADCHAR), TerraFX.Interop.Windows.WM_DEADCHAR);
-    public static readonly WindowMessage WM_DELETEITEM = new(nameof(WM_DELETEITEM), TerraFX.Interop.Windows.WM_DELETEITEM);
-    public static readonly WindowMessage WM_DESTROY = new(nameof(WM_DESTROY), TerraFX.Interop.Windows.WM_DESTROY);
-    public static readonly WindowMessage WM_DESTROYCLIPBOARD = new(nameof(WM_DESTROYCLIPBOARD), TerraFX.Interop.Windows.WM_DESTROYCLIPBOARD);
-    public static readonly WindowMessage WM_DEVICECHANGE = new(nameof(WM_DEVICECHANGE), TerraFX.Interop.Windows.WM_DEVICECHANGE);
-    public static readonly WindowMessage WM_DEVMODECHANGE = new(nameof(WM_DEVMODECHANGE), TerraFX.Interop.Windows.WM_DEVMODECHANGE);
-    public static readonly WindowMessage WM_DISPLAYCHANGE = new(nameof(WM_DISPLAYCHANGE), TerraFX.Interop.Windows.WM_DISPLAYCHANGE);
-    public static readonly WindowMessage WM_DPICHANGED = new(nameof(WM_DPICHANGED), TerraFX.Interop.Windows.WM_DPICHANGED);
-    public static readonly WindowMessage WM_DPICHANGED_AFTERPARENT = new(nameof(WM_DPICHANGED_AFTERPARENT), TerraFX.Interop.Windows.WM_DPICHANGED_AFTERPARENT);
+    public static readonly WindowMessage MN_GETHMENU = new(nameof(MN_GETHMENU), TerraFX.Interop.Windows.Windows.MN_GETHMENU);
+    public static readonly WindowMessage WM_ACTIVATE = new(nameof(WM_ACTIVATE), WM.WM_ACTIVATE);
+    public static readonly WindowMessage WM_ACTIVATEAPP = new(nameof(WM_ACTIVATEAPP), WM.WM_ACTIVATEAPP);
+    public static readonly WindowMessage WM_AFXFIRST = new(nameof(WM_AFXFIRST), WM.WM_AFXFIRST);
+    public static readonly WindowMessage WM_AFXLAST = new(nameof(WM_AFXLAST), WM.WM_AFXLAST);
+    public static readonly WindowMessage WM_APP = new(nameof(WM_APP), WM.WM_APP);
+    public static readonly WindowMessage WM_APPCOMMAND = new(nameof(WM_APPCOMMAND), WM.WM_APPCOMMAND);
+    public static readonly WindowMessage WM_ASKCBFORMATNAME = new(nameof(WM_ASKCBFORMATNAME), WM.WM_ASKCBFORMATNAME);
+    public static readonly WindowMessage WM_CANCELJOURNAL = new(nameof(WM_CANCELJOURNAL), WM.WM_CANCELJOURNAL);
+    public static readonly WindowMessage WM_CANCELMODE = new(nameof(WM_CANCELMODE), WM.WM_CANCELMODE);
+    public static readonly WindowMessage WM_CAPTURECHANGED = new(nameof(WM_CAPTURECHANGED), WM.WM_CAPTURECHANGED);
+    public static readonly WindowMessage WM_CHANGECBCHAIN = new(nameof(WM_CHANGECBCHAIN), WM.WM_CHANGECBCHAIN);
+    public static readonly WindowMessage WM_CHANGEUISTATE = new(nameof(WM_CHANGEUISTATE), WM.WM_CHANGEUISTATE);
+    public static readonly WindowMessage WM_CHAR = new(nameof(WM_CHAR), WM.WM_CHAR);
+    public static readonly WindowMessage WM_CHARTOITEM = new(nameof(WM_CHARTOITEM), WM.WM_CHARTOITEM);
+    public static readonly WindowMessage WM_CHILDACTIVATE = new(nameof(WM_CHILDACTIVATE), WM.WM_CHILDACTIVATE);
+    public static readonly WindowMessage WM_CLEAR = new(nameof(WM_CLEAR), WM.WM_CLEAR);
+    public static readonly WindowMessage WM_CLIPBOARDUPDATE = new(nameof(WM_CLIPBOARDUPDATE), WM.WM_CLIPBOARDUPDATE);
+    public static readonly WindowMessage WM_CLOSE = new(nameof(WM_CLOSE), WM.WM_CLOSE);
+    public static readonly WindowMessage WM_COMMAND = new(nameof(WM_COMMAND), WM.WM_COMMAND);
+    public static readonly WindowMessage WM_COMMNOTIFY = new(nameof(WM_COMMNOTIFY), WM.WM_COMMNOTIFY);
+    public static readonly WindowMessage WM_COMPACTING = new(nameof(WM_COMPACTING), WM.WM_COMPACTING);
+    public static readonly WindowMessage WM_COMPAREITEM = new(nameof(WM_COMPAREITEM), WM.WM_COMPAREITEM);
+    public static readonly WindowMessage WM_CONTEXTMENU = new(nameof(WM_CONTEXTMENU), WM.WM_CONTEXTMENU);
+    public static readonly WindowMessage WM_COPY = new(nameof(WM_COPY), WM.WM_COPY);
+    public static readonly WindowMessage WM_COPYDATA = new(nameof(WM_COPYDATA), WM.WM_COPYDATA);
+    public static readonly WindowMessage WM_CREATE = new(nameof(WM_CREATE), WM.WM_CREATE);
+    public static readonly WindowMessage WM_CTLCOLORBTN = new(nameof(WM_CTLCOLORBTN), WM.WM_CTLCOLORBTN);
+    public static readonly WindowMessage WM_CTLCOLORDLG = new(nameof(WM_CTLCOLORDLG), WM.WM_CTLCOLORDLG);
+    public static readonly WindowMessage WM_CTLCOLOREDIT = new(nameof(WM_CTLCOLOREDIT), WM.WM_CTLCOLOREDIT);
+    public static readonly WindowMessage WM_CTLCOLORLISTBOX = new(nameof(WM_CTLCOLORLISTBOX), WM.WM_CTLCOLORLISTBOX);
+    public static readonly WindowMessage WM_CTLCOLORMSGBOX = new(nameof(WM_CTLCOLORMSGBOX), WM.WM_CTLCOLORMSGBOX);
+    public static readonly WindowMessage WM_CTLCOLORSCROLLBAR = new(nameof(WM_CTLCOLORSCROLLBAR), WM.WM_CTLCOLORSCROLLBAR);
+    public static readonly WindowMessage WM_CTLCOLORSTATIC = new(nameof(WM_CTLCOLORSTATIC), WM.WM_CTLCOLORSTATIC);
+    public static readonly WindowMessage WM_CUT = new(nameof(WM_CUT), WM.WM_CUT);
+    public static readonly WindowMessage WM_DEADCHAR = new(nameof(WM_DEADCHAR), WM.WM_DEADCHAR);
+    public static readonly WindowMessage WM_DELETEITEM = new(nameof(WM_DELETEITEM), WM.WM_DELETEITEM);
+    public static readonly WindowMessage WM_DESTROY = new(nameof(WM_DESTROY), WM.WM_DESTROY);
+    public static readonly WindowMessage WM_DESTROYCLIPBOARD = new(nameof(WM_DESTROYCLIPBOARD), WM.WM_DESTROYCLIPBOARD);
+    public static readonly WindowMessage WM_DEVICECHANGE = new(nameof(WM_DEVICECHANGE), WM.WM_DEVICECHANGE);
+    public static readonly WindowMessage WM_DEVMODECHANGE = new(nameof(WM_DEVMODECHANGE), WM.WM_DEVMODECHANGE);
+    public static readonly WindowMessage WM_DISPLAYCHANGE = new(nameof(WM_DISPLAYCHANGE), WM.WM_DISPLAYCHANGE);
+    public static readonly WindowMessage WM_DPICHANGED = new(nameof(WM_DPICHANGED), WM.WM_DPICHANGED);
+
+    public static readonly WindowMessage WM_DPICHANGED_AFTERPARENT = new(
+        nameof(WM_DPICHANGED_AFTERPARENT),
+        WM.WM_DPICHANGED_AFTERPARENT);
 
     public static readonly WindowMessage WM_DPICHANGED_BEFOREPARENT = new(
         nameof(WM_DPICHANGED_BEFOREPARENT),
-        TerraFX.Interop.Windows.WM_DPICHANGED_BEFOREPARENT);
+        WM.WM_DPICHANGED_BEFOREPARENT);
 
-    public static readonly WindowMessage WM_DRAWCLIPBOARD = new(nameof(WM_DRAWCLIPBOARD), TerraFX.Interop.Windows.WM_DRAWCLIPBOARD);
-    public static readonly WindowMessage WM_DRAWITEM = new(nameof(WM_DRAWITEM), TerraFX.Interop.Windows.WM_DRAWITEM);
-    public static readonly WindowMessage WM_DROPFILES = new(nameof(WM_DROPFILES), TerraFX.Interop.Windows.WM_DROPFILES);
+    public static readonly WindowMessage WM_DRAWCLIPBOARD = new(nameof(WM_DRAWCLIPBOARD), WM.WM_DRAWCLIPBOARD);
+    public static readonly WindowMessage WM_DRAWITEM = new(nameof(WM_DRAWITEM), WM.WM_DRAWITEM);
+    public static readonly WindowMessage WM_DROPFILES = new(nameof(WM_DROPFILES), WM.WM_DROPFILES);
 
     public static readonly WindowMessage WM_DWMCOLORIZATIONCOLORCHANGED = new(
         nameof(WM_DWMCOLORIZATIONCOLORCHANGED),
-        TerraFX.Interop.Windows.WM_DWMCOLORIZATIONCOLORCHANGED);
+        WM.WM_DWMCOLORIZATIONCOLORCHANGED);
 
-    public static readonly WindowMessage WM_DWMCOMPOSITIONCHANGED = new(nameof(WM_DWMCOMPOSITIONCHANGED), TerraFX.Interop.Windows.WM_DWMCOMPOSITIONCHANGED);
-    public static readonly WindowMessage WM_DWMNCRENDERINGCHANGED = new(nameof(WM_DWMNCRENDERINGCHANGED), TerraFX.Interop.Windows.WM_DWMNCRENDERINGCHANGED);
+    public static readonly WindowMessage WM_DWMCOMPOSITIONCHANGED = new(
+        nameof(WM_DWMCOMPOSITIONCHANGED),
+        WM.WM_DWMCOMPOSITIONCHANGED);
+
+    public static readonly WindowMessage WM_DWMNCRENDERINGCHANGED = new(
+        nameof(WM_DWMNCRENDERINGCHANGED),
+        WM.WM_DWMNCRENDERINGCHANGED);
 
     public static readonly WindowMessage WM_DWMSENDICONICLIVEPREVIEWBITMAP = new(
         nameof(WM_DWMSENDICONICLIVEPREVIEWBITMAP),
-        TerraFX.Interop.Windows.WM_DWMSENDICONICLIVEPREVIEWBITMAP);
+        WM.WM_DWMSENDICONICLIVEPREVIEWBITMAP);
 
-    public static readonly WindowMessage WM_DWMSENDICONICTHUMBNAIL = new(nameof(WM_DWMSENDICONICTHUMBNAIL), TerraFX.Interop.Windows.WM_DWMSENDICONICTHUMBNAIL);
+    public static readonly WindowMessage WM_DWMSENDICONICTHUMBNAIL = new(
+        nameof(WM_DWMSENDICONICTHUMBNAIL),
+        WM.WM_DWMSENDICONICTHUMBNAIL);
 
     public static readonly WindowMessage WM_DWMWINDOWMAXIMIZEDCHANGE = new(
         nameof(WM_DWMWINDOWMAXIMIZEDCHANGE),
-        TerraFX.Interop.Windows.WM_DWMWINDOWMAXIMIZEDCHANGE);
+        WM.WM_DWMWINDOWMAXIMIZEDCHANGE);
 
-    public static readonly WindowMessage WM_ENABLE = new(nameof(WM_ENABLE), TerraFX.Interop.Windows.WM_ENABLE);
-    public static readonly WindowMessage WM_ENDSESSION = new(nameof(WM_ENDSESSION), TerraFX.Interop.Windows.WM_ENDSESSION);
-    public static readonly WindowMessage WM_ENTERIDLE = new(nameof(WM_ENTERIDLE), TerraFX.Interop.Windows.WM_ENTERIDLE);
-    public static readonly WindowMessage WM_ENTERMENULOOP = new(nameof(WM_ENTERMENULOOP), TerraFX.Interop.Windows.WM_ENTERMENULOOP);
-    public static readonly WindowMessage WM_ENTERSIZEMOVE = new(nameof(WM_ENTERSIZEMOVE), TerraFX.Interop.Windows.WM_ENTERSIZEMOVE);
-    public static readonly WindowMessage WM_ERASEBKGND = new(nameof(WM_ERASEBKGND), TerraFX.Interop.Windows.WM_ERASEBKGND);
-    public static readonly WindowMessage WM_EXITMENULOOP = new(nameof(WM_EXITMENULOOP), TerraFX.Interop.Windows.WM_EXITMENULOOP);
-    public static readonly WindowMessage WM_EXITSIZEMOVE = new(nameof(WM_EXITSIZEMOVE), TerraFX.Interop.Windows.WM_EXITSIZEMOVE);
-    public static readonly WindowMessage WM_FONTCHANGE = new(nameof(WM_FONTCHANGE), TerraFX.Interop.Windows.WM_FONTCHANGE);
-    public static readonly WindowMessage WM_GESTURE = new(nameof(WM_GESTURE), TerraFX.Interop.Windows.WM_GESTURE);
-    public static readonly WindowMessage WM_GESTURENOTIFY = new(nameof(WM_GESTURENOTIFY), TerraFX.Interop.Windows.WM_GESTURENOTIFY);
-    public static readonly WindowMessage WM_GETDLGCODE = new(nameof(WM_GETDLGCODE), TerraFX.Interop.Windows.WM_GETDLGCODE);
-    public static readonly WindowMessage WM_GETDPISCALEDSIZE = new(nameof(WM_GETDPISCALEDSIZE), TerraFX.Interop.Windows.WM_GETDPISCALEDSIZE);
-    public static readonly WindowMessage WM_GETFONT = new(nameof(WM_GETFONT), TerraFX.Interop.Windows.WM_GETFONT);
-    public static readonly WindowMessage WM_GETHOTKEY = new(nameof(WM_GETHOTKEY), TerraFX.Interop.Windows.WM_GETHOTKEY);
-    public static readonly WindowMessage WM_GETICON = new(nameof(WM_GETICON), TerraFX.Interop.Windows.WM_GETICON);
-    public static readonly WindowMessage WM_GETMINMAXINFO = new(nameof(WM_GETMINMAXINFO), TerraFX.Interop.Windows.WM_GETMINMAXINFO);
-    public static readonly WindowMessage WM_GETOBJECT = new(nameof(WM_GETOBJECT), TerraFX.Interop.Windows.WM_GETOBJECT);
-    public static readonly WindowMessage WM_GETTEXT = new(nameof(WM_GETTEXT), TerraFX.Interop.Windows.WM_GETTEXT);
-    public static readonly WindowMessage WM_GETTEXTLENGTH = new(nameof(WM_GETTEXTLENGTH), TerraFX.Interop.Windows.WM_GETTEXTLENGTH);
-    public static readonly WindowMessage WM_GETTITLEBARINFOEX = new(nameof(WM_GETTITLEBARINFOEX), TerraFX.Interop.Windows.WM_GETTITLEBARINFOEX);
-    public static readonly WindowMessage WM_HANDHELDFIRST = new(nameof(WM_HANDHELDFIRST), TerraFX.Interop.Windows.WM_HANDHELDFIRST);
-    public static readonly WindowMessage WM_HANDHELDLAST = new(nameof(WM_HANDHELDLAST), TerraFX.Interop.Windows.WM_HANDHELDLAST);
-    public static readonly WindowMessage WM_HELP = new(nameof(WM_HELP), TerraFX.Interop.Windows.WM_HELP);
-    public static readonly WindowMessage WM_HOTKEY = new(nameof(WM_HOTKEY), TerraFX.Interop.Windows.WM_HOTKEY);
-    public static readonly WindowMessage WM_HSCROLL = new(nameof(WM_HSCROLL), TerraFX.Interop.Windows.WM_HSCROLL);
-    public static readonly WindowMessage WM_HSCROLLCLIPBOARD = new(nameof(WM_HSCROLLCLIPBOARD), TerraFX.Interop.Windows.WM_HSCROLLCLIPBOARD);
-    public static readonly WindowMessage WM_ICONERASEBKGND = new(nameof(WM_ICONERASEBKGND), TerraFX.Interop.Windows.WM_ICONERASEBKGND);
-    public static readonly WindowMessage WM_IME_CHAR = new(nameof(WM_IME_CHAR), TerraFX.Interop.Windows.WM_IME_CHAR);
-    public static readonly WindowMessage WM_IME_COMPOSITION = new(nameof(WM_IME_COMPOSITION), TerraFX.Interop.Windows.WM_IME_COMPOSITION);
-    public static readonly WindowMessage WM_IME_COMPOSITIONFULL = new(nameof(WM_IME_COMPOSITIONFULL), TerraFX.Interop.Windows.WM_IME_COMPOSITIONFULL);
-    public static readonly WindowMessage WM_IME_CONTROL = new(nameof(WM_IME_CONTROL), TerraFX.Interop.Windows.WM_IME_CONTROL);
-    public static readonly WindowMessage WM_IME_ENDCOMPOSITION = new(nameof(WM_IME_ENDCOMPOSITION), TerraFX.Interop.Windows.WM_IME_ENDCOMPOSITION);
-    public static readonly WindowMessage WM_IME_KEYDOWN = new(nameof(WM_IME_KEYDOWN), TerraFX.Interop.Windows.WM_IME_KEYDOWN);
-    public static readonly WindowMessage WM_IME_KEYUP = new(nameof(WM_IME_KEYUP), TerraFX.Interop.Windows.WM_IME_KEYUP);
-    public static readonly WindowMessage WM_IME_NOTIFY = new(nameof(WM_IME_NOTIFY), TerraFX.Interop.Windows.WM_IME_NOTIFY);
-    public static readonly WindowMessage WM_IME_REQUEST = new(nameof(WM_IME_REQUEST), TerraFX.Interop.Windows.WM_IME_REQUEST);
-    public static readonly WindowMessage WM_IME_SELECT = new(nameof(WM_IME_SELECT), TerraFX.Interop.Windows.WM_IME_SELECT);
-    public static readonly WindowMessage WM_IME_SETCONTEXT = new(nameof(WM_IME_SETCONTEXT), TerraFX.Interop.Windows.WM_IME_SETCONTEXT);
-    public static readonly WindowMessage WM_IME_STARTCOMPOSITION = new(nameof(WM_IME_STARTCOMPOSITION), TerraFX.Interop.Windows.WM_IME_STARTCOMPOSITION);
-    public static readonly WindowMessage WM_INITDIALOG = new(nameof(WM_INITDIALOG), TerraFX.Interop.Windows.WM_INITDIALOG);
-    public static readonly WindowMessage WM_INITMENU = new(nameof(WM_INITMENU), TerraFX.Interop.Windows.WM_INITMENU);
-    public static readonly WindowMessage WM_INITMENUPOPUP = new(nameof(WM_INITMENUPOPUP), TerraFX.Interop.Windows.WM_INITMENUPOPUP);
-    public static readonly WindowMessage WM_INPUT = new(nameof(WM_INPUT), TerraFX.Interop.Windows.WM_INPUT);
-    public static readonly WindowMessage WM_INPUT_DEVICE_CHANGE = new(nameof(WM_INPUT_DEVICE_CHANGE), TerraFX.Interop.Windows.WM_INPUT_DEVICE_CHANGE);
-    public static readonly WindowMessage WM_INPUTLANGCHANGE = new(nameof(WM_INPUTLANGCHANGE), TerraFX.Interop.Windows.WM_INPUTLANGCHANGE);
-    public static readonly WindowMessage WM_INPUTLANGCHANGEREQUEST = new(nameof(WM_INPUTLANGCHANGEREQUEST), TerraFX.Interop.Windows.WM_INPUTLANGCHANGEREQUEST);
-    public static readonly WindowMessage WM_KEYDOWN = new(nameof(WM_KEYDOWN), TerraFX.Interop.Windows.WM_KEYDOWN);
-    public static readonly WindowMessage WM_KEYUP = new(nameof(WM_KEYUP), TerraFX.Interop.Windows.WM_KEYUP);
-    public static readonly WindowMessage WM_KILLFOCUS = new(nameof(WM_KILLFOCUS), TerraFX.Interop.Windows.WM_KILLFOCUS);
-    public static readonly WindowMessage WM_LBUTTONDBLCLK = new(nameof(WM_LBUTTONDBLCLK), TerraFX.Interop.Windows.WM_LBUTTONDBLCLK);
-    public static readonly WindowMessage WM_LBUTTONDOWN = new(nameof(WM_LBUTTONDOWN), TerraFX.Interop.Windows.WM_LBUTTONDOWN);
-    public static readonly WindowMessage WM_LBUTTONUP = new(nameof(WM_LBUTTONUP), TerraFX.Interop.Windows.WM_LBUTTONUP);
-    public static readonly WindowMessage WM_MBUTTONDBLCLK = new(nameof(WM_MBUTTONDBLCLK), TerraFX.Interop.Windows.WM_MBUTTONDBLCLK);
-    public static readonly WindowMessage WM_MBUTTONDOWN = new(nameof(WM_MBUTTONDOWN), TerraFX.Interop.Windows.WM_MBUTTONDOWN);
-    public static readonly WindowMessage WM_MBUTTONUP = new(nameof(WM_MBUTTONUP), TerraFX.Interop.Windows.WM_MBUTTONUP);
-    public static readonly WindowMessage WM_MDIACTIVATE = new(nameof(WM_MDIACTIVATE), TerraFX.Interop.Windows.WM_MDIACTIVATE);
-    public static readonly WindowMessage WM_MDICASCADE = new(nameof(WM_MDICASCADE), TerraFX.Interop.Windows.WM_MDICASCADE);
-    public static readonly WindowMessage WM_MDICREATE = new(nameof(WM_MDICREATE), TerraFX.Interop.Windows.WM_MDICREATE);
-    public static readonly WindowMessage WM_MDIDESTROY = new(nameof(WM_MDIDESTROY), TerraFX.Interop.Windows.WM_MDIDESTROY);
-    public static readonly WindowMessage WM_MDIGETACTIVE = new(nameof(WM_MDIGETACTIVE), TerraFX.Interop.Windows.WM_MDIGETACTIVE);
-    public static readonly WindowMessage WM_MDIICONARRANGE = new(nameof(WM_MDIICONARRANGE), TerraFX.Interop.Windows.WM_MDIICONARRANGE);
-    public static readonly WindowMessage WM_MDIMAXIMIZE = new(nameof(WM_MDIMAXIMIZE), TerraFX.Interop.Windows.WM_MDIMAXIMIZE);
-    public static readonly WindowMessage WM_MDINEXT = new(nameof(WM_MDINEXT), TerraFX.Interop.Windows.WM_MDINEXT);
-    public static readonly WindowMessage WM_MDIREFRESHMENU = new(nameof(WM_MDIREFRESHMENU), TerraFX.Interop.Windows.WM_MDIREFRESHMENU);
-    public static readonly WindowMessage WM_MDIRESTORE = new(nameof(WM_MDIRESTORE), TerraFX.Interop.Windows.WM_MDIRESTORE);
-    public static readonly WindowMessage WM_MDISETMENU = new(nameof(WM_MDISETMENU), TerraFX.Interop.Windows.WM_MDISETMENU);
-    public static readonly WindowMessage WM_MDITILE = new(nameof(WM_MDITILE), TerraFX.Interop.Windows.WM_MDITILE);
-    public static readonly WindowMessage WM_MEASUREITEM = new(nameof(WM_MEASUREITEM), TerraFX.Interop.Windows.WM_MEASUREITEM);
-    public static readonly WindowMessage WM_MENUCHAR = new(nameof(WM_MENUCHAR), TerraFX.Interop.Windows.WM_MENUCHAR);
-    public static readonly WindowMessage WM_MENUCOMMAND = new(nameof(WM_MENUCOMMAND), TerraFX.Interop.Windows.WM_MENUCOMMAND);
-    public static readonly WindowMessage WM_MENUDRAG = new(nameof(WM_MENUDRAG), TerraFX.Interop.Windows.WM_MENUDRAG);
-    public static readonly WindowMessage WM_MENUGETOBJECT = new(nameof(WM_MENUGETOBJECT), TerraFX.Interop.Windows.WM_MENUGETOBJECT);
-    public static readonly WindowMessage WM_MENURBUTTONUP = new(nameof(WM_MENURBUTTONUP), TerraFX.Interop.Windows.WM_MENURBUTTONUP);
-    public static readonly WindowMessage WM_MENUSELECT = new(nameof(WM_MENUSELECT), TerraFX.Interop.Windows.WM_MENUSELECT);
-    public static readonly WindowMessage WM_MOUSEACTIVATE = new(nameof(WM_MOUSEACTIVATE), TerraFX.Interop.Windows.WM_MOUSEACTIVATE);
-    public static readonly WindowMessage WM_MOUSEHOVER = new(nameof(WM_MOUSEHOVER), TerraFX.Interop.Windows.WM_MOUSEHOVER);
-    public static readonly WindowMessage WM_MOUSEHWHEEL = new(nameof(WM_MOUSEHWHEEL), TerraFX.Interop.Windows.WM_MOUSEHWHEEL);
-    public static readonly WindowMessage WM_MOUSELEAVE = new(nameof(WM_MOUSELEAVE), TerraFX.Interop.Windows.WM_MOUSELEAVE);
-    public static readonly WindowMessage WM_MOUSEMOVE = new(nameof(WM_MOUSEMOVE), TerraFX.Interop.Windows.WM_MOUSEMOVE);
-    public static readonly WindowMessage WM_MOUSEWHEEL = new(nameof(WM_MOUSEWHEEL), TerraFX.Interop.Windows.WM_MOUSEWHEEL);
-    public static readonly WindowMessage WM_MOVE = new(nameof(WM_MOVE), TerraFX.Interop.Windows.WM_MOVE);
-    public static readonly WindowMessage WM_MOVING = new(nameof(WM_MOVING), TerraFX.Interop.Windows.WM_MOVING);
-    public static readonly WindowMessage WM_NCACTIVATE = new(nameof(WM_NCACTIVATE), TerraFX.Interop.Windows.WM_NCACTIVATE);
-    public static readonly WindowMessage WM_NCCALCSIZE = new(nameof(WM_NCCALCSIZE), TerraFX.Interop.Windows.WM_NCCALCSIZE);
-    public static readonly WindowMessage WM_NCCREATE = new(nameof(WM_NCCREATE), TerraFX.Interop.Windows.WM_NCCREATE);
-    public static readonly WindowMessage WM_NCDESTROY = new(nameof(WM_NCDESTROY), TerraFX.Interop.Windows.WM_NCDESTROY);
-    public static readonly WindowMessage WM_NCHITTEST = new(nameof(WM_NCHITTEST), TerraFX.Interop.Windows.WM_NCHITTEST);
-    public static readonly WindowMessage WM_NCLBUTTONDBLCLK = new(nameof(WM_NCLBUTTONDBLCLK), TerraFX.Interop.Windows.WM_NCLBUTTONDBLCLK);
-    public static readonly WindowMessage WM_NCLBUTTONDOWN = new(nameof(WM_NCLBUTTONDOWN), TerraFX.Interop.Windows.WM_NCLBUTTONDOWN);
-    public static readonly WindowMessage WM_NCLBUTTONUP = new(nameof(WM_NCLBUTTONUP), TerraFX.Interop.Windows.WM_NCLBUTTONUP);
-    public static readonly WindowMessage WM_NCMBUTTONDBLCLK = new(nameof(WM_NCMBUTTONDBLCLK), TerraFX.Interop.Windows.WM_NCMBUTTONDBLCLK);
-    public static readonly WindowMessage WM_NCMBUTTONDOWN = new(nameof(WM_NCMBUTTONDOWN), TerraFX.Interop.Windows.WM_NCMBUTTONDOWN);
-    public static readonly WindowMessage WM_NCMBUTTONUP = new(nameof(WM_NCMBUTTONUP), TerraFX.Interop.Windows.WM_NCMBUTTONUP);
-    public static readonly WindowMessage WM_NCMOUSEHOVER = new(nameof(WM_NCMOUSEHOVER), TerraFX.Interop.Windows.WM_NCMOUSEHOVER);
-    public static readonly WindowMessage WM_NCMOUSELEAVE = new(nameof(WM_NCMOUSELEAVE), TerraFX.Interop.Windows.WM_NCMOUSELEAVE);
-    public static readonly WindowMessage WM_NCMOUSEMOVE = new(nameof(WM_NCMOUSEMOVE), TerraFX.Interop.Windows.WM_NCMOUSEMOVE);
-    public static readonly WindowMessage WM_NCPAINT = new(nameof(WM_NCPAINT), TerraFX.Interop.Windows.WM_NCPAINT);
-    public static readonly WindowMessage WM_NCPOINTERDOWN = new(nameof(WM_NCPOINTERDOWN), TerraFX.Interop.Windows.WM_NCPOINTERDOWN);
-    public static readonly WindowMessage WM_NCPOINTERUP = new(nameof(WM_NCPOINTERUP), TerraFX.Interop.Windows.WM_NCPOINTERUP);
-    public static readonly WindowMessage WM_NCPOINTERUPDATE = new(nameof(WM_NCPOINTERUPDATE), TerraFX.Interop.Windows.WM_NCPOINTERUPDATE);
-    public static readonly WindowMessage WM_NCRBUTTONDBLCLK = new(nameof(WM_NCRBUTTONDBLCLK), TerraFX.Interop.Windows.WM_NCRBUTTONDBLCLK);
-    public static readonly WindowMessage WM_NCRBUTTONDOWN = new(nameof(WM_NCRBUTTONDOWN), TerraFX.Interop.Windows.WM_NCRBUTTONDOWN);
-    public static readonly WindowMessage WM_NCRBUTTONUP = new(nameof(WM_NCRBUTTONUP), TerraFX.Interop.Windows.WM_NCRBUTTONUP);
-    public static readonly WindowMessage WM_NCXBUTTONDBLCLK = new(nameof(WM_NCXBUTTONDBLCLK), TerraFX.Interop.Windows.WM_NCXBUTTONDBLCLK);
-    public static readonly WindowMessage WM_NCXBUTTONDOWN = new(nameof(WM_NCXBUTTONDOWN), TerraFX.Interop.Windows.WM_NCXBUTTONDOWN);
-    public static readonly WindowMessage WM_NCXBUTTONUP = new(nameof(WM_NCXBUTTONUP), TerraFX.Interop.Windows.WM_NCXBUTTONUP);
-    public static readonly WindowMessage WM_NEXTDLGCTL = new(nameof(WM_NEXTDLGCTL), TerraFX.Interop.Windows.WM_NEXTDLGCTL);
-    public static readonly WindowMessage WM_NEXTMENU = new(nameof(WM_NEXTMENU), TerraFX.Interop.Windows.WM_NEXTMENU);
-    public static readonly WindowMessage WM_NOTIFY = new(nameof(WM_NOTIFY), TerraFX.Interop.Windows.WM_NOTIFY);
-    public static readonly WindowMessage WM_NOTIFYFORMAT = new(nameof(WM_NOTIFYFORMAT), TerraFX.Interop.Windows.WM_NOTIFYFORMAT);
-    public static readonly WindowMessage WM_NULL = new(nameof(WM_NULL), TerraFX.Interop.Windows.WM_NULL);
-    public static readonly WindowMessage WM_PAINT = new(nameof(WM_PAINT), TerraFX.Interop.Windows.WM_PAINT);
-    public static readonly WindowMessage WM_PAINTCLIPBOARD = new(nameof(WM_PAINTCLIPBOARD), TerraFX.Interop.Windows.WM_PAINTCLIPBOARD);
-    public static readonly WindowMessage WM_PAINTICON = new(nameof(WM_PAINTICON), TerraFX.Interop.Windows.WM_PAINTICON);
-    public static readonly WindowMessage WM_PALETTECHANGED = new(nameof(WM_PALETTECHANGED), TerraFX.Interop.Windows.WM_PALETTECHANGED);
-    public static readonly WindowMessage WM_PALETTEISCHANGING = new(nameof(WM_PALETTEISCHANGING), TerraFX.Interop.Windows.WM_PALETTEISCHANGING);
-    public static readonly WindowMessage WM_PARENTNOTIFY = new(nameof(WM_PARENTNOTIFY), TerraFX.Interop.Windows.WM_PARENTNOTIFY);
-    public static readonly WindowMessage WM_PASTE = new(nameof(WM_PASTE), TerraFX.Interop.Windows.WM_PASTE);
-    public static readonly WindowMessage WM_PENWINFIRST = new(nameof(WM_PENWINFIRST), TerraFX.Interop.Windows.WM_PENWINFIRST);
-    public static readonly WindowMessage WM_PENWINLAST = new(nameof(WM_PENWINLAST), TerraFX.Interop.Windows.WM_PENWINLAST);
-    public static readonly WindowMessage WM_POINTERACTIVATE = new(nameof(WM_POINTERACTIVATE), TerraFX.Interop.Windows.WM_POINTERACTIVATE);
-    public static readonly WindowMessage WM_POINTERCAPTURECHANGED = new(nameof(WM_POINTERCAPTURECHANGED), TerraFX.Interop.Windows.WM_POINTERCAPTURECHANGED);
-    public static readonly WindowMessage WM_POINTERDEVICECHANGE = new(nameof(WM_POINTERDEVICECHANGE), TerraFX.Interop.Windows.WM_POINTERDEVICECHANGE);
-    public static readonly WindowMessage WM_POINTERDEVICEINRANGE = new(nameof(WM_POINTERDEVICEINRANGE), TerraFX.Interop.Windows.WM_POINTERDEVICEINRANGE);
+    public static readonly WindowMessage WM_ENABLE = new(nameof(WM_ENABLE), WM.WM_ENABLE);
+    public static readonly WindowMessage WM_ENDSESSION = new(nameof(WM_ENDSESSION), WM.WM_ENDSESSION);
+    public static readonly WindowMessage WM_ENTERIDLE = new(nameof(WM_ENTERIDLE), WM.WM_ENTERIDLE);
+    public static readonly WindowMessage WM_ENTERMENULOOP = new(nameof(WM_ENTERMENULOOP), WM.WM_ENTERMENULOOP);
+    public static readonly WindowMessage WM_ENTERSIZEMOVE = new(nameof(WM_ENTERSIZEMOVE), WM.WM_ENTERSIZEMOVE);
+    public static readonly WindowMessage WM_ERASEBKGND = new(nameof(WM_ERASEBKGND), WM.WM_ERASEBKGND);
+    public static readonly WindowMessage WM_EXITMENULOOP = new(nameof(WM_EXITMENULOOP), WM.WM_EXITMENULOOP);
+    public static readonly WindowMessage WM_EXITSIZEMOVE = new(nameof(WM_EXITSIZEMOVE), WM.WM_EXITSIZEMOVE);
+    public static readonly WindowMessage WM_FONTCHANGE = new(nameof(WM_FONTCHANGE), WM.WM_FONTCHANGE);
+    public static readonly WindowMessage WM_GESTURE = new(nameof(WM_GESTURE), WM.WM_GESTURE);
+    public static readonly WindowMessage WM_GESTURENOTIFY = new(nameof(WM_GESTURENOTIFY), WM.WM_GESTURENOTIFY);
+    public static readonly WindowMessage WM_GETDLGCODE = new(nameof(WM_GETDLGCODE), WM.WM_GETDLGCODE);
+    public static readonly WindowMessage WM_GETDPISCALEDSIZE = new(nameof(WM_GETDPISCALEDSIZE), WM.WM_GETDPISCALEDSIZE);
+    public static readonly WindowMessage WM_GETFONT = new(nameof(WM_GETFONT), WM.WM_GETFONT);
+    public static readonly WindowMessage WM_GETHOTKEY = new(nameof(WM_GETHOTKEY), WM.WM_GETHOTKEY);
+    public static readonly WindowMessage WM_GETICON = new(nameof(WM_GETICON), WM.WM_GETICON);
+    public static readonly WindowMessage WM_GETMINMAXINFO = new(nameof(WM_GETMINMAXINFO), WM.WM_GETMINMAXINFO);
+    public static readonly WindowMessage WM_GETOBJECT = new(nameof(WM_GETOBJECT), WM.WM_GETOBJECT);
+    public static readonly WindowMessage WM_GETTEXT = new(nameof(WM_GETTEXT), WM.WM_GETTEXT);
+    public static readonly WindowMessage WM_GETTEXTLENGTH = new(nameof(WM_GETTEXTLENGTH), WM.WM_GETTEXTLENGTH);
+    public static readonly WindowMessage WM_GETTITLEBARINFOEX = new(nameof(WM_GETTITLEBARINFOEX), WM.WM_GETTITLEBARINFOEX);
+    public static readonly WindowMessage WM_HANDHELDFIRST = new(nameof(WM_HANDHELDFIRST), WM.WM_HANDHELDFIRST);
+    public static readonly WindowMessage WM_HANDHELDLAST = new(nameof(WM_HANDHELDLAST), WM.WM_HANDHELDLAST);
+    public static readonly WindowMessage WM_HELP = new(nameof(WM_HELP), WM.WM_HELP);
+    public static readonly WindowMessage WM_HOTKEY = new(nameof(WM_HOTKEY), WM.WM_HOTKEY);
+    public static readonly WindowMessage WM_HSCROLL = new(nameof(WM_HSCROLL), WM.WM_HSCROLL);
+    public static readonly WindowMessage WM_HSCROLLCLIPBOARD = new(nameof(WM_HSCROLLCLIPBOARD), WM.WM_HSCROLLCLIPBOARD);
+    public static readonly WindowMessage WM_ICONERASEBKGND = new(nameof(WM_ICONERASEBKGND), WM.WM_ICONERASEBKGND);
+    public static readonly WindowMessage WM_IME_CHAR = new(nameof(WM_IME_CHAR), WM.WM_IME_CHAR);
+    public static readonly WindowMessage WM_IME_COMPOSITION = new(nameof(WM_IME_COMPOSITION), WM.WM_IME_COMPOSITION);
+    public static readonly WindowMessage WM_IME_COMPOSITIONFULL = new(nameof(WM_IME_COMPOSITIONFULL), WM.WM_IME_COMPOSITIONFULL);
+    public static readonly WindowMessage WM_IME_CONTROL = new(nameof(WM_IME_CONTROL), WM.WM_IME_CONTROL);
+    public static readonly WindowMessage WM_IME_ENDCOMPOSITION = new(nameof(WM_IME_ENDCOMPOSITION), WM.WM_IME_ENDCOMPOSITION);
+    public static readonly WindowMessage WM_IME_KEYDOWN = new(nameof(WM_IME_KEYDOWN), WM.WM_IME_KEYDOWN);
+    public static readonly WindowMessage WM_IME_KEYUP = new(nameof(WM_IME_KEYUP), WM.WM_IME_KEYUP);
+    public static readonly WindowMessage WM_IME_NOTIFY = new(nameof(WM_IME_NOTIFY), WM.WM_IME_NOTIFY);
+    public static readonly WindowMessage WM_IME_REQUEST = new(nameof(WM_IME_REQUEST), WM.WM_IME_REQUEST);
+    public static readonly WindowMessage WM_IME_SELECT = new(nameof(WM_IME_SELECT), WM.WM_IME_SELECT);
+    public static readonly WindowMessage WM_IME_SETCONTEXT = new(nameof(WM_IME_SETCONTEXT), WM.WM_IME_SETCONTEXT);
+
+    public static readonly WindowMessage WM_IME_STARTCOMPOSITION = new(
+        nameof(WM_IME_STARTCOMPOSITION),
+        WM.WM_IME_STARTCOMPOSITION);
+
+    public static readonly WindowMessage WM_INITDIALOG = new(nameof(WM_INITDIALOG), WM.WM_INITDIALOG);
+    public static readonly WindowMessage WM_INITMENU = new(nameof(WM_INITMENU), WM.WM_INITMENU);
+    public static readonly WindowMessage WM_INITMENUPOPUP = new(nameof(WM_INITMENUPOPUP), WM.WM_INITMENUPOPUP);
+    public static readonly WindowMessage WM_INPUT = new(nameof(WM_INPUT), WM.WM_INPUT);
+    public static readonly WindowMessage WM_INPUT_DEVICE_CHANGE = new(nameof(WM_INPUT_DEVICE_CHANGE), WM.WM_INPUT_DEVICE_CHANGE);
+    public static readonly WindowMessage WM_INPUTLANGCHANGE = new(nameof(WM_INPUTLANGCHANGE), WM.WM_INPUTLANGCHANGE);
+
+    public static readonly WindowMessage WM_INPUTLANGCHANGEREQUEST = new(
+        nameof(WM_INPUTLANGCHANGEREQUEST),
+        WM.WM_INPUTLANGCHANGEREQUEST);
+
+    public static readonly WindowMessage WM_KEYDOWN = new(nameof(WM_KEYDOWN), WM.WM_KEYDOWN);
+    public static readonly WindowMessage WM_KEYUP = new(nameof(WM_KEYUP), WM.WM_KEYUP);
+    public static readonly WindowMessage WM_KILLFOCUS = new(nameof(WM_KILLFOCUS), WM.WM_KILLFOCUS);
+    public static readonly WindowMessage WM_LBUTTONDBLCLK = new(nameof(WM_LBUTTONDBLCLK), WM.WM_LBUTTONDBLCLK);
+    public static readonly WindowMessage WM_LBUTTONDOWN = new(nameof(WM_LBUTTONDOWN), WM.WM_LBUTTONDOWN);
+    public static readonly WindowMessage WM_LBUTTONUP = new(nameof(WM_LBUTTONUP), WM.WM_LBUTTONUP);
+    public static readonly WindowMessage WM_MBUTTONDBLCLK = new(nameof(WM_MBUTTONDBLCLK), WM.WM_MBUTTONDBLCLK);
+    public static readonly WindowMessage WM_MBUTTONDOWN = new(nameof(WM_MBUTTONDOWN), WM.WM_MBUTTONDOWN);
+    public static readonly WindowMessage WM_MBUTTONUP = new(nameof(WM_MBUTTONUP), WM.WM_MBUTTONUP);
+    public static readonly WindowMessage WM_MDIACTIVATE = new(nameof(WM_MDIACTIVATE), WM.WM_MDIACTIVATE);
+    public static readonly WindowMessage WM_MDICASCADE = new(nameof(WM_MDICASCADE), WM.WM_MDICASCADE);
+    public static readonly WindowMessage WM_MDICREATE = new(nameof(WM_MDICREATE), WM.WM_MDICREATE);
+    public static readonly WindowMessage WM_MDIDESTROY = new(nameof(WM_MDIDESTROY), WM.WM_MDIDESTROY);
+    public static readonly WindowMessage WM_MDIGETACTIVE = new(nameof(WM_MDIGETACTIVE), WM.WM_MDIGETACTIVE);
+    public static readonly WindowMessage WM_MDIICONARRANGE = new(nameof(WM_MDIICONARRANGE), WM.WM_MDIICONARRANGE);
+    public static readonly WindowMessage WM_MDIMAXIMIZE = new(nameof(WM_MDIMAXIMIZE), WM.WM_MDIMAXIMIZE);
+    public static readonly WindowMessage WM_MDINEXT = new(nameof(WM_MDINEXT), WM.WM_MDINEXT);
+    public static readonly WindowMessage WM_MDIREFRESHMENU = new(nameof(WM_MDIREFRESHMENU), WM.WM_MDIREFRESHMENU);
+    public static readonly WindowMessage WM_MDIRESTORE = new(nameof(WM_MDIRESTORE), WM.WM_MDIRESTORE);
+    public static readonly WindowMessage WM_MDISETMENU = new(nameof(WM_MDISETMENU), WM.WM_MDISETMENU);
+    public static readonly WindowMessage WM_MDITILE = new(nameof(WM_MDITILE), WM.WM_MDITILE);
+    public static readonly WindowMessage WM_MEASUREITEM = new(nameof(WM_MEASUREITEM), WM.WM_MEASUREITEM);
+    public static readonly WindowMessage WM_MENUCHAR = new(nameof(WM_MENUCHAR), WM.WM_MENUCHAR);
+    public static readonly WindowMessage WM_MENUCOMMAND = new(nameof(WM_MENUCOMMAND), WM.WM_MENUCOMMAND);
+    public static readonly WindowMessage WM_MENUDRAG = new(nameof(WM_MENUDRAG), WM.WM_MENUDRAG);
+    public static readonly WindowMessage WM_MENUGETOBJECT = new(nameof(WM_MENUGETOBJECT), WM.WM_MENUGETOBJECT);
+    public static readonly WindowMessage WM_MENURBUTTONUP = new(nameof(WM_MENURBUTTONUP), WM.WM_MENURBUTTONUP);
+    public static readonly WindowMessage WM_MENUSELECT = new(nameof(WM_MENUSELECT), WM.WM_MENUSELECT);
+    public static readonly WindowMessage WM_MOUSEACTIVATE = new(nameof(WM_MOUSEACTIVATE), WM.WM_MOUSEACTIVATE);
+    public static readonly WindowMessage WM_MOUSEHOVER = new(nameof(WM_MOUSEHOVER), WM.WM_MOUSEHOVER);
+    public static readonly WindowMessage WM_MOUSEHWHEEL = new(nameof(WM_MOUSEHWHEEL), WM.WM_MOUSEHWHEEL);
+    public static readonly WindowMessage WM_MOUSELEAVE = new(nameof(WM_MOUSELEAVE), WM.WM_MOUSELEAVE);
+    public static readonly WindowMessage WM_MOUSEMOVE = new(nameof(WM_MOUSEMOVE), WM.WM_MOUSEMOVE);
+    public static readonly WindowMessage WM_MOUSEWHEEL = new(nameof(WM_MOUSEWHEEL), WM.WM_MOUSEWHEEL);
+    public static readonly WindowMessage WM_MOVE = new(nameof(WM_MOVE), WM.WM_MOVE);
+    public static readonly WindowMessage WM_MOVING = new(nameof(WM_MOVING), WM.WM_MOVING);
+    public static readonly WindowMessage WM_NCACTIVATE = new(nameof(WM_NCACTIVATE), WM.WM_NCACTIVATE);
+    public static readonly WindowMessage WM_NCCALCSIZE = new(nameof(WM_NCCALCSIZE), WM.WM_NCCALCSIZE);
+    public static readonly WindowMessage WM_NCCREATE = new(nameof(WM_NCCREATE), WM.WM_NCCREATE);
+    public static readonly WindowMessage WM_NCDESTROY = new(nameof(WM_NCDESTROY), WM.WM_NCDESTROY);
+    public static readonly WindowMessage WM_NCHITTEST = new(nameof(WM_NCHITTEST), WM.WM_NCHITTEST);
+    public static readonly WindowMessage WM_NCLBUTTONDBLCLK = new(nameof(WM_NCLBUTTONDBLCLK), WM.WM_NCLBUTTONDBLCLK);
+    public static readonly WindowMessage WM_NCLBUTTONDOWN = new(nameof(WM_NCLBUTTONDOWN), WM.WM_NCLBUTTONDOWN);
+    public static readonly WindowMessage WM_NCLBUTTONUP = new(nameof(WM_NCLBUTTONUP), WM.WM_NCLBUTTONUP);
+    public static readonly WindowMessage WM_NCMBUTTONDBLCLK = new(nameof(WM_NCMBUTTONDBLCLK), WM.WM_NCMBUTTONDBLCLK);
+    public static readonly WindowMessage WM_NCMBUTTONDOWN = new(nameof(WM_NCMBUTTONDOWN), WM.WM_NCMBUTTONDOWN);
+    public static readonly WindowMessage WM_NCMBUTTONUP = new(nameof(WM_NCMBUTTONUP), WM.WM_NCMBUTTONUP);
+    public static readonly WindowMessage WM_NCMOUSEHOVER = new(nameof(WM_NCMOUSEHOVER), WM.WM_NCMOUSEHOVER);
+    public static readonly WindowMessage WM_NCMOUSELEAVE = new(nameof(WM_NCMOUSELEAVE), WM.WM_NCMOUSELEAVE);
+    public static readonly WindowMessage WM_NCMOUSEMOVE = new(nameof(WM_NCMOUSEMOVE), WM.WM_NCMOUSEMOVE);
+    public static readonly WindowMessage WM_NCPAINT = new(nameof(WM_NCPAINT), WM.WM_NCPAINT);
+    public static readonly WindowMessage WM_NCPOINTERDOWN = new(nameof(WM_NCPOINTERDOWN), WM.WM_NCPOINTERDOWN);
+    public static readonly WindowMessage WM_NCPOINTERUP = new(nameof(WM_NCPOINTERUP), WM.WM_NCPOINTERUP);
+    public static readonly WindowMessage WM_NCPOINTERUPDATE = new(nameof(WM_NCPOINTERUPDATE), WM.WM_NCPOINTERUPDATE);
+    public static readonly WindowMessage WM_NCRBUTTONDBLCLK = new(nameof(WM_NCRBUTTONDBLCLK), WM.WM_NCRBUTTONDBLCLK);
+    public static readonly WindowMessage WM_NCRBUTTONDOWN = new(nameof(WM_NCRBUTTONDOWN), WM.WM_NCRBUTTONDOWN);
+    public static readonly WindowMessage WM_NCRBUTTONUP = new(nameof(WM_NCRBUTTONUP), WM.WM_NCRBUTTONUP);
+    public static readonly WindowMessage WM_NCXBUTTONDBLCLK = new(nameof(WM_NCXBUTTONDBLCLK), WM.WM_NCXBUTTONDBLCLK);
+    public static readonly WindowMessage WM_NCXBUTTONDOWN = new(nameof(WM_NCXBUTTONDOWN), WM.WM_NCXBUTTONDOWN);
+    public static readonly WindowMessage WM_NCXBUTTONUP = new(nameof(WM_NCXBUTTONUP), WM.WM_NCXBUTTONUP);
+    public static readonly WindowMessage WM_NEXTDLGCTL = new(nameof(WM_NEXTDLGCTL), WM.WM_NEXTDLGCTL);
+    public static readonly WindowMessage WM_NEXTMENU = new(nameof(WM_NEXTMENU), WM.WM_NEXTMENU);
+    public static readonly WindowMessage WM_NOTIFY = new(nameof(WM_NOTIFY), WM.WM_NOTIFY);
+    public static readonly WindowMessage WM_NOTIFYFORMAT = new(nameof(WM_NOTIFYFORMAT), WM.WM_NOTIFYFORMAT);
+    public static readonly WindowMessage WM_NULL = new(nameof(WM_NULL), WM.WM_NULL);
+    public static readonly WindowMessage WM_PAINT = new(nameof(WM_PAINT), WM.WM_PAINT);
+    public static readonly WindowMessage WM_PAINTCLIPBOARD = new(nameof(WM_PAINTCLIPBOARD), WM.WM_PAINTCLIPBOARD);
+    public static readonly WindowMessage WM_PAINTICON = new(nameof(WM_PAINTICON), WM.WM_PAINTICON);
+    public static readonly WindowMessage WM_PALETTECHANGED = new(nameof(WM_PALETTECHANGED), WM.WM_PALETTECHANGED);
+    public static readonly WindowMessage WM_PALETTEISCHANGING = new(nameof(WM_PALETTEISCHANGING), WM.WM_PALETTEISCHANGING);
+    public static readonly WindowMessage WM_PARENTNOTIFY = new(nameof(WM_PARENTNOTIFY), WM.WM_PARENTNOTIFY);
+    public static readonly WindowMessage WM_PASTE = new(nameof(WM_PASTE), WM.WM_PASTE);
+    public static readonly WindowMessage WM_PENWINFIRST = new(nameof(WM_PENWINFIRST), WM.WM_PENWINFIRST);
+    public static readonly WindowMessage WM_PENWINLAST = new(nameof(WM_PENWINLAST), WM.WM_PENWINLAST);
+    public static readonly WindowMessage WM_POINTERACTIVATE = new(nameof(WM_POINTERACTIVATE), WM.WM_POINTERACTIVATE);
+
+    public static readonly WindowMessage WM_POINTERCAPTURECHANGED = new(
+        nameof(WM_POINTERCAPTURECHANGED),
+        WM.WM_POINTERCAPTURECHANGED);
+
+    public static readonly WindowMessage WM_POINTERDEVICECHANGE = new(nameof(WM_POINTERDEVICECHANGE), WM.WM_POINTERDEVICECHANGE);
+
+    public static readonly WindowMessage WM_POINTERDEVICEINRANGE = new(
+        nameof(WM_POINTERDEVICEINRANGE),
+        WM.WM_POINTERDEVICEINRANGE);
 
     public static readonly WindowMessage WM_POINTERDEVICEOUTOFRANGE = new(
         nameof(WM_POINTERDEVICEOUTOFRANGE),
-        TerraFX.Interop.Windows.WM_POINTERDEVICEOUTOFRANGE);
+        WM.WM_POINTERDEVICEOUTOFRANGE);
 
-    public static readonly WindowMessage WM_POINTERDOWN = new(nameof(WM_POINTERDOWN), TerraFX.Interop.Windows.WM_POINTERDOWN);
-    public static readonly WindowMessage WM_POINTERENTER = new(nameof(WM_POINTERENTER), TerraFX.Interop.Windows.WM_POINTERENTER);
-    public static readonly WindowMessage WM_POINTERHWHEEL = new(nameof(WM_POINTERHWHEEL), TerraFX.Interop.Windows.WM_POINTERHWHEEL);
-    public static readonly WindowMessage WM_POINTERLEAVE = new(nameof(WM_POINTERLEAVE), TerraFX.Interop.Windows.WM_POINTERLEAVE);
-    public static readonly WindowMessage WM_POINTERROUTEDAWAY = new(nameof(WM_POINTERROUTEDAWAY), TerraFX.Interop.Windows.WM_POINTERROUTEDAWAY);
-    public static readonly WindowMessage WM_POINTERROUTEDRELEASED = new(nameof(WM_POINTERROUTEDRELEASED), TerraFX.Interop.Windows.WM_POINTERROUTEDRELEASED);
-    public static readonly WindowMessage WM_POINTERROUTEDTO = new(nameof(WM_POINTERROUTEDTO), TerraFX.Interop.Windows.WM_POINTERROUTEDTO);
-    public static readonly WindowMessage WM_POINTERUP = new(nameof(WM_POINTERUP), TerraFX.Interop.Windows.WM_POINTERUP);
-    public static readonly WindowMessage WM_POINTERUPDATE = new(nameof(WM_POINTERUPDATE), TerraFX.Interop.Windows.WM_POINTERUPDATE);
-    public static readonly WindowMessage WM_POINTERWHEEL = new(nameof(WM_POINTERWHEEL), TerraFX.Interop.Windows.WM_POINTERWHEEL);
-    public static readonly WindowMessage WM_POWER = new(nameof(WM_POWER), TerraFX.Interop.Windows.WM_POWER);
-    public static readonly WindowMessage WM_POWERBROADCAST = new(nameof(WM_POWERBROADCAST), TerraFX.Interop.Windows.WM_POWERBROADCAST);
-    public static readonly WindowMessage WM_PRINT = new(nameof(WM_PRINT), TerraFX.Interop.Windows.WM_PRINT);
-    public static readonly WindowMessage WM_PRINTCLIENT = new(nameof(WM_PRINTCLIENT), TerraFX.Interop.Windows.WM_PRINTCLIENT);
-    public static readonly WindowMessage WM_QUERYDRAGICON = new(nameof(WM_QUERYDRAGICON), TerraFX.Interop.Windows.WM_QUERYDRAGICON);
-    public static readonly WindowMessage WM_QUERYENDSESSION = new(nameof(WM_QUERYENDSESSION), TerraFX.Interop.Windows.WM_QUERYENDSESSION);
-    public static readonly WindowMessage WM_QUERYNEWPALETTE = new(nameof(WM_QUERYNEWPALETTE), TerraFX.Interop.Windows.WM_QUERYNEWPALETTE);
-    public static readonly WindowMessage WM_QUERYOPEN = new(nameof(WM_QUERYOPEN), TerraFX.Interop.Windows.WM_QUERYOPEN);
-    public static readonly WindowMessage WM_QUERYUISTATE = new(nameof(WM_QUERYUISTATE), TerraFX.Interop.Windows.WM_QUERYUISTATE);
-    public static readonly WindowMessage WM_QUEUESYNC = new(nameof(WM_QUEUESYNC), TerraFX.Interop.Windows.WM_QUEUESYNC);
-    public static readonly WindowMessage WM_QUIT = new(nameof(WM_QUIT), TerraFX.Interop.Windows.WM_QUIT);
-    public static readonly WindowMessage WM_RBUTTONDBLCLK = new(nameof(WM_RBUTTONDBLCLK), TerraFX.Interop.Windows.WM_RBUTTONDBLCLK);
-    public static readonly WindowMessage WM_RBUTTONDOWN = new(nameof(WM_RBUTTONDOWN), TerraFX.Interop.Windows.WM_RBUTTONDOWN);
-    public static readonly WindowMessage WM_RBUTTONUP = new(nameof(WM_RBUTTONUP), TerraFX.Interop.Windows.WM_RBUTTONUP);
-    public static readonly WindowMessage WM_RENDERALLFORMATS = new(nameof(WM_RENDERALLFORMATS), TerraFX.Interop.Windows.WM_RENDERALLFORMATS);
-    public static readonly WindowMessage WM_RENDERFORMAT = new(nameof(WM_RENDERFORMAT), TerraFX.Interop.Windows.WM_RENDERFORMAT);
-    public static readonly WindowMessage WM_SETCURSOR = new(nameof(WM_SETCURSOR), TerraFX.Interop.Windows.WM_SETCURSOR);
-    public static readonly WindowMessage WM_SETFOCUS = new(nameof(WM_SETFOCUS), TerraFX.Interop.Windows.WM_SETFOCUS);
-    public static readonly WindowMessage WM_SETFONT = new(nameof(WM_SETFONT), TerraFX.Interop.Windows.WM_SETFONT);
-    public static readonly WindowMessage WM_SETHOTKEY = new(nameof(WM_SETHOTKEY), TerraFX.Interop.Windows.WM_SETHOTKEY);
-    public static readonly WindowMessage WM_SETICON = new(nameof(WM_SETICON), TerraFX.Interop.Windows.WM_SETICON);
-    public static readonly WindowMessage WM_SETREDRAW = new(nameof(WM_SETREDRAW), TerraFX.Interop.Windows.WM_SETREDRAW);
-    public static readonly WindowMessage WM_SETTEXT = new(nameof(WM_SETTEXT), TerraFX.Interop.Windows.WM_SETTEXT);
-    public static readonly WindowMessage WM_SETTINGCHANGE = new(nameof(WM_SETTINGCHANGE), TerraFX.Interop.Windows.WM_SETTINGCHANGE);
-    public static readonly WindowMessage WM_SHOWWINDOW = new(nameof(WM_SHOWWINDOW), TerraFX.Interop.Windows.WM_SHOWWINDOW);
-    public static readonly WindowMessage WM_SIZE = new(nameof(WM_SIZE), TerraFX.Interop.Windows.WM_SIZE);
-    public static readonly WindowMessage WM_SIZECLIPBOARD = new(nameof(WM_SIZECLIPBOARD), TerraFX.Interop.Windows.WM_SIZECLIPBOARD);
-    public static readonly WindowMessage WM_SIZING = new(nameof(WM_SIZING), TerraFX.Interop.Windows.WM_SIZING);
-    public static readonly WindowMessage WM_SPOOLERSTATUS = new(nameof(WM_SPOOLERSTATUS), TerraFX.Interop.Windows.WM_SPOOLERSTATUS);
-    public static readonly WindowMessage WM_STYLECHANGED = new(nameof(WM_STYLECHANGED), TerraFX.Interop.Windows.WM_STYLECHANGED);
-    public static readonly WindowMessage WM_STYLECHANGING = new(nameof(WM_STYLECHANGING), TerraFX.Interop.Windows.WM_STYLECHANGING);
-    public static readonly WindowMessage WM_SYNCPAINT = new(nameof(WM_SYNCPAINT), TerraFX.Interop.Windows.WM_SYNCPAINT);
-    public static readonly WindowMessage WM_SYSCHAR = new(nameof(WM_SYSCHAR), TerraFX.Interop.Windows.WM_SYSCHAR);
-    public static readonly WindowMessage WM_SYSCOLORCHANGE = new(nameof(WM_SYSCOLORCHANGE), TerraFX.Interop.Windows.WM_SYSCOLORCHANGE);
-    public static readonly WindowMessage WM_SYSCOMMAND = new(nameof(WM_SYSCOMMAND), TerraFX.Interop.Windows.WM_SYSCOMMAND);
-    public static readonly WindowMessage WM_SYSDEADCHAR = new(nameof(WM_SYSDEADCHAR), TerraFX.Interop.Windows.WM_SYSDEADCHAR);
-    public static readonly WindowMessage WM_SYSKEYDOWN = new(nameof(WM_SYSKEYDOWN), TerraFX.Interop.Windows.WM_SYSKEYDOWN);
-    public static readonly WindowMessage WM_SYSKEYUP = new(nameof(WM_SYSKEYUP), TerraFX.Interop.Windows.WM_SYSKEYUP);
-    public static readonly WindowMessage WM_TABLET_FIRST = new(nameof(WM_TABLET_FIRST), TerraFX.Interop.Windows.WM_TABLET_FIRST);
-    public static readonly WindowMessage WM_TABLET_LAST = new(nameof(WM_TABLET_LAST), TerraFX.Interop.Windows.WM_TABLET_LAST);
-    public static readonly WindowMessage WM_TCARD = new(nameof(WM_TCARD), TerraFX.Interop.Windows.WM_TCARD);
-    public static readonly WindowMessage WM_THEMECHANGED = new(nameof(WM_THEMECHANGED), TerraFX.Interop.Windows.WM_THEMECHANGED);
-    public static readonly WindowMessage WM_TIMECHANGE = new(nameof(WM_TIMECHANGE), TerraFX.Interop.Windows.WM_TIMECHANGE);
-    public static readonly WindowMessage WM_TIMER = new(nameof(WM_TIMER), TerraFX.Interop.Windows.WM_TIMER);
-    public static readonly WindowMessage WM_TOUCH = new(nameof(WM_TOUCH), TerraFX.Interop.Windows.WM_TOUCH);
-    public static readonly WindowMessage WM_TOUCHHITTESTING = new(nameof(WM_TOUCHHITTESTING), TerraFX.Interop.Windows.WM_TOUCHHITTESTING);
-    public static readonly WindowMessage WM_UNDO = new(nameof(WM_UNDO), TerraFX.Interop.Windows.WM_UNDO);
-    public static readonly WindowMessage WM_UNICHAR = new(nameof(WM_UNICHAR), TerraFX.Interop.Windows.WM_UNICHAR);
-    public static readonly WindowMessage WM_UNINITMENUPOPUP = new(nameof(WM_UNINITMENUPOPUP), TerraFX.Interop.Windows.WM_UNINITMENUPOPUP);
-    public static readonly WindowMessage WM_UPDATEUISTATE = new(nameof(WM_UPDATEUISTATE), TerraFX.Interop.Windows.WM_UPDATEUISTATE);
-    public static readonly WindowMessage WM_USER = new(nameof(WM_USER), TerraFX.Interop.Windows.WM_USER);
-    public static readonly WindowMessage WM_USERCHANGED = new(nameof(WM_USERCHANGED), TerraFX.Interop.Windows.WM_USERCHANGED);
-    public static readonly WindowMessage WM_VKEYTOITEM = new(nameof(WM_VKEYTOITEM), TerraFX.Interop.Windows.WM_VKEYTOITEM);
-    public static readonly WindowMessage WM_VSCROLL = new(nameof(WM_VSCROLL), TerraFX.Interop.Windows.WM_VSCROLL);
-    public static readonly WindowMessage WM_VSCROLLCLIPBOARD = new(nameof(WM_VSCROLLCLIPBOARD), TerraFX.Interop.Windows.WM_VSCROLLCLIPBOARD);
-    public static readonly WindowMessage WM_WINDOWPOSCHANGED = new(nameof(WM_WINDOWPOSCHANGED), TerraFX.Interop.Windows.WM_WINDOWPOSCHANGED);
-    public static readonly WindowMessage WM_WINDOWPOSCHANGING = new(nameof(WM_WINDOWPOSCHANGING), TerraFX.Interop.Windows.WM_WINDOWPOSCHANGING);
-    public static readonly WindowMessage WM_WTSSESSION_CHANGE = new(nameof(WM_WTSSESSION_CHANGE), TerraFX.Interop.Windows.WM_WTSSESSION_CHANGE);
-    public static readonly WindowMessage WM_XBUTTONDBLCLK = new(nameof(WM_XBUTTONDBLCLK), TerraFX.Interop.Windows.WM_XBUTTONDBLCLK);
-    public static readonly WindowMessage WM_XBUTTONDOWN = new(nameof(WM_XBUTTONDOWN), TerraFX.Interop.Windows.WM_XBUTTONDOWN);
-    public static readonly WindowMessage WM_XBUTTONUP = new(nameof(WM_XBUTTONUP), TerraFX.Interop.Windows.WM_XBUTTONUP);
+    public static readonly WindowMessage WM_POINTERDOWN = new(nameof(WM_POINTERDOWN), WM.WM_POINTERDOWN);
+    public static readonly WindowMessage WM_POINTERENTER = new(nameof(WM_POINTERENTER), WM.WM_POINTERENTER);
+    public static readonly WindowMessage WM_POINTERHWHEEL = new(nameof(WM_POINTERHWHEEL), WM.WM_POINTERHWHEEL);
+    public static readonly WindowMessage WM_POINTERLEAVE = new(nameof(WM_POINTERLEAVE), WM.WM_POINTERLEAVE);
+    public static readonly WindowMessage WM_POINTERROUTEDAWAY = new(nameof(WM_POINTERROUTEDAWAY), WM.WM_POINTERROUTEDAWAY);
+
+    public static readonly WindowMessage WM_POINTERROUTEDRELEASED = new(
+        nameof(WM_POINTERROUTEDRELEASED),
+        WM.WM_POINTERROUTEDRELEASED);
+
+    public static readonly WindowMessage WM_POINTERROUTEDTO = new(nameof(WM_POINTERROUTEDTO), WM.WM_POINTERROUTEDTO);
+    public static readonly WindowMessage WM_POINTERUP = new(nameof(WM_POINTERUP), WM.WM_POINTERUP);
+    public static readonly WindowMessage WM_POINTERUPDATE = new(nameof(WM_POINTERUPDATE), WM.WM_POINTERUPDATE);
+    public static readonly WindowMessage WM_POINTERWHEEL = new(nameof(WM_POINTERWHEEL), WM.WM_POINTERWHEEL);
+    public static readonly WindowMessage WM_POWER = new(nameof(WM_POWER), WM.WM_POWER);
+    public static readonly WindowMessage WM_POWERBROADCAST = new(nameof(WM_POWERBROADCAST), WM.WM_POWERBROADCAST);
+    public static readonly WindowMessage WM_PRINT = new(nameof(WM_PRINT), WM.WM_PRINT);
+    public static readonly WindowMessage WM_PRINTCLIENT = new(nameof(WM_PRINTCLIENT), WM.WM_PRINTCLIENT);
+    public static readonly WindowMessage WM_QUERYDRAGICON = new(nameof(WM_QUERYDRAGICON), WM.WM_QUERYDRAGICON);
+    public static readonly WindowMessage WM_QUERYENDSESSION = new(nameof(WM_QUERYENDSESSION), WM.WM_QUERYENDSESSION);
+    public static readonly WindowMessage WM_QUERYNEWPALETTE = new(nameof(WM_QUERYNEWPALETTE), WM.WM_QUERYNEWPALETTE);
+    public static readonly WindowMessage WM_QUERYOPEN = new(nameof(WM_QUERYOPEN), WM.WM_QUERYOPEN);
+    public static readonly WindowMessage WM_QUERYUISTATE = new(nameof(WM_QUERYUISTATE), WM.WM_QUERYUISTATE);
+    public static readonly WindowMessage WM_QUEUESYNC = new(nameof(WM_QUEUESYNC), WM.WM_QUEUESYNC);
+    public static readonly WindowMessage WM_QUIT = new(nameof(WM_QUIT), WM.WM_QUIT);
+    public static readonly WindowMessage WM_RBUTTONDBLCLK = new(nameof(WM_RBUTTONDBLCLK), WM.WM_RBUTTONDBLCLK);
+    public static readonly WindowMessage WM_RBUTTONDOWN = new(nameof(WM_RBUTTONDOWN), WM.WM_RBUTTONDOWN);
+    public static readonly WindowMessage WM_RBUTTONUP = new(nameof(WM_RBUTTONUP), WM.WM_RBUTTONUP);
+    public static readonly WindowMessage WM_RENDERALLFORMATS = new(nameof(WM_RENDERALLFORMATS), WM.WM_RENDERALLFORMATS);
+    public static readonly WindowMessage WM_RENDERFORMAT = new(nameof(WM_RENDERFORMAT), WM.WM_RENDERFORMAT);
+    public static readonly WindowMessage WM_SETCURSOR = new(nameof(WM_SETCURSOR), WM.WM_SETCURSOR);
+    public static readonly WindowMessage WM_SETFOCUS = new(nameof(WM_SETFOCUS), WM.WM_SETFOCUS);
+    public static readonly WindowMessage WM_SETFONT = new(nameof(WM_SETFONT), WM.WM_SETFONT);
+    public static readonly WindowMessage WM_SETHOTKEY = new(nameof(WM_SETHOTKEY), WM.WM_SETHOTKEY);
+    public static readonly WindowMessage WM_SETICON = new(nameof(WM_SETICON), WM.WM_SETICON);
+    public static readonly WindowMessage WM_SETREDRAW = new(nameof(WM_SETREDRAW), WM.WM_SETREDRAW);
+    public static readonly WindowMessage WM_SETTEXT = new(nameof(WM_SETTEXT), WM.WM_SETTEXT);
+    public static readonly WindowMessage WM_SETTINGCHANGE = new(nameof(WM_SETTINGCHANGE), WM.WM_SETTINGCHANGE);
+    public static readonly WindowMessage WM_SHOWWINDOW = new(nameof(WM_SHOWWINDOW), WM.WM_SHOWWINDOW);
+    public static readonly WindowMessage WM_SIZE = new(nameof(WM_SIZE), WM.WM_SIZE);
+    public static readonly WindowMessage WM_SIZECLIPBOARD = new(nameof(WM_SIZECLIPBOARD), WM.WM_SIZECLIPBOARD);
+    public static readonly WindowMessage WM_SIZING = new(nameof(WM_SIZING), WM.WM_SIZING);
+    public static readonly WindowMessage WM_SPOOLERSTATUS = new(nameof(WM_SPOOLERSTATUS), WM.WM_SPOOLERSTATUS);
+    public static readonly WindowMessage WM_STYLECHANGED = new(nameof(WM_STYLECHANGED), WM.WM_STYLECHANGED);
+    public static readonly WindowMessage WM_STYLECHANGING = new(nameof(WM_STYLECHANGING), WM.WM_STYLECHANGING);
+    public static readonly WindowMessage WM_SYNCPAINT = new(nameof(WM_SYNCPAINT), WM.WM_SYNCPAINT);
+    public static readonly WindowMessage WM_SYSCHAR = new(nameof(WM_SYSCHAR), WM.WM_SYSCHAR);
+    public static readonly WindowMessage WM_SYSCOLORCHANGE = new(nameof(WM_SYSCOLORCHANGE), WM.WM_SYSCOLORCHANGE);
+    public static readonly WindowMessage WM_SYSCOMMAND = new(nameof(WM_SYSCOMMAND), WM.WM_SYSCOMMAND);
+    public static readonly WindowMessage WM_SYSDEADCHAR = new(nameof(WM_SYSDEADCHAR), WM.WM_SYSDEADCHAR);
+    public static readonly WindowMessage WM_SYSKEYDOWN = new(nameof(WM_SYSKEYDOWN), WM.WM_SYSKEYDOWN);
+    public static readonly WindowMessage WM_SYSKEYUP = new(nameof(WM_SYSKEYUP), WM.WM_SYSKEYUP);
+    public static readonly WindowMessage WM_TABLET_FIRST = new(nameof(WM_TABLET_FIRST), WM.WM_TABLET_FIRST);
+    public static readonly WindowMessage WM_TABLET_LAST = new(nameof(WM_TABLET_LAST), WM.WM_TABLET_LAST);
+    public static readonly WindowMessage WM_TCARD = new(nameof(WM_TCARD), WM.WM_TCARD);
+    public static readonly WindowMessage WM_THEMECHANGED = new(nameof(WM_THEMECHANGED), WM.WM_THEMECHANGED);
+    public static readonly WindowMessage WM_TIMECHANGE = new(nameof(WM_TIMECHANGE), WM.WM_TIMECHANGE);
+    public static readonly WindowMessage WM_TIMER = new(nameof(WM_TIMER), WM.WM_TIMER);
+    public static readonly WindowMessage WM_TOUCH = new(nameof(WM_TOUCH), WM.WM_TOUCH);
+    public static readonly WindowMessage WM_TOUCHHITTESTING = new(nameof(WM_TOUCHHITTESTING), WM.WM_TOUCHHITTESTING);
+    public static readonly WindowMessage WM_UNDO = new(nameof(WM_UNDO), WM.WM_UNDO);
+    public static readonly WindowMessage WM_UNICHAR = new(nameof(WM_UNICHAR), WM.WM_UNICHAR);
+    public static readonly WindowMessage WM_UNINITMENUPOPUP = new(nameof(WM_UNINITMENUPOPUP), WM.WM_UNINITMENUPOPUP);
+    public static readonly WindowMessage WM_UPDATEUISTATE = new(nameof(WM_UPDATEUISTATE), WM.WM_UPDATEUISTATE);
+    public static readonly WindowMessage WM_USER = new(nameof(WM_USER), WM.WM_USER);
+    public static readonly WindowMessage WM_USERCHANGED = new(nameof(WM_USERCHANGED), WM.WM_USERCHANGED);
+    public static readonly WindowMessage WM_VKEYTOITEM = new(nameof(WM_VKEYTOITEM), WM.WM_VKEYTOITEM);
+    public static readonly WindowMessage WM_VSCROLL = new(nameof(WM_VSCROLL), WM.WM_VSCROLL);
+    public static readonly WindowMessage WM_VSCROLLCLIPBOARD = new(nameof(WM_VSCROLLCLIPBOARD), WM.WM_VSCROLLCLIPBOARD);
+    public static readonly WindowMessage WM_WINDOWPOSCHANGED = new(nameof(WM_WINDOWPOSCHANGED), WM.WM_WINDOWPOSCHANGED);
+    public static readonly WindowMessage WM_WINDOWPOSCHANGING = new(nameof(WM_WINDOWPOSCHANGING), WM.WM_WINDOWPOSCHANGING);
+    public static readonly WindowMessage WM_WTSSESSION_CHANGE = new(nameof(WM_WTSSESSION_CHANGE), WM.WM_WTSSESSION_CHANGE);
+    public static readonly WindowMessage WM_XBUTTONDBLCLK = new(nameof(WM_XBUTTONDBLCLK), WM.WM_XBUTTONDBLCLK);
+    public static readonly WindowMessage WM_XBUTTONDOWN = new(nameof(WM_XBUTTONDOWN), WM.WM_XBUTTONDOWN);
+    public static readonly WindowMessage WM_XBUTTONUP = new(nameof(WM_XBUTTONUP), WM.WM_XBUTTONUP);
 
     private static readonly WindowsMessageCollection _windowMessageByValue =
         new()
@@ -555,7 +585,7 @@ public sealed class WindowMessage
     /// <param name="value">The <see cref="WindowMessage" /> to convert.</param>
     public static implicit operator int(WindowMessage value)
     {
-        ThrowIfNull(value, nameof(value));
+        ThrowIfNull(value);
 
         return value.Value;
     }
@@ -568,7 +598,7 @@ public sealed class WindowMessage
     /// </returns>
     public static WindowMessage? MapKnown(uint message)
     {
-        _windowMessageByValue.TryGetValue(unchecked((int)message), out WindowMessage? windowsMessage);
+        _ = _windowMessageByValue.TryGetValue(unchecked((int)message), out var windowsMessage);
 
         return windowsMessage;
     }

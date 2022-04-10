@@ -6,7 +6,8 @@ namespace VorpalEngine.Messaging;
 /// <summary>Represents a concurrent message queue that implements a one-publisher, many-subscribers model.</summary>
 /// <typeparam name="TMessageBase">The base type for all messages.</typeparam>
 /// <typeparam name="TThread">The type representing logical threads that handle messages.</typeparam>
-public interface IConcurrentMessageQueue<TMessageBase, in TThread> : IMessagePublisher<TMessageBase>, IMessageSubscriber<TMessageBase, TThread>
+public interface IConcurrentMessageQueue<TMessageBase, in TThread> : IMessagePublisher<TMessageBase>,
+    IMessageSubscriber<TMessageBase, TThread>
     where TThread : struct, Enum
 {
     /// <summary>Invoked before a message is published.</summary>

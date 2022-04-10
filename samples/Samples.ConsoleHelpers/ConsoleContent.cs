@@ -14,14 +14,14 @@ public sealed class ConsoleContent
 
     public ConsoleContent(string text = "")
     {
-        Text(text);
+        _ = Text(text);
     }
 
     public ConsoleContent(ConsoleContent content)
     {
-        ThrowIfNull(content, nameof(content));
+        ThrowIfNull(content);
 
-        _stringBuilder.Append(content._stringBuilder);
+        _ = _stringBuilder.Append(content._stringBuilder);
         _visibleLength = content._visibleLength;
     }
 
@@ -33,9 +33,9 @@ public sealed class ConsoleContent
 
     public ConsoleContent Text(string text)
     {
-        ThrowIfNull(text, nameof(text));
+        ThrowIfNull(text);
 
-        _stringBuilder.Append(text);
+        _ = _stringBuilder.Append(text);
         _visibleLength += text.Length;
 
         return this;
@@ -43,14 +43,14 @@ public sealed class ConsoleContent
 
     public ConsoleContent PadRight(int width)
     {
-        _stringBuilder.Append(new string(' ', Math.Max(0, width - _visibleLength)));
+        _ = _stringBuilder.Append(new string(' ', Math.Max(0, width - _visibleLength)));
 
         return this;
     }
 
     public ConsoleContent FormatText(TextFormat format)
     {
-        _stringBuilder.Append($"\x1B[{(int)format}m");
+        _ = _stringBuilder.Append($"\x1B[{(int)format}m");
 
         return this;
     }

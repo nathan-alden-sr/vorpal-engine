@@ -7,14 +7,7 @@ namespace VorpalEngine.Input.Mouse;
 public abstract class MouseManager : IMouseManager
 {
     private static readonly ImmutableHashSet<Button> AllButtons =
-        new[]
-        {
-            Button.Left,
-            Button.Right,
-            Button.Middle,
-            Button.X1,
-            Button.X2
-        }.ToImmutableHashSet();
+        new[] { Button.Left, Button.Right, Button.Middle, Button.X1, Button.X2 }.ToImmutableHashSet();
 
     private readonly HashSet<Button> _newDownButtons = new(AllButtons.Count);
     private readonly HashSet<Button> _oldDownButtons = new(AllButtons.Count);
@@ -38,10 +31,10 @@ public abstract class MouseManager : IMouseManager
         _stateChanges.ButtonPressedStates = 0;
         _stateChanges.ButtonReleasedStates = 0;
 
-        foreach (Button button in AllButtons)
+        foreach (var button in AllButtons)
         {
-            bool oldDownButton = _oldDownButtons.Contains(button);
-            bool newDownButton = _newDownButtons.Contains(button);
+            var oldDownButton = _oldDownButtons.Contains(button);
+            var newDownButton = _newDownButtons.Contains(button);
 
             if (newDownButton)
             {
@@ -62,14 +55,7 @@ public abstract class MouseManager : IMouseManager
                 _stateChanges.ButtonReleasedStates |= (byte)(1 << (byte)button);
             }
 
-            if (newDownButton)
-            {
-                _oldDownButtons.Add(button);
-            }
-            else
-            {
-                _oldDownButtons.Remove(button);
-            }
+            _ = newDownButton ? _oldDownButtons.Add(button) : _oldDownButtons.Remove(button);
         }
 
         _stateChanges.RelativeLocationXDelta = RelativeLocationXDelta;
@@ -102,14 +88,5 @@ public abstract class MouseManager : IMouseManager
     /// <param name="button">The button for which the down state will be set.</param>
     /// <param name="state">The down state of the button.</param>
     protected void SetButtonDown(Button button, bool state)
-    {
-        if (state)
-        {
-            _newDownButtons.Add(button);
-        }
-        else
-        {
-            _newDownButtons.Remove(button);
-        }
-    }
+        => _ = state ? _newDownButtons.Add(button) : _newDownButtons.Remove(button);
 }

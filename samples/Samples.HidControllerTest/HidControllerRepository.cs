@@ -9,9 +9,12 @@ public sealed class HidControllerRepository : IHidControllerRepository
 {
     private readonly Dictionary<(string?, string?, string?), uint> _controllers = new();
 
-    public (uint index, bool? enabled, bool enabledDefault) AddHidController(string? manufacturer, string? productName, string? serialNumber)
+    public (uint index, bool? enabled, bool enabledDefault) AddHidController(
+        string? manufacturer,
+        string? productName,
+        string? serialNumber)
     {
-        if (_controllers.TryGetValue((manufacturer, productName, serialNumber), out uint index))
+        if (_controllers.TryGetValue((manufacturer, productName, serialNumber), out var index))
         {
             return (index, true, true);
         }

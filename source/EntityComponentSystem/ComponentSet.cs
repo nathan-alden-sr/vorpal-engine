@@ -45,14 +45,14 @@ public sealed class ComponentSet<T>
         {
             if (id < 0)
             {
-                ThrowArgumentOutOfRangeException("Invalid ID.", id, nameof(id));
+                ThrowArgumentOutOfRangeException(nameof(id), id, "Invalid ID.");
             }
 
-            int denseIndex = _sparse[id];
+            var denseIndex = _sparse[id];
 
             if (denseIndex < 0)
             {
-                ThrowArgumentOutOfRangeException("Invalid dense index.", denseIndex, nameof(denseIndex));
+                ThrowArgumentOutOfRangeException(nameof(denseIndex), denseIndex, "Invalid dense index.");
             }
 
             return _dense[denseIndex];
@@ -66,12 +66,12 @@ public sealed class ComponentSet<T>
     {
         if (id < 0)
         {
-            ThrowArgumentOutOfRangeException("Invalid ID.", id, nameof(id));
+            ThrowArgumentOutOfRangeException(nameof(id), id, "Invalid ID.");
         }
 
         if (id < _sparse.Count)
         {
-            int denseIndex = _sparse[id];
+            var denseIndex = _sparse[id];
 
             if (denseIndex >= 0)
             {
@@ -102,12 +102,12 @@ public sealed class ComponentSet<T>
     {
         if (id < 0)
         {
-            ThrowArgumentOutOfRangeException("Invalid ID.", id, nameof(id));
+            ThrowArgumentOutOfRangeException(nameof(id), id, "Invalid ID.");
         }
 
         if (id < _sparse.Count)
         {
-            int denseIndex = _sparse[id];
+            var denseIndex = _sparse[id];
 
             if (denseIndex >= 0)
             {
@@ -138,7 +138,7 @@ public sealed class ComponentSet<T>
     {
         if (id < 0)
         {
-            ThrowArgumentOutOfRangeException("Invalid ID.", id, nameof(id));
+            ThrowArgumentOutOfRangeException(nameof(id), id, "Invalid ID.");
         }
 
         if (id >= _sparse.Count)
@@ -146,7 +146,7 @@ public sealed class ComponentSet<T>
             return false;
         }
 
-        int denseIndex = _sparse[id];
+        var denseIndex = _sparse[id];
 
         if (denseIndex < 0)
         {
@@ -165,12 +165,7 @@ public sealed class ComponentSet<T>
     /// <summary>Gets an enumerable all components.</summary>
     /// <returns>An enumerable of all components.</returns>
     public IEnumerable<T> GetAll()
-    {
-        for (var i = 0; i < _dense.Count; i++)
-        {
-            yield return _dense[i];
-        }
-    }
+        => _dense;
 
     /// <summary>Removes all components from the set.</summary>
     public void Clear()
@@ -193,7 +188,7 @@ public sealed class ComponentSet<T>
     {
         if (id < 0)
         {
-            ThrowArgumentOutOfRangeException("Invalid ID.", id, nameof(id));
+            ThrowArgumentOutOfRangeException(nameof(id), id, "Invalid ID.");
         }
 
         return id < _sparse.Count && _sparse[id] != InvalidComponentId;

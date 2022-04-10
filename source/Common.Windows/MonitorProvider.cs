@@ -2,8 +2,8 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Runtime.InteropServices;
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -53,13 +53,11 @@ public sealed class MonitorProvider : IMonitorProvider
         {
             _monitors.Clear();
 
-            GCHandle monitorsHandle = GCHandle.Alloc(_monitors);
+            var monitorsHandle = GCHandle.Alloc(_monitors);
 
             try
             {
-                ThrowIfZero(
-                    EnumDisplayMonitors(IntPtr.Zero, null, &MonitorEnumProc, GCHandle.ToIntPtr(monitorsHandle)),
-                    nameof(EnumDisplayMonitors));
+                ThrowIfZero(EnumDisplayMonitors(HDC.NULL, null, &MonitorEnumProc, GCHandle.ToIntPtr(monitorsHandle)));
             }
             finally
             {
@@ -69,12 +67,12 @@ public sealed class MonitorProvider : IMonitorProvider
     }
 
     [UnmanagedCallersOnly]
-    private static unsafe int MonitorEnumProc(IntPtr param0, IntPtr param1, RECT* param2, nint param3)
+    private static unsafe BOOL MonitorEnumProc(HMONITOR param0, HDC param1, RECT* param2, LPARAM param3)
     {
         var monitors = (HashSet<Monitor>)GCHandle.FromIntPtr(param3).Target!;
 
-        monitors.Add(new Monitor(param0, param1));
+        _ = monitors.Add(new Monitor(param0, param1));
 
-        return TRUE;
+        return BOOL.TRUE;
     }
 }

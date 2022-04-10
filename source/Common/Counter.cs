@@ -52,7 +52,7 @@ public sealed class Counter : IDisposable
     {
         if (_decrementOnDispose)
         {
-            Decrement();
+            _ = Decrement();
         }
     }
 

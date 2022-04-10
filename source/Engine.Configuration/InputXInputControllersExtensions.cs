@@ -12,10 +12,10 @@ public static class InputXInputControllersExtensions
     /// <returns>A tuple containing the enabled state of the XInput controller.</returns>
     public static (bool? enabled, bool enabledDefault) Add(this InputXInputControllers inputXInputControllers, byte index)
     {
-        ThrowIfNull(inputXInputControllers, nameof(inputXInputControllers));
+        ThrowIfNull(inputXInputControllers);
 
-        IList<InputXInputControllersController> controllers = inputXInputControllers.Controllers();
-        InputXInputControllersController? controller = controllers.SingleOrDefault(a => a.Index == index);
+        var controllers = inputXInputControllers.Controllers();
+        var controller = controllers.SingleOrDefault(a => a.Index == index);
 
         // ReSharper disable once InvertIf
         if (controller is null)

@@ -1,8 +1,9 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.DirectX;
+using static TerraFX.Interop.DirectX.DirectX;
+using static TerraFX.Interop.Windows.ERROR;
 
 namespace VorpalEngine.Input.Controller.XInput;
 
@@ -22,7 +23,7 @@ internal sealed class XInputController
     public unsafe bool TryGetState(out XInputControllerState state)
     {
         XINPUT_STATE newState;
-        uint result = XInputGetState(Index, &newState);
+        var result = XInputGetState(Index, &newState);
 
         switch (result)
         {

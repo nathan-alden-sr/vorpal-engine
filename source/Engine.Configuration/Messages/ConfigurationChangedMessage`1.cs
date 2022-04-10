@@ -16,8 +16,8 @@ public readonly struct ConfigurationChangedMessage<T> : IMessage
     /// <param name="counter">A value that uniquely identifies this particular configuration.</param>
     public ConfigurationChangedMessage(T oldConfiguration, T newConfiguration, ulong counter)
     {
-        ThrowIfNull(oldConfiguration, nameof(oldConfiguration));
-        ThrowIfNull(newConfiguration, nameof(newConfiguration));
+        ThrowIfNull(oldConfiguration);
+        ThrowIfNull(newConfiguration);
 
         OldConfiguration = oldConfiguration;
         NewConfiguration = newConfiguration;

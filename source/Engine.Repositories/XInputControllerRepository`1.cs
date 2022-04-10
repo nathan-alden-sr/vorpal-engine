@@ -17,7 +17,7 @@ public sealed class XInputControllerRepository<T> : IXInputControllerRepository
     /// <param name="configurationManager">An <see cref="IConfigurationManager{T}" /> implementation.</param>
     public XInputControllerRepository(IConfigurationManager<T> configurationManager)
     {
-        ThrowIfNull(configurationManager, nameof(configurationManager));
+        ThrowIfNull(configurationManager);
 
         _configurationManager = configurationManager;
     }
@@ -27,7 +27,8 @@ public sealed class XInputControllerRepository<T> : IXInputControllerRepository
     {
         (bool? enabled, bool enabledDefault) result = default;
 
-        _configurationManager.ModifyConfiguration((configuration, _) => result = configuration.Input(true).XInputControllers(true).Add(index));
+        _configurationManager.ModifyConfiguration(
+            (configuration, _) => result = configuration.Input(true).XInputControllers(true).Add(index));
 
         return result;
     }

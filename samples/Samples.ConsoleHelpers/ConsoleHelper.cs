@@ -2,7 +2,9 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Text;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.ENABLE;
+using static TerraFX.Interop.Windows.STD;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Samples.ConsoleHelpers;
 
@@ -16,12 +18,12 @@ public sealed unsafe class ConsoleHelper
 
     public ConsoleHelper(string title, int width, int windowHeight, int bufferHeight)
     {
-        ThrowIfNull(title, nameof(title));
+        ThrowIfNull(title);
 
         _width = width;
         _bufferHeight = bufferHeight;
 
-        IntPtr standardOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+        var standardOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
         uint dwMode;
 
         _ = GetConsoleMode(standardOutputHandle, &dwMode);
@@ -48,11 +50,11 @@ public sealed unsafe class ConsoleHelper
 
     public void WriteLine(ConsoleContent content)
     {
-        ThrowIfNull(content, nameof(content));
+        ThrowIfNull(content);
 
         if (_contents.Count == _bufferHeight)
         {
-            _contents.Dequeue();
+            _ = _contents.Dequeue();
         }
 
         _contents.Enqueue(content);
@@ -60,17 +62,15 @@ public sealed unsafe class ConsoleHelper
 
     public void Render()
     {
-        _stringBuilder.Clear();
+        _ = _stringBuilder.Clear();
 
         void Append(string text = "")
-        {
-            _stringBuilder.Append(text);
-        }
+            => _ = _stringBuilder.Append(text);
 
         Console.SetCursorPosition(0, 0);
 
         // Write each line of content
-        while (_contents.TryDequeue(out ConsoleContent? content))
+        while (_contents.TryDequeue(out var content))
         {
             Append(content.Copy().PadRight(_width).Render());
         }

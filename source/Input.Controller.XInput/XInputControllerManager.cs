@@ -1,11 +1,17 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using TerraFX.Interop;
+using TerraFX.Interop.DirectX;
 using VorpalEngine.Common;
 using VorpalEngine.Logging;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.DirectX.DirectX;
+using static TerraFX.Interop.DirectX.XINPUT;
+using static TerraFX.Interop.Windows.ERROR;
+using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Input.Controller.XInput;
 
@@ -23,7 +29,7 @@ public sealed class XInputControllerManager : IXInputControllerManager
     /// <param name="context">A nested context.</param>
     public XInputControllerManager(IXInputControllerRepository xInputControllerRepository, NestedContext context = default)
     {
-        ThrowIfNull(xInputControllerRepository, nameof(xInputControllerRepository));
+        ThrowIfNull(xInputControllerRepository);
 
         context = context.Push<XInputControllerManager>();
 
@@ -40,7 +46,7 @@ public sealed class XInputControllerManager : IXInputControllerManager
     {
         ValidateIndex(index);
 
-        if (_xInputControllersByIndex.TryGetValue(index, out XInputController? controller) && controller is not null)
+        if (_xInputControllersByIndex.TryGetValue(index, out var controller) && controller is not null)
         {
             return controller.TryGetState(out state);
         }
@@ -67,16 +73,18 @@ public sealed class XInputControllerManager : IXInputControllerManager
     {
         ValidateIndex(index);
 
-        (bool? _, bool enabledDefault) = _xInputControllerRepository.AddXInputController(index);
+        var (_, enabledDefault) = _xInputControllerRepository.AddXInputController(index);
         XINPUT_CAPABILITIES capabilities;
-        uint result = XInputGetCapabilities(index, XINPUT_FLAG_GAMEPAD, &capabilities);
+        var result = XInputGetCapabilities(index, XINPUT_FLAG_GAMEPAD, &capabilities);
         XInputController? controller = null;
 
         switch (result)
         {
             case ERROR_SUCCESS:
                 controller =
-                    capabilities.Type == XINPUT_DEVTYPE_GAMEPAD && capabilities.SubType == XINPUT_DEVSUBTYPE_GAMEPAD ? new XInputController(index) : null;
+                    capabilities.Type == XINPUT_DEVTYPE_GAMEPAD && capabilities.SubType == XINPUT_DEVSUBTYPE_GAMEPAD
+                        ? new XInputController(index)
+                        : null;
                 break;
             case ERROR_DEVICE_NOT_CONNECTED:
                 controller = null;
@@ -111,7 +119,7 @@ public sealed class XInputControllerManager : IXInputControllerManager
     {
         if (index > MaximumIndex)
         {
-            ThrowArgumentOutOfRangeException("Invalid index.", index, nameof(index));
+            ThrowArgumentOutOfRangeException(nameof(index), index, "Invalid index.");
         }
     }
 }

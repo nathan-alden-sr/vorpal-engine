@@ -20,5 +20,8 @@ public interface IHidControllerRepository
     ///     unknown.
     /// </param>
     /// <returns>A tuple containing the index of the HID controller and values indicating whether the controller is enabled.</returns>
-    (uint index, bool? enabled, bool enabledDefault) AddHidController(string? manufacturer, string? productName, string? serialNumber);
+    (uint index, bool? enabled, bool enabledDefault) AddHidController(
+        string? manufacturer,
+        string? productName,
+        string? serialNumber);
 }

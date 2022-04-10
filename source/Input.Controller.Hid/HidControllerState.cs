@@ -100,7 +100,9 @@ public struct HidControllerState
     public (HidControllerStateValue OldValue, HidControllerStateValue NewValue) ZAxisRotation { get; internal set; }
 
     internal uint DownButtonStates { get; set; }
+
     internal uint PressedButtonStates { get; set; }
+
     internal uint ReleasedButtonStates { get; set; }
 
     /// <summary>Determines if a button is down.</summary>
@@ -148,7 +150,7 @@ public struct HidControllerState
     {
         if (buttonIndex > MaximumButtonIndex)
         {
-            ThrowArgumentOutOfRangeException("Invalid button index.", buttonIndex, nameof(buttonIndex));
+            ThrowArgumentOutOfRangeException(nameof(buttonIndex), buttonIndex, "Invalid button index.");
         }
     }
 }

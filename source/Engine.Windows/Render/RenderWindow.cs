@@ -3,16 +3,21 @@
 
 using Silk.NET.Maths;
 using TerraFX;
-using TerraFX.Interop;
+using TerraFX.Interop.DirectX;
+using TerraFX.Interop.Windows;
 using TerraFX.Threading;
 using VorpalEngine.Common;
 using VorpalEngine.Common.Windows;
 using VorpalEngine.Common.Windows.Messages;
 using VorpalEngine.Engine.Messaging;
 using VorpalEngine.Logging;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.HID;
+using static TerraFX.Interop.Windows.PBT;
+using static TerraFX.Interop.Windows.RIDEV;
+using static TerraFX.Interop.Windows.SW;
+using static TerraFX.Interop.Windows.Windows;
+using static TerraFX.Interop.Windows.WM;
 using Monitor = VorpalEngine.Common.Windows.Monitor;
-using WindowsRender = VorpalEngine.Engine.Configuration.WindowsRender;
 
 namespace VorpalEngine.Engine.Windows.Render;
 
@@ -34,13 +39,7 @@ public sealed class RenderWindow<T> : IRenderWindow
     private bool _cachedControlsVisible;
     private bool _cachedIconVisible;
     private Vector2D<int>? _cachedResolution;
-
-    private unsafe WINDOWPLACEMENT _cachedWindowPlacement =
-        new()
-        {
-            length = (uint)sizeof(WINDOWPLACEMENT)
-        };
-
+    private unsafe WINDOWPLACEMENT _cachedWindowPlacement = new() { length = (uint)sizeof(WINDOWPLACEMENT) };
     private DisplayMode _displayMode;
     private Monitor _monitor;
     private bool _mouseCaptured;
@@ -65,10 +64,10 @@ public sealed class RenderWindow<T> : IRenderWindow
         Action<Window>? windowConfigurationDelegate = null,
         NestedContext context = default)
     {
-        ThrowIfNull(messageQueue, nameof(messageQueue));
-        ThrowIfNull(monitorProvider, nameof(monitorProvider));
-        ThrowIfNull(configurationManager, nameof(configurationManager));
-        ThrowIfNull(windowProvider, nameof(windowProvider));
+        ThrowIfNull(messageQueue);
+        ThrowIfNull(monitorProvider);
+        ThrowIfNull(configurationManager);
+        ThrowIfNull(windowProvider);
 
         context = context.Push<RenderWindow<T>>();
 
@@ -79,12 +78,13 @@ public sealed class RenderWindow<T> : IRenderWindow
 
         // Position and configure the window using configuration
 
-        T configuration = configurationManager.GetConfiguration();
-        WindowsRender windowsRender = configuration.Windows().Render();
-        Vector2D<int> resolution = windowsRender.Resolution ?? new Vector2D<int>(1280, 720);
-        Monitor? monitor =
-            monitorProvider.Monitors.SingleOrDefault(a => a.DeviceName.Equals(windowsRender.DisplayDeviceName, StringComparison.Ordinal))
-            ?? monitorProvider.PrimaryMonitor;
+        var configuration = configurationManager.GetConfiguration();
+        var windowsRender = configuration.Windows().Render();
+        var resolution = windowsRender.Resolution ?? new Vector2D<int>(1280, 720);
+        var monitor =
+            monitorProvider.Monitors.SingleOrDefault(
+                a => a.DeviceName.Equals(windowsRender.DisplayDeviceName, StringComparison.Ordinal)) ??
+            monitorProvider.PrimaryMonitor;
 
         if (monitor is null)
         {
@@ -105,7 +105,7 @@ public sealed class RenderWindow<T> : IRenderWindow
                 _displayMode = DisplayMode.BorderlessFullscreen;
                 break;
             default:
-                ThrowForInvalidKind(windowsRender.DisplayMode.Value, nameof(windowsRender.DisplayMode));
+                ThrowForInvalidKind(windowsRender.DisplayMode.Value);
                 break;
         }
 
@@ -114,7 +114,7 @@ public sealed class RenderWindow<T> : IRenderWindow
         _window = windowProvider.CreateWindow(
             window =>
             {
-                Rectangle<int> clientBounds = new Rectangle<int>(Vector2D<int>.Zero, resolution).CenterOn(_monitor.WorkingArea);
+                var clientBounds = new Rectangle<int>(Vector2D<int>.Zero, resolution).CenterOn(_monitor.WorkingArea);
 
                 switch (_displayMode)
                 {
@@ -133,7 +133,7 @@ public sealed class RenderWindow<T> : IRenderWindow
                         window.SetWindowStyles(BorderStyle.None, false, false, false, false, false);
                         break;
                     default:
-                        ThrowForInvalidKind(_displayMode, nameof(_displayMode));
+                        ThrowForInvalidKind(_displayMode);
                         break;
                 }
 
@@ -149,9 +149,9 @@ public sealed class RenderWindow<T> : IRenderWindow
 
         RegisterRawInputDevices(_window.Handle);
 
-        XInputEnable(TRUE);
+        DirectX.XInputEnable(BOOL.TRUE);
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <inheritdoc />
@@ -180,7 +180,7 @@ public sealed class RenderWindow<T> : IRenderWindow
                 return;
             }
 
-            DisplayMode oldDisplayMode = _displayMode;
+            var oldDisplayMode = _displayMode;
 
             _displayMode = value;
 
@@ -200,12 +200,12 @@ public sealed class RenderWindow<T> : IRenderWindow
                         CacheWindowStyles(_window);
                         CacheWindowPlacement();
 
-                        Monitor monitor = Monitor.From(_window.Handle);
+                        var monitor = Monitor.From(_window.Handle);
 
                         _window.SetWindowStyles(BorderStyle.None, false, false, false, false, false);
 
-                        WINDOWPLACEMENT windowPlacement =
-                            new()
+                        var windowPlacement =
+                            new WINDOWPLACEMENT
                             {
                                 flags = 0,
                                 length = (uint)sizeof(WINDOWPLACEMENT),
@@ -213,16 +213,14 @@ public sealed class RenderWindow<T> : IRenderWindow
                                 showCmd = SW_SHOWNORMAL
                             };
 
-                        ThrowIfZero(
-                            SetWindowPlacement(_window.Handle, &windowPlacement),
-                            nameof(SetWindowPlacement));
+                        ThrowIfZero(SetWindowPlacement(_window.Handle, &windowPlacement));
                         break;
                     default:
-                        ThrowForInvalidKind(_displayMode, nameof(_displayMode));
+                        ThrowForInvalidKind(_displayMode);
                         break;
                 }
 
-                _messageQueueHelper.Publish(new DisplayModeChangedMessage(oldDisplayMode, value));
+                _ = _messageQueueHelper.Publish(new DisplayModeChangedMessage(oldDisplayMode, value));
             }
         }
     }
@@ -255,9 +253,10 @@ public sealed class RenderWindow<T> : IRenderWindow
 
         _wasShown = true;
 
-        _messageQueueHelper.Publish(new DisplayModeChangedMessage(null, _displayMode));
-        _messageQueueHelper.Publish(new MonitorChangedMessage(null, _window.GetMonitor()));
-        _messageQueueHelper.Publish(new ResolutionChangedMessage(null, _window.ClientSize));
+        _ = _messageQueueHelper
+            .Publish(new DisplayModeChangedMessage(null, _displayMode))
+            .Publish(new MonitorChangedMessage(null, _window.GetMonitor()))
+            .Publish(new ResolutionChangedMessage(null, _window.ClientSize));
     }
 
     private unsafe void RegisterRawInputDevices(HWND windowHandle)
@@ -266,16 +265,13 @@ public sealed class RenderWindow<T> : IRenderWindow
 
         ushort[] usages =
         {
-            HID_USAGE_GENERIC_GAMEPAD,
-            HID_USAGE_GENERIC_JOYSTICK,
-            HID_USAGE_GENERIC_KEYBOARD,
-            HID_USAGE_GENERIC_MOUSE
+            HID_USAGE_GENERIC_GAMEPAD, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_GENERIC_KEYBOARD, HID_USAGE_GENERIC_MOUSE
         };
-        RAWINPUTDEVICE* pRawInputDevices = stackalloc RAWINPUTDEVICE[usages.Length];
+        var pRawInputDevices = stackalloc RAWINPUTDEVICE[usages.Length];
 
         for (uint i = 0; i < usages.Length; i++)
         {
-            ushort usage = usages[i];
+            var usage = usages[i];
 
             pRawInputDevices[i] =
                 new RAWINPUTDEVICE
@@ -290,8 +286,10 @@ public sealed class RenderWindow<T> : IRenderWindow
         }
 
         ThrowIfZero(
-            TerraFX.Interop.Windows.RegisterRawInputDevices(pRawInputDevices, (uint)usages.Length, (uint)sizeof(RAWINPUTDEVICE)),
-            nameof(TerraFX.Interop.Windows.RegisterRawInputDevices));
+            TerraFX.Interop.Windows.Windows.RegisterRawInputDevices(
+                pRawInputDevices,
+                (uint)usages.Length,
+                (uint)sizeof(RAWINPUTDEVICE)));
     }
 
     private void CacheWindowStyles(Window window)
@@ -335,9 +333,7 @@ public sealed class RenderWindow<T> : IRenderWindow
     {
         fixed (WINDOWPLACEMENT* pCachedWindowPlacement = &_cachedWindowPlacement)
         {
-            ThrowIfZero(
-                GetWindowPlacement(_window.Handle, pCachedWindowPlacement),
-                nameof(GetWindowPlacement));
+            ThrowIfZero(GetWindowPlacement(_window.Handle, pCachedWindowPlacement));
         }
     }
 
@@ -345,9 +341,7 @@ public sealed class RenderWindow<T> : IRenderWindow
     {
         fixed (WINDOWPLACEMENT* pCachedWindowPlacement = &_cachedWindowPlacement)
         {
-            ThrowIfZero(
-                SetWindowPlacement(_window.Handle, pCachedWindowPlacement),
-                nameof(SetWindowPlacement));
+            ThrowIfZero(SetWindowPlacement(_window.Handle, pCachedWindowPlacement));
         }
     }
 
@@ -358,19 +352,19 @@ public sealed class RenderWindow<T> : IRenderWindow
     {
         if (_window.ClientSize != _cachedResolution)
         {
-            _messageQueueHelper.Publish(new ResolutionChangedMessage(_cachedResolution, _window.ClientSize));
+            _ = _messageQueueHelper.Publish(new ResolutionChangedMessage(_cachedResolution, _window.ClientSize));
         }
     }
 
     private void HandleWmCaptureChanged()
     {
         _mouseCaptured = false;
-        _ = ShowCursor(TRUE);
+        _ = ShowCursor(BOOL.TRUE);
     }
 
-    private void HandleWmClose(out nint? result)
+    private void HandleWmClose(out LRESULT? result)
     {
-        _messageQueueHelper.Publish<RenderWindowClosingMessage>();
+        _ = _messageQueueHelper.Publish<RenderWindowClosingMessage>();
 
         result = 0;
     }
@@ -384,7 +378,7 @@ public sealed class RenderWindow<T> : IRenderWindow
     private void HandleWmExitSizeMove()
         => _ignoreClientSizeChanges.Decrement();
 
-    private static void HandleWmMenuChar(out nint? result)
+    private static void HandleWmMenuChar(out LRESULT? result)
         => result = MNC_CLOSE << 16;
 
     private void HandleWmMouseMove()
@@ -394,25 +388,23 @@ public sealed class RenderWindow<T> : IRenderWindow
             return;
         }
 
-        Vector2D<int> center = _window.ClientBounds.Center;
+        var center = _window.ClientBounds.Center;
 
-        ThrowIfZero(
-            SetCursorPos(center.X, center.Y),
-            nameof(SetCursorPos));
+        ThrowIfZero(SetCursorPos(center.X, center.Y));
     }
 
-    private static void HandleWmPowerBroadcast(nuint wParam, ref nint? result)
+    private static void HandleWmPowerBroadcast(WPARAM wParam, ref LRESULT? result)
     {
-        if (wParam == PBT_APMQUERYSUSPEND)
+        if (wParam.Value == PBT_APMQUERYSUSPEND)
         {
             result = 1;
         }
     }
 
-    private void WindowOnBeforeMessageProcessing(HWND windowHandle, uint message, nuint wParam, nint lParam, ref nint? result)
+    private void WindowOnBeforeMessageProcessing(HWND windowHandle, uint message, WPARAM wParam, LPARAM lParam, ref LRESULT? result)
         => WindowMessageReceived?.Invoke(windowHandle, message, wParam, lParam);
 
-    private void WindowOnAfterMessageProcessing(HWND windowHandle, uint message, nuint wParam, nint lParam, ref nint? result)
+    private void WindowOnAfterMessageProcessing(HWND windowHandle, uint message, WPARAM wParam, LPARAM lParam, ref LRESULT? result)
     {
         switch (message)
         {
@@ -447,24 +439,24 @@ public sealed class RenderWindow<T> : IRenderWindow
     {
         if (_ignoreClientSizeChanges.IsZero)
         {
-            _messageQueueHelper.Publish(new ResolutionChangedMessage(e.PreviousValue, e.CurrentValue));
+            _ = _messageQueueHelper.Publish(new ResolutionChangedMessage(e.PreviousValue, e.CurrentValue));
         }
     }
 
     private void WindowOnNonClientLocationChanged(object? sender, PropertyChangedEventArgs<Vector2D<int>> e)
     {
-        Monitor newMonitor = _window.GetMonitor();
+        var newMonitor = _window.GetMonitor();
 
         if (newMonitor == _monitor)
         {
             return;
         }
 
-        Monitor oldMonitor = _monitor;
+        var oldMonitor = _monitor;
 
         _monitor = newMonitor;
 
-        _messageQueueHelper.Publish(new MonitorChangedMessage(oldMonitor, newMonitor));
+        _ = _messageQueueHelper.Publish(new MonitorChangedMessage(oldMonitor, newMonitor));
     }
 
     private void WindowOnActivated(object? sender, EventArgs e)
@@ -474,11 +466,9 @@ public sealed class RenderWindow<T> : IRenderWindow
     {
         if (_mouseCaptured)
         {
-            ThrowIfZero(
-                ReleaseCapture(),
-                nameof(ReleaseCapture));
+            ThrowIfZero(ReleaseCapture());
         }
 
-        _messageQueueHelper.Publish(new RenderWindowActivationChangedMessage(true, false));
+        _ = _messageQueueHelper.Publish(new RenderWindowActivationChangedMessage(true, false));
     }
 }

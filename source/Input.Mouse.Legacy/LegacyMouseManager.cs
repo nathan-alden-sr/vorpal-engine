@@ -2,7 +2,7 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using Silk.NET.Maths;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Input.Mouse.Legacy;
 
@@ -14,7 +14,7 @@ public sealed class LegacyMouseManager : MouseManager, ILegacyMouseManager
     /// <inheritdoc />
     public void UpdateStateFromWmMouseMove(nint lParam)
     {
-        Vector2D<int> newLocation = new(LOWORD((uint)lParam), HIWORD((uint)lParam));
+        var newLocation = new Vector2D<int>(LOWORD((uint)lParam), HIWORD((uint)lParam));
 
         if (_oldLocation is not null)
         {
