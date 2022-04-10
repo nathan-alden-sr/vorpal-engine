@@ -34,5 +34,6 @@ public readonly struct HidControllerStateValue
     /// <summary>Gets the value of the HID value.</summary>
     public int Value { get; }
 
-    private string DebuggerDisplay => $"IsValid = {IsValid}; Minimum = {LogicalMinimum}; Maximum = {LogicalMaximum}; Value = {Value}";
+    private string DebuggerDisplay
+        => $"IsValid = {IsValid}; Minimum = {LogicalMinimum}; Maximum = {LogicalMaximum}; Value = {Value}";
 }

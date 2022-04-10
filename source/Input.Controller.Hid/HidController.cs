@@ -2,8 +2,11 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Collections.ObjectModel;
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.Windows;
+using TerraFX.Utilities;
+using static TerraFX.Interop.Windows.HID;
+using static TerraFX.Interop.Windows.HIDP;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Input.Controller.Hid;
 
@@ -13,8 +16,8 @@ internal sealed class HidController : IHidController
     private HidControllerState _newState;
     private HidControllerState _oldState;
 
-    public HidController(
-        IntPtr deviceHandle,
+    public unsafe HidController(
+        HANDLE deviceHandle,
         uint index,
         HIDP_BUTTON_CAPS buttonCapabilities,
         ReadOnlySpan<HIDP_VALUE_CAPS> valueCapabilities,
@@ -24,7 +27,7 @@ internal sealed class HidController : IHidController
         ushort minimumButtonNumber,
         ushort maximumButtonNumber)
     {
-        ThrowIfZero(deviceHandle, nameof(deviceHandle));
+        ThrowIfNull(deviceHandle);
 
         DeviceHandle = deviceHandle;
         Index = index;
@@ -39,10 +42,10 @@ internal sealed class HidController : IHidController
         _oldState = new HidControllerState(index);
         _newState = new HidControllerState(index);
 
-        Dictionary<ushort, byte> buttonIndexesByButtonNumber = new();
-        Dictionary<byte, ushort> buttonNumbersByButtonIndex = new();
+        var buttonIndexesByButtonNumber = new Dictionary<ushort, byte>();
+        var buttonNumbersByButtonIndex = new Dictionary<byte, ushort>();
 
-        for (ushort buttonNumber = minimumButtonNumber; buttonNumber <= maximumButtonNumber; buttonNumber++)
+        for (var buttonNumber = minimumButtonNumber; buttonNumber <= maximumButtonNumber; buttonNumber++)
         {
             var buttonIndex = (byte)(buttonNumber - minimumButtonNumber);
 
@@ -55,55 +58,68 @@ internal sealed class HidController : IHidController
 
         if (ButtonCount > MaximumButtonCount)
         {
-            ThrowArgumentException($"The maximum number of buttons supported is {MaximumButtonCount}.", nameof(maximumButtonNumber));
+            ThrowArgumentException(
+                $"The maximum number of buttons supported is {MaximumButtonCount}.",
+                nameof(maximumButtonNumber));
         }
     }
 
-    public IntPtr DeviceHandle { get; }
+    public HANDLE DeviceHandle { get; }
+
     public HIDP_BUTTON_CAPS ButtonCapabilities { get; }
+
     public IReadOnlyList<HIDP_VALUE_CAPS> ValueCapabilities { get; }
+
     public uint ButtonMask { get; }
+
     public IReadOnlyDictionary<ushort, byte> ButtonIndexesByButtonNumber { get; }
+
     public IReadOnlyDictionary<byte, ushort> ButtonNumbersByButtonIndex { get; }
+
     public uint Index { get; }
+
     public string? Manufacturer { get; }
+
     public string? ProductName { get; }
+
     public string? SerialNumber { get; }
+
     public byte ButtonCount { get; }
+
     public byte ValueCount { get; }
 
     public unsafe void UpdateState(RAWINPUT* rawInput)
     {
-        ThrowIfNull(rawInput, nameof(rawInput));
+        ThrowIfNull(rawInput);
 
         // https://www.codeproject.com/articles/185522/using-the-raw-input-api-to-process-joystick-input
 
         // Get preparsed data
 
-        IntPtr deviceHandle = rawInput->header.hDevice;
+        var deviceHandle = rawInput->header.hDevice;
         uint size;
 
         ThrowForLastErrorIfNotZero(
             GetRawInputDeviceInfoW(deviceHandle, RIDI_PREPARSEDDATA, null, &size),
             nameof(GetRawInputDeviceInfoW));
 
-        byte* pPreparsedDataBuffer = stackalloc byte[(int)size];
-        var pPreparsedData = (IntPtr)pPreparsedDataBuffer;
+        var pPreparsedDataBuffer = stackalloc byte[(int)size];
+        var pPreparsedData = (PHIDP_PREPARSED_DATA)pPreparsedDataBuffer;
 
         {
-            uint result = GetRawInputDeviceInfoW(deviceHandle, RIDI_PREPARSEDDATA, pPreparsedDataBuffer, &size);
+            var result = GetRawInputDeviceInfoW(deviceHandle, RIDI_PREPARSEDDATA, pPreparsedDataBuffer, &size);
 
             if (result == unchecked((uint)-1) || result != size)
             {
-                ThrowExternalException(nameof(GetRawInputDeviceInfoW), unchecked((int)result));
+                ExceptionUtilities.ThrowExternalException(nameof(GetRawInputDeviceInfoW), unchecked((int)result));
             }
         }
         {
             // Get button states
 
-            ushort* pUsages = stackalloc ushort[ButtonCount];
+            var pUsages = stackalloc ushort[ButtonCount];
             uint usageCount = ButtonCount;
-            int result =
+            var result =
                 HidP_GetUsages(
                     HIDP_REPORT_TYPE.HidP_Input,
                     ButtonCapabilities.UsagePage,
@@ -116,7 +132,7 @@ internal sealed class HidController : IHidController
 
             if (result != HIDP_STATUS_SUCCESS)
             {
-                ThrowExternalException(nameof(HidP_GetUsages), result);
+                ExceptionUtilities.ThrowExternalException(nameof(HidP_GetUsages), result);
             }
 
             _newState.DownButtonStates = 0;
@@ -130,7 +146,7 @@ internal sealed class HidController : IHidController
 
             for (var i = 0; i < ValueCount; i++)
             {
-                HIDP_VALUE_CAPS valueCapability = ValueCapabilities[i];
+                var valueCapability = ValueCapabilities[i];
                 uint value;
 
                 result =
@@ -146,10 +162,13 @@ internal sealed class HidController : IHidController
 
                 if (result != HIDP_STATUS_SUCCESS)
                 {
-                    ThrowExternalException(nameof(HidP_GetUsageValue), result);
+                    ExceptionUtilities.ThrowExternalException(nameof(HidP_GetUsageValue), result);
                 }
 
-                static HidControllerStateValue CalculateState(in HIDP_VALUE_CAPS valueCapability, uint value, in HidControllerStateValue stateValue)
+                static HidControllerStateValue CalculateState(
+                    in HIDP_VALUE_CAPS valueCapability,
+                    uint value,
+                    in HidControllerStateValue stateValue)
                     => new(
                         // Handles so-called "null" HID values
                         value >= valueCapability.LogicalMin && value <= valueCapability.LogicalMax,
@@ -161,19 +180,34 @@ internal sealed class HidController : IHidController
                 switch (valueCapability.Anonymous.Range.UsageMin)
                 {
                     case HID_USAGE_GENERIC_HATSWITCH:
-                        _newState.HatSwitchStateValue = CalculateState(in valueCapability, value, in _newState.HatSwitchStateValue);
+                        _newState.HatSwitchStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.HatSwitchStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_UP:
-                        _newState.DirectionalPadUpStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadUpStateValue);
+                        _newState.DirectionalPadUpStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.DirectionalPadUpStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_DOWN:
-                        _newState.DirectionalPadDownStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadDownStateValue);
+                        _newState.DirectionalPadDownStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.DirectionalPadDownStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_LEFT:
-                        _newState.DirectionalPadLeftStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadLeftStateValue);
+                        _newState.DirectionalPadLeftStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.DirectionalPadLeftStateValue);
                         break;
                     case HID_USAGE_GENERIC_DPAD_RIGHT:
-                        _newState.DirectionalPadRightStateValue = CalculateState(in valueCapability, value, in _newState.DirectionalPadRightStateValue);
+                        _newState.DirectionalPadRightStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.DirectionalPadRightStateValue);
                         break;
                     case HID_USAGE_GENERIC_X:
                         _newState.XAxisStateValue = CalculateState(in valueCapability, value, in _newState.XAxisStateValue);
@@ -185,13 +219,22 @@ internal sealed class HidController : IHidController
                         _newState.ZAxisStateValue = CalculateState(in valueCapability, value, in _newState.ZAxisStateValue);
                         break;
                     case HID_USAGE_GENERIC_RX:
-                        _newState.XAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.XAxisRotationStateValue);
+                        _newState.XAxisRotationStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.XAxisRotationStateValue);
                         break;
                     case HID_USAGE_GENERIC_RY:
-                        _newState.YAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.YAxisRotationStateValue);
+                        _newState.YAxisRotationStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.YAxisRotationStateValue);
                         break;
                     case HID_USAGE_GENERIC_RZ:
-                        _newState.ZAxisRotationStateValue = CalculateState(in valueCapability, value, in _newState.ZAxisRotationStateValue);
+                        _newState.ZAxisRotationStateValue = CalculateState(
+                            in valueCapability,
+                            value,
+                            in _newState.ZAxisRotationStateValue);
                         break;
                 }
             }

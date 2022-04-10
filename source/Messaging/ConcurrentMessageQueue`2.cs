@@ -11,14 +11,16 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
     where TThread : struct, Enum
 {
     private readonly ConcurrentDictionary<TThread, ConcurrentQueue<Action>> _queuedHandlerDelegatesByTThread = new();
-    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Subscription, byte>> _subscriptionReceiptsByMessageType = new();
+
+    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Subscription, byte>> _subscriptionReceiptsByMessageType =
+        new();
 
     /// <summary>Initializes a new instance of the <see cref="ConcurrentMessageQueue{TMessageBase,TThread}" /> class.</summary>
     public ConcurrentMessageQueue()
     {
-        foreach (TThread thread in Enum.GetValues<TThread>())
+        foreach (var thread in Enum.GetValues<TThread>())
         {
-            _queuedHandlerDelegatesByTThread.TryAdd(thread, new ConcurrentQueue<Action>());
+            _ = _queuedHandlerDelegatesByTThread.TryAdd(thread, new ConcurrentQueue<Action>());
         }
     }
 
@@ -44,8 +46,8 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
     public void Publish<T>(T message, NestedContext context = default)
         where T : TMessageBase
     {
-        Type messageType = typeof(T);
-        bool hasSubscribers = _subscriptionReceiptsByMessageType.TryGetValue(messageType, out ConcurrentDictionary<Subscription, byte>? subscriptions);
+        var messageType = typeof(T);
+        var hasSubscribers = _subscriptionReceiptsByMessageType.TryGetValue(messageType, out var subscriptions);
 
         // Notify observers that a message is about to be published
         MessagePublishing?.Invoke(message, subscriptions?.Count ?? 0, context);
@@ -58,7 +60,7 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
         AssertNotNull(subscriptions);
 
         // Enqueue the message for each subscription
-        foreach (Subscription subscription in subscriptions.Keys)
+        foreach (var subscription in subscriptions.Keys)
         {
             _queuedHandlerDelegatesByTThread[subscription.Thread]
                 .Enqueue(
@@ -81,19 +83,20 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
     /// <inheritdoc />
     public void Publish<T>(NestedContext context = default)
         where T : TMessageBase, new()
-    {
-        Publish(new T(), context);
-    }
+        => Publish(new T(), context);
 
     /// <inheritdoc />
-    public ISubscriptionReceipt Subscribe<TMessage>(MessageHandlerDelegate<TMessage> handlerDelegate, TThread thread, NestedContext context = default)
+    public ISubscriptionReceipt Subscribe<TMessage>(
+        MessageHandlerDelegate<TMessage> handlerDelegate,
+        TThread thread,
+        NestedContext context = default)
         where TMessage : TMessageBase
     {
-        ThrowIfNull(handlerDelegate, nameof(handlerDelegate));
+        ThrowIfNull(handlerDelegate);
 
-        Type messageType = typeof(TMessage);
-        Subscription subscription = new(messageType, thread, handlerDelegate, context);
-        ConcurrentDictionary<Subscription, byte> subscriptions =
+        var messageType = typeof(TMessage);
+        var subscription = new Subscription(messageType, thread, handlerDelegate, context);
+        var subscriptions = 
             _subscriptionReceiptsByMessageType.GetOrAdd(messageType, _ => new ConcurrentDictionary<Subscription, byte>());
 
         if (subscriptions.TryAdd(subscription, 0))
@@ -108,15 +111,15 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
     /// <inheritdoc />
     public void Unsubscribe(IReadOnlySet<ISubscriptionReceipt> subscriptionReceipts)
     {
-        ThrowIfNull(subscriptionReceipts, nameof(subscriptionReceipts));
+        ThrowIfNull(subscriptionReceipts);
 
-        IEnumerable<IGrouping<Type, Subscription>> groupings = subscriptionReceipts.OfType<Subscription>().GroupBy(a => a.MessageType, a => a);
+        var groupings = subscriptionReceipts.OfType<Subscription>().GroupBy(a => a.MessageType, a => a);
 
-        foreach (IGrouping<Type, Subscription> grouping in groupings)
+        foreach (var grouping in groupings)
         {
-            ConcurrentDictionary<Subscription, byte> subscriptions = _subscriptionReceiptsByMessageType[grouping.Key];
+            var subscriptions = _subscriptionReceiptsByMessageType[grouping.Key];
 
-            foreach (Subscription subscription in grouping)
+            foreach (var subscription in grouping)
             {
                 if (subscriptions.TryRemove(subscription, out _))
                 {
@@ -134,10 +137,10 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
     /// <inheritdoc />
     public void DispatchQueued(TThread thread)
     {
-        ConcurrentQueue<Action> queue = _queuedHandlerDelegatesByTThread[thread];
+        var queue = _queuedHandlerDelegatesByTThread[thread];
 
         // Process all queued messages in publish order
-        while (queue.TryDequeue(out Action? handlerDelegate))
+        while (queue.TryDequeue(out var handlerDelegate))
         {
             handlerDelegate();
         }
@@ -154,8 +157,11 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
         }
 
         public Type MessageType { get; }
+
         public TThread Thread { get; }
+
         public Delegate HandlerDelegate { get; }
+
         public NestedContext Context { get; }
     }
 }

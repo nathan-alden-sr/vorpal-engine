@@ -1,8 +1,9 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.RI;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Input.Mouse.RawInput;
 
@@ -12,19 +13,19 @@ public sealed class RawInputMouseManager : MouseManager, IRawInputMouseManager
     /// <inheritdoc />
     public unsafe void UpdateState(RAWINPUT* rawInput)
     {
-        ThrowIfNull(rawInput, nameof(rawInput));
+        ThrowIfNull(rawInput);
 
-        RAWMOUSE rawMouse = rawInput->data.mouse;
+        var rawMouse = rawInput->data.mouse;
 
         if (rawMouse.usFlags != MOUSE_MOVE_RELATIVE)
         {
-            ThrowArgumentOutOfRangeException("Invalid flags.", rawMouse.usFlags, nameof(RAWMOUSE.usFlags));
+            ThrowArgumentOutOfRangeException(nameof(RAWMOUSE.usFlags), rawMouse.usFlags, "Invalid flags.");
         }
 
         RelativeLocationXDelta += rawMouse.lLastX;
         RelativeLocationYDelta += rawMouse.lLastY;
 
-        ushort buttonFlags = rawMouse.Anonymous.Anonymous.usButtonFlags;
+        var buttonFlags = rawMouse.Anonymous.Anonymous.usButtonFlags;
 
         if ((buttonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) != 0)
         {

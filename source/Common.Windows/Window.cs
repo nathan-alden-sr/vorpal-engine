@@ -6,9 +6,16 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Silk.NET.Maths;
 using TerraFX;
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
 using TerraFX.Threading;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.GWL;
+using static TerraFX.Interop.Windows.MONITOR;
+using static TerraFX.Interop.Windows.RDW;
+using static TerraFX.Interop.Windows.SW;
+using static TerraFX.Interop.Windows.SWP;
+using static TerraFX.Interop.Windows.Windows;
+using static TerraFX.Interop.Windows.WM;
+using static TerraFX.Interop.Windows.WS;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -17,7 +24,7 @@ namespace VorpalEngine.Common.Windows;
 public sealed class Window : IDisposable
 {
     private static readonly unsafe HINSTANCE ModuleHandle = GetModuleHandleW(null);
-    private static readonly Size SmallIconSize = new(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+    private static readonly Size SmallIconSize = new(GetSystemMetrics(SM.SM_CXSMICON), GetSystemMetrics(SM.SM_CYSMICON));
     private readonly WindowMessageHandlerDelegate? _afterMessageHandledDelegate;
     private readonly WindowMessageHandlerDelegate? _beforeMessageHandledDelegate;
     private readonly IMonitorProvider _monitorProvider;
@@ -27,18 +34,18 @@ public sealed class Window : IDisposable
     private bool _allowMinimize = true;
     private BorderStyle _borderStyle;
     private bool _captionVisible = true;
-    private Rectangle<int> _clientBounds = Rectangle.Empty<int>();
+    private Rectangle<int> _clientBounds = Rectangle.NaN<int>();
     private bool _controlsVisible = true;
     private Icon? _icon;
     private bool _iconVisible = true;
-    private Rectangle<int> _nonClientBounds = Rectangle.Empty<int>();
+    private Rectangle<int> _nonClientBounds = Rectangle.NaN<int>();
     private Icon? _smallIcon;
     private VolatileState _state;
     private string _title = "";
-    private uint _windowExStyles;
+    private nint _windowExStyles;
     private ValueLazy<HWND> _windowHandle;
     private WindowState _windowState = WindowState.Restored;
-    private uint _windowStyles;
+    private nint _windowStyles;
 
     /// <summary>Initializes a new instance of the <see cref="Window" /> class.</summary>
     /// <param name="monitorProvider">An <see cref="IMonitorProvider" /> implementation.</param>
@@ -61,8 +68,8 @@ public sealed class Window : IDisposable
         WindowMessageHandlerDelegate? beforeMessageHandledDelegate = null,
         WindowMessageHandlerDelegate? afterMessageHandledDelegate = null)
     {
-        ThrowIfNull(monitorProvider, nameof(monitorProvider));
-        ThrowIfNull(windowProvider, nameof(windowProvider));
+        ThrowIfNull(monitorProvider);
+        ThrowIfNull(windowProvider);
 
         _monitorProvider = monitorProvider;
         _windowProvider = windowProvider;
@@ -71,7 +78,7 @@ public sealed class Window : IDisposable
         _ownerThread = Thread.CurrentThread;
         _windowHandle = new ValueLazy<HWND>(() => CreateWindowHandle(beforeCreationDelegate, afterCreationDelegate));
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <summary>Gets the handle of the window. The handle will be created if it has not yet been.</summary>
@@ -121,7 +128,7 @@ public sealed class Window : IDisposable
                     _ = ShowWindow(_windowHandle.Value, SW_MAXIMIZE);
                     break;
                 default:
-                    ThrowForInvalidKind(_windowState, nameof(_windowState));
+                    ThrowForInvalidKind(_windowState);
                     break;
             }
         }
@@ -147,7 +154,8 @@ public sealed class Window : IDisposable
     }
 
     /// <summary>
-    ///     Gets or sets a value determining whether window controls are visible. Window controls include the system menu, minimize
+    ///     Gets or sets a value determining whether window controls are visible. Window controls include the system menu,
+    ///     minimize
     ///     button, maximize button, and close button.
     /// </summary>
     public bool ControlsVisible
@@ -261,7 +269,7 @@ public sealed class Window : IDisposable
                 return;
             }
 
-            bool applyWindowStyles = string.IsNullOrEmpty(value) || string.IsNullOrEmpty(_title);
+            var applyWindowStyles = string.IsNullOrEmpty(value) || string.IsNullOrEmpty(_title);
 
             _title = value;
 
@@ -345,7 +353,8 @@ public sealed class Window : IDisposable
     }
 
     /// <summary>
-    ///     Disposes the <see cref="Window" />, releasing all of its unmanaged resources. When disposing on a thread other than the
+    ///     Disposes the <see cref="Window" />, releasing all of its unmanaged resources. When disposing on a thread other than
+    ///     the
     ///     owner thread, a <c>WM_CLOSE</c> message will be dispatched to the window, instead.
     /// </summary>
     public void Dispose()
@@ -408,7 +417,7 @@ public sealed class Window : IDisposable
             case BoundsType.Client:
                 return _clientBounds;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 return default;
         }
     }
@@ -425,7 +434,7 @@ public sealed class Window : IDisposable
             case BoundsType.Client:
                 return _clientBounds.Origin;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 return default;
         }
     }
@@ -442,7 +451,7 @@ public sealed class Window : IDisposable
             case BoundsType.Client:
                 return _clientBounds.Size;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 return default;
         }
     }
@@ -478,7 +487,7 @@ public sealed class Window : IDisposable
                 _clientBounds = newBounds = bounds;
                 break;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 newBounds = default;
                 break;
         }
@@ -504,7 +513,7 @@ public sealed class Window : IDisposable
                 newBounds = _clientBounds;
                 break;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 newBounds = default;
                 break;
         }
@@ -530,7 +539,7 @@ public sealed class Window : IDisposable
                 newBounds = _clientBounds;
                 break;
             default:
-                ThrowForInvalidKind(type, nameof(type));
+                ThrowForInvalidKind(type);
                 newBounds = default;
                 break;
         }
@@ -577,7 +586,7 @@ public sealed class Window : IDisposable
     {
         AssertNotDisposedOrDisposing(_state);
 
-        return IsActive || SetForegroundWindow(Handle) != FALSE;
+        return IsActive || SetForegroundWindow(Handle) != BOOL.FALSE;
     }
 
     /// <summary>Enables the window.</summary>
@@ -587,7 +596,7 @@ public sealed class Window : IDisposable
 
         if (!IsEnabled)
         {
-            _ = EnableWindow(Handle, TRUE);
+            _ = EnableWindow(Handle, BOOL.TRUE);
         }
     }
 
@@ -598,7 +607,7 @@ public sealed class Window : IDisposable
 
         if (IsEnabled)
         {
-            _ = EnableWindow(Handle, FALSE);
+            _ = EnableWindow(Handle, BOOL.FALSE);
         }
     }
 
@@ -642,7 +651,7 @@ public sealed class Window : IDisposable
 
         if (_windowHandle.IsValueCreated)
         {
-            SendMessageW(Handle, WM_CLOSE, UIntPtr.Zero, IntPtr.Zero);
+            _ = SendMessageW(Handle, WM_CLOSE, 0u, 0);
         }
     }
 
@@ -651,7 +660,10 @@ public sealed class Window : IDisposable
     ///     A monitor to center the window on. A <see langword="null" /> value will default to the nearest monitor
     ///     associated with <see cref="Handle" />.
     /// </param>
-    /// <param name="newSize">The new size of the window. A <see langword="null" /> value will not change the current size of the window.</param>
+    /// <param name="newSize">
+    ///     The new size of the window. A <see langword="null" /> value will not change the current size of
+    ///     the window.
+    /// </param>
     public void Center(Monitor? monitor = null, (Vector2D<int> size, BoundsType type)? newSize = null)
     {
         AssertNotDisposedOrDisposing(_state);
@@ -669,11 +681,11 @@ public sealed class Window : IDisposable
 
         if (newSize is null)
         {
-            if (!_nonClientBounds.IsEmpty())
+            if (!_nonClientBounds.IsNaN())
             {
                 SetBounds(_nonClientBounds.CenterOn(monitor.WorkingArea), BoundsType.NonClient);
             }
-            else if (!_clientBounds.IsEmpty())
+            else if (!_clientBounds.IsNaN())
             {
                 SetBounds(_nonClientBounds.CenterOn(monitor.WorkingArea), BoundsType.Client);
             }
@@ -729,16 +741,16 @@ public sealed class Window : IDisposable
     /// <summary>Calculates and, if a window handle has been created, applies window styles.</summary>
     internal void ApplyWindowStyles()
     {
-        uint windowStyles = 0;
-        uint windowExStyles = 0;
+        nint windowStyles = 0;
+        nint windowExStyles = 0;
 
         if (_windowHandle.IsValueCreated)
         {
             // Remove all styles set by the code below
             // GetWindowLongPtrW can return 0 if the style is actually 0, so don't check for errors
 
-            windowStyles = (uint)GetWindowLongPtrW(_windowHandle.Value, GWL_STYLE);
-            windowExStyles = (uint)GetWindowLongPtrW(_windowHandle.Value, GWL_EXSTYLE);
+            windowStyles = GetWindowLongPtrW(_windowHandle.Value, GWL_STYLE);
+            windowExStyles = GetWindowLongPtrW(_windowHandle.Value, GWL_EXSTYLE);
         }
         else
         {
@@ -756,7 +768,7 @@ public sealed class Window : IDisposable
                     windowStyles = 0;
                     break;
                 default:
-                    ThrowForInvalidKind(_windowState, nameof(_windowState));
+                    ThrowForInvalidKind(_windowState);
                     break;
             }
 
@@ -773,15 +785,15 @@ public sealed class Window : IDisposable
                 break;
             case BorderStyle.NonSizable:
                 windowStyles |= WS_BORDER;
-                windowStyles &= ~(uint)WS_THICKFRAME;
+                windowStyles &= ~WS_THICKFRAME;
                 windowExStyles |= WS_EX_CLIENTEDGE | WS_EX_WINDOWEDGE;
                 break;
             case BorderStyle.None:
-                windowStyles &= ~(uint)(WS_BORDER | WS_THICKFRAME);
-                windowExStyles &= ~(uint)(WS_EX_CLIENTEDGE | WS_EX_WINDOWEDGE);
+                windowStyles &= ~(WS_BORDER | WS_THICKFRAME);
+                windowExStyles &= ~(WS_EX_CLIENTEDGE | WS_EX_WINDOWEDGE);
                 break;
             default:
-                ThrowForInvalidKind(_borderStyle, nameof(_borderStyle));
+                ThrowForInvalidKind(_borderStyle);
                 break;
         }
 
@@ -799,13 +811,13 @@ public sealed class Window : IDisposable
         else
         {
             // Hide the system menu
-            windowStyles &= ~(uint)WS_SYSMENU;
+            windowStyles &= ~WS_SYSMENU;
         }
 
         if (_borderStyle == BorderStyle.None)
         {
             // Hide the title bar
-            windowStyles &= ~(uint)WS_CAPTION;
+            windowStyles &= ~WS_CAPTION;
         }
 
         if (_allowMaximize)
@@ -816,7 +828,7 @@ public sealed class Window : IDisposable
         else
         {
             // Hide the maximize button
-            windowStyles &= ~(uint)WS_MAXIMIZEBOX;
+            windowStyles &= ~WS_MAXIMIZEBOX;
         }
 
         if (_allowMinimize)
@@ -827,7 +839,7 @@ public sealed class Window : IDisposable
         else
         {
             // Hide the minimize button
-            windowStyles &= ~(uint)WS_MINIMIZEBOX;
+            windowStyles &= ~WS_MINIMIZEBOX;
         }
 
         _windowStyles = windowStyles;
@@ -840,8 +852,8 @@ public sealed class Window : IDisposable
 
         // SetWindowLongPtrW can return 0 if the previous style is actually 0, so don't check for errors
 
-        _ = SetWindowLongPtrW(_windowHandle.Value, GWL_STYLE, (nint)_windowStyles);
-        _ = SetWindowLongPtrW(_windowHandle.Value, GWL_EXSTYLE, (nint)_windowExStyles);
+        _ = SetWindowLongPtrW(_windowHandle.Value, GWL_STYLE, _windowStyles);
+        _ = SetWindowLongPtrW(_windowHandle.Value, GWL_EXSTYLE, _windowExStyles);
 
         /*
          * SetWindowPos leads to several window messages being sent, including WM_ACTIVATE, despite the
@@ -849,7 +861,14 @@ public sealed class Window : IDisposable
          */
         if (IsVisible)
         {
-            _ = SetWindowPos(_windowHandle.Value, IntPtr.Zero, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOREPOSITION);
+            _ = SetWindowPos(
+                _windowHandle.Value,
+                HWND.NULL,
+                0,
+                0,
+                0,
+                0,
+                SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOREPOSITION);
         }
 
         ApplyIcon(_windowHandle.Value, false);
@@ -860,11 +879,11 @@ public sealed class Window : IDisposable
     /// <param name="wParam">A <c>WPARAM</c> value.</param>
     /// <param name="lParam">An <c>LPARAM</c> value.</param>
     /// <returns>The message processing result.</returns>
-    internal nint HandleWindowMessage(uint message, nuint wParam, nint lParam)
+    internal LRESULT HandleWindowMessage(uint message, WPARAM wParam, LPARAM lParam)
     {
         ThrowIfNotThread(_ownerThread);
 
-        nint? result = null;
+        LRESULT? result = null;
 
         _beforeMessageHandledDelegate?.Invoke(Handle, message, wParam, lParam, ref result);
 
@@ -894,7 +913,7 @@ public sealed class Window : IDisposable
 
     private nint HandleWmActivateApp(nuint wParam)
     {
-        bool isActive = wParam == TRUE;
+        var isActive = wParam == TRUE;
 
         switch (isActive)
         {
@@ -941,39 +960,43 @@ public sealed class Window : IDisposable
 
         if (_state != VolatileState.Disposing)
         {
-            _state.Transition(VolatileState.Disposed);
+            _ = _state.Transition(VolatileState.Disposed);
         }
 
         return 0;
     }
 
-    private nint HandleWmEnable(nuint wParam)
+    private nint HandleWmEnable(WPARAM wParam)
     {
-        IsEnabled = wParam != FALSE;
+        IsEnabled = (BOOL)wParam != BOOL.FALSE;
 
         return 0;
     }
 
     private nint HandleWmMove(nint lParam)
     {
-        Vector2D<int> oldNonClientLocation = _nonClientBounds.Origin;
-        Vector2D<int> oldClientLocation = _clientBounds.Origin;
+        var oldNonClientLocation = _nonClientBounds.Origin;
+        var oldClientLocation = _clientBounds.Origin;
         var x = unchecked((short)LOWORD((uint)lParam));
         var y = unchecked((short)HIWORD((uint)lParam));
-        Vector2D<int> newClientLocation = new(x, y);
+        var newClientLocation = new Vector2D<int>(x, y);
 
         _clientBounds = _clientBounds with { Origin = newClientLocation };
         _nonClientBounds = ClientBoundsToNonClientBounds(_clientBounds);
 
-        Vector2D<int> newNonClientLocation = _nonClientBounds.Origin;
+        var newNonClientLocation = _nonClientBounds.Origin;
 
         if (oldNonClientLocation != newNonClientLocation)
         {
-            NonClientLocationChanged?.Invoke(this, new PropertyChangedEventArgs<Vector2D<int>>(oldNonClientLocation, newNonClientLocation));
+            NonClientLocationChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs<Vector2D<int>>(oldNonClientLocation, newNonClientLocation));
         }
         if (oldClientLocation != newClientLocation)
         {
-            ClientLocationChanged?.Invoke(this, new PropertyChangedEventArgs<Vector2D<int>>(oldClientLocation, newClientLocation));
+            ClientLocationChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs<Vector2D<int>>(oldClientLocation, newClientLocation));
         }
 
         return 0;
@@ -1016,20 +1039,22 @@ public sealed class Window : IDisposable
                 break;
         }
 
-        Vector2D<int> oldNonClientSize = _nonClientBounds.Size;
-        Vector2D<int> oldClientSize = _clientBounds.Size;
-        ushort width = LOWORD(lParam);
-        ushort height = HIWORD(lParam);
-        Vector2D<int> newClientSize = new(width, height);
+        var oldNonClientSize = _nonClientBounds.Size;
+        var oldClientSize = _clientBounds.Size;
+        var width = LOWORD(lParam);
+        var height = HIWORD(lParam);
+        var newClientSize = new Vector2D<int>(width, height);
 
         _clientBounds.Size = newClientSize;
         _nonClientBounds = ClientBoundsToNonClientBounds(_clientBounds);
 
-        Vector2D<int> newNonClientSize = _nonClientBounds.Size;
+        var newNonClientSize = _nonClientBounds.Size;
 
         if (oldNonClientSize != newNonClientSize)
         {
-            NonClientSizeChanged?.Invoke(this, new PropertyChangedEventArgs<Vector2D<int>>(oldNonClientSize, newNonClientSize));
+            NonClientSizeChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs<Vector2D<int>>(oldNonClientSize, newNonClientSize));
         }
         if (oldClientSize != newClientSize)
         {
@@ -1039,7 +1064,9 @@ public sealed class Window : IDisposable
         return 0;
     }
 
-    private unsafe HWND CreateWindowHandle(Action<Window>? beforeCreationDelegate, Action<Window>? afterCreationDelegate)
+    private unsafe HWND CreateWindowHandle(
+        Action<Window>? beforeCreationDelegate,
+        Action<Window>? afterCreationDelegate)
     {
         Assert(_windowHandle.IsValueCreated);
 
@@ -1048,11 +1075,11 @@ public sealed class Window : IDisposable
         HWND hWnd;
         Rectangle<int>? bounds = null;
 
-        if (!_nonClientBounds.IsEmpty())
+        if (!_nonClientBounds.IsNaN())
         {
             bounds = _nonClientBounds;
         }
-        else if (!_clientBounds.IsEmpty())
+        else if (!_clientBounds.IsNaN())
         {
             bounds = ClientBoundsToNonClientBounds(_clientBounds);
         }
@@ -1061,21 +1088,21 @@ public sealed class Window : IDisposable
         {
             hWnd =
                 CreateWindowExW(
-                    _windowExStyles,
+                    (uint)_windowExStyles,
                     (ushort*)_windowProvider.ClassAtom,
                     (ushort*)pTitle,
-                    _windowStyles,
+                    (uint)_windowStyles,
                     bounds?.Origin.X ?? CW_USEDEFAULT,
                     bounds?.Origin.Y ?? CW_USEDEFAULT,
                     bounds?.Size.X ?? CW_USEDEFAULT,
                     bounds?.Size.Y ?? CW_USEDEFAULT,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
+                    HWND.NULL,
+                    HMENU.NULL,
                     ModuleHandle,
                     GCHandle.ToIntPtr(_windowProvider.NativeHandle).ToPointer());
         }
 
-        ThrowForLastErrorIfZero(hWnd, nameof(CreateWindowExW));
+        ThrowForLastErrorIfNull(hWnd, nameof(CreateWindowExW));
 
         afterCreationDelegate?.Invoke(this);
 
@@ -1088,7 +1115,7 @@ public sealed class Window : IDisposable
         {
             return;
         }
-        if (bounds.IsEmpty())
+        if (bounds.IsNaN())
         {
             ThrowArgumentException("Bounds are empty.", nameof(bounds));
         }
@@ -1104,13 +1131,20 @@ public sealed class Window : IDisposable
                 adjustedBounds = ClientBoundsToNonClientBounds(bounds);
                 break;
             default:
-                ThrowForInvalidKind(boundsType, nameof(boundsType));
+                ThrowForInvalidKind(boundsType);
                 adjustedBounds = default;
                 break;
         }
 
         ThrowIfZero(
-            SetWindowPos(Handle, IntPtr.Zero, adjustedBounds.Origin.X, adjustedBounds.Origin.Y, adjustedBounds.Size.X, adjustedBounds.Size.Y, 0),
+            SetWindowPos(
+                Handle,
+                HWND.NULL,
+                adjustedBounds.Origin.X,
+                adjustedBounds.Origin.Y,
+                adjustedBounds.Size.X,
+                adjustedBounds.Size.Y,
+                0),
             nameof(SetWindowPos));
     }
 
@@ -1124,10 +1158,10 @@ public sealed class Window : IDisposable
          * icons.
          */
 
-        SendMessageW(windowHandle, WM_SETICON, ICON_SMALL, 0);
-        SendMessageW(windowHandle, WM_SETICON, ICON_BIG, 0);
+        _ = SendMessageW(windowHandle, WM_SETICON, (WPARAM)ICON_SMALL, 0);
+        _ = SendMessageW(windowHandle, WM_SETICON, (WPARAM)ICON_BIG, 0);
 
-        Icon? icon = _iconVisible ? _icon : null;
+        var icon = _iconVisible ? _icon : null;
 
         if (icon is not null)
         {
@@ -1145,15 +1179,15 @@ public sealed class Window : IDisposable
 
             if (_smallIcon is not null)
             {
-                SendMessageW(windowHandle, WM_SETICON, ICON_SMALL, _smallIcon.Handle);
+                _ = SendMessageW(windowHandle, WM_SETICON, (WPARAM)ICON_SMALL, _smallIcon.Handle);
             }
 
-            SendMessageW(windowHandle, WM_SETICON, ICON_BIG, icon.Handle);
+            _ = SendMessageW(windowHandle, WM_SETICON, (WPARAM)ICON_BIG, icon.Handle);
         }
 
         if (invalidateFrame)
         {
-            _ = RedrawWindow(windowHandle, null, IntPtr.Zero, RDW_INVALIDATE | RDW_FRAME);
+            _ = RedrawWindow(windowHandle, null, HRGN.NULL, RDW_INVALIDATE | RDW_FRAME);
         }
     }
 
@@ -1172,13 +1206,13 @@ public sealed class Window : IDisposable
     {
         RECT rect;
 
-        ThrowIfZero(
-            AdjustWindowRectEx(&rect, _windowStyles, FALSE, _windowExStyles),
-            nameof(AdjustWindowRectEx));
+        ThrowIfZero(AdjustWindowRectEx(&rect, (uint)_windowStyles, BOOL.FALSE, (uint)_windowExStyles));
 
         return new Rectangle<int>(
             new Vector2D<int>(clientBounds.Origin.X + rect.left, clientBounds.Origin.Y + rect.top),
-            new Vector2D<int>(clientBounds.Size.X + (rect.right - rect.left), clientBounds.Size.Y + (rect.bottom - rect.top)));
+            new Vector2D<int>(
+                clientBounds.Size.X + (rect.right - rect.left),
+                clientBounds.Size.Y + (rect.bottom - rect.top)));
     }
 
     private void DisposeWindowHandle()
@@ -1188,9 +1222,7 @@ public sealed class Window : IDisposable
 
         if (_windowHandle.IsValueCreated)
         {
-            ThrowIfZero(
-                DestroyWindow(Handle),
-                nameof(DestroyWindow));
+            ThrowIfZero(DestroyWindow(Handle));
         }
     }
 }

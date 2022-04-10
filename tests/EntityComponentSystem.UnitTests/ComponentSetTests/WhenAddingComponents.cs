@@ -8,7 +8,7 @@ public sealed class WhenAddingComponents
     [Fact]
     public void MustAssociateValueWithId()
     {
-        ComponentSet<char> componentSet = new();
+        var componentSet = new ComponentSet<char>();
 
         componentSet.Add(0, 'A');
         componentSet.Add(1, 'B');
@@ -16,21 +16,21 @@ public sealed class WhenAddingComponents
 
         for (var i = 0; i < componentSet.Count; i++)
         {
-            char component = componentSet[i];
+            var component = componentSet[i];
 
-            component.Should().Be((char)('A' + i));
+            _ = component.Should().Be((char)('A' + i));
         }
     }
 
     [Fact]
     public void MustAdjustCount()
     {
-        ComponentSet<char> componentSet = new();
+        var componentSet = new ComponentSet<char>();
 
         componentSet.Add(0, 'A');
         componentSet.Add(1, 'B');
         componentSet.Add(2, 'C');
 
-        componentSet.Count.Should().Be(3);
+        _ = componentSet.Count.Should().Be(3);
     }
 }

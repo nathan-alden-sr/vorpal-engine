@@ -27,10 +27,10 @@ public static class InputHidControllersExtensions
         string? productName,
         string? serialNumber)
     {
-        ThrowIfNull(inputHidControllers, nameof(inputHidControllers));
+        ThrowIfNull(inputHidControllers);
 
-        IList<InputHidControllersController> controllers = inputHidControllers.Controllers();
-        InputHidControllersController? controller =
+        var controllers = inputHidControllers.Controllers();
+        var controller =
             controllers.SingleOrDefault(
                 a => string.Equals(a.Manufacturer, manufacturer, StringComparison.Ordinal) &&
                      string.Equals(a.ProductName, productName, StringComparison.Ordinal) &&
@@ -40,7 +40,7 @@ public static class InputHidControllersExtensions
         if (controller is null)
         {
             const bool enabled = true;
-            uint index = controllers.Count > 0 ? controllers.Max(b => b.Index) + 1 : 0;
+            var index = controllers.Count > 0 ? controllers.Max(b => b.Index) + 1 : 0;
 
             controller =
                 new InputHidControllersController

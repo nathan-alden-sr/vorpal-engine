@@ -1,13 +1,9 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace VorpalEngine.Input.Mouse;
 
 /// <summary>Represents mouse state changes since the last time the mouse state was calculated.</summary>
-[SuppressMessage("ReSharper", "ConvertToAutoProperty")]
-[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Roslyn is over-aggressive")]
 public struct MouseStateChanges
 {
     /// <summary>Gets the relative location x-dimension delta.</summary>
@@ -23,7 +19,9 @@ public struct MouseStateChanges
     public int RelativeHorizontalWheelDelta { get; internal set; }
 
     internal byte ButtonDownStates { get; set; }
+
     internal byte ButtonPressedStates { get; set; }
+
     internal byte ButtonReleasedStates { get; set; }
 
     /// <summary>Determines whether a button is down.</summary>

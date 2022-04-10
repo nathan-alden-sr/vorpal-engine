@@ -16,10 +16,7 @@ public sealed class ConfigurationFileManager : IConfigurationFileManager
     public static readonly JsonSerializerOptions DefaultJsonSerializerOptions =
         new()
         {
-            Converters =
-            {
-                new JsonStringEnumConverter()
-            },
+            Converters = { new JsonStringEnumConverter() },
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             IgnoreReadOnlyProperties = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -36,7 +33,7 @@ public sealed class ConfigurationFileManager : IConfigurationFileManager
     /// </param>
     public ConfigurationFileManager(IIdentifierPaths identifierPaths, JsonSerializerOptions? options = null)
     {
-        ThrowIfNull(identifierPaths, nameof(identifierPaths));
+        ThrowIfNull(identifierPaths);
 
         _identifierPaths = identifierPaths;
         JsonSerializerOptions = options ?? new JsonSerializerOptions(DefaultJsonSerializerOptions);
@@ -49,12 +46,12 @@ public sealed class ConfigurationFileManager : IConfigurationFileManager
     public T LoadConfiguration<T>(Identifier identifier, Func<T> defaultConfigurationFactoryDelegate)
         where T : class
     {
-        ThrowIfNull(identifier, nameof(identifier));
-        ThrowIfNull(defaultConfigurationFactoryDelegate, nameof(defaultConfigurationFactoryDelegate));
+        ThrowIfNull(identifier);
+        ThrowIfNull(defaultConfigurationFactoryDelegate);
 
         T SaveDefaultConfiguration()
         {
-            T defaultConfiguration = defaultConfigurationFactoryDelegate();
+            var defaultConfiguration = defaultConfigurationFactoryDelegate();
 
             SaveConfiguration(identifier, defaultConfiguration);
 
@@ -71,7 +68,7 @@ public sealed class ConfigurationFileManager : IConfigurationFileManager
         {
             try
             {
-                string json = File.ReadAllText(_identifierPaths.ConfigurationFilePath);
+                var json = File.ReadAllText(_identifierPaths.ConfigurationFilePath);
 
                 configuration = JsonSerializer.Deserialize<T>(json, JsonSerializerOptions) ?? SaveDefaultConfiguration();
             }
@@ -87,18 +84,16 @@ public sealed class ConfigurationFileManager : IConfigurationFileManager
     /// <inheritdoc />
     public T LoadConfiguration<T>(Identifier identifier)
         where T : class, new()
-    {
-        return LoadConfiguration(identifier, () => new T());
-    }
+        => LoadConfiguration(identifier, () => new T());
 
     /// <inheritdoc />
     public void SaveConfiguration<T>(Identifier identifier, T configuration)
         where T : class
     {
-        ThrowIfNull(identifier, nameof(identifier));
-        ThrowIfNull(configuration, nameof(configuration));
+        ThrowIfNull(identifier);
+        ThrowIfNull(configuration);
 
-        string json = JsonSerializer.Serialize(configuration, JsonSerializerOptions);
+        var json = JsonSerializer.Serialize(configuration, JsonSerializerOptions);
 
         File.WriteAllText(_identifierPaths.ConfigurationFilePath, json, Encoding.UTF8);
     }

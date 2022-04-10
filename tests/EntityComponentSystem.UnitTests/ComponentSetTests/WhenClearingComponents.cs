@@ -8,7 +8,7 @@ public sealed class WhenClearingComponents
     [Fact]
     public void MustRemoveAllIds()
     {
-        ComponentSet<char> componentSet = new();
+        var componentSet = new ComponentSet<char>();
 
         componentSet.Add(0, 'A');
         componentSet.Add(1, 'B');
@@ -18,9 +18,9 @@ public sealed class WhenClearingComponents
 
         for (var i = 0; i < 3; i++)
         {
-            componentSet.Contains(i).Should().BeFalse();
+            _ = componentSet.Contains(i).Should().BeFalse();
         }
 
-        componentSet.Count.Should().Be(0);
+        _ = componentSet.Count.Should().Be(0);
     }
 }

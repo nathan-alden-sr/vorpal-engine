@@ -29,11 +29,11 @@ public sealed class Logger : ILogger
     /// <param name="configuration">A Serilog logger configuration.</param>
     public Logger(LoggerConfiguration configuration)
     {
-        ThrowIfNull(configuration, nameof(configuration));
+        ThrowIfNull(configuration);
 
         _logger = configuration.CreateLogger();
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <inheritdoc />

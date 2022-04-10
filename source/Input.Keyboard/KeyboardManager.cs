@@ -1,8 +1,11 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.RI;
+using static TerraFX.Interop.Windows.VK;
+using static TerraFX.Interop.Windows.Windows;
+using static TerraFX.Interop.Windows.WM;
 
 namespace VorpalEngine.Input.Keyboard;
 
@@ -20,14 +23,14 @@ public sealed class KeyboardManager : IKeyboardManager
     /// <inheritdoc />
     public unsafe void UpdateState(RAWINPUT* rawInput)
     {
-        ThrowIfNull(rawInput, nameof(rawInput));
+        ThrowIfNull(rawInput);
 
         // https://github.com/hrydgard/ppsspp/blob/master/Windows/RawInput.cpp
 
-        RAWKEYBOARD rawKeyboard = rawInput->data.keyboard;
+        var rawKeyboard = rawInput->data.keyboard;
 
         // Translate modifier keys to their left or right equivalents
-        Key translatedKey =
+        var translatedKey =
             rawKeyboard.VKey switch
             {
                 VK_SHIFT => (Key)MapVirtualKeyW(rawKeyboard.MakeCode, MAPVK_VSC_TO_VK_EX),
@@ -48,11 +51,11 @@ public sealed class KeyboardManager : IKeyboardManager
         {
             case WM_KEYDOWN:
             case WM_SYSKEYDOWN:
-                _newDownKeys.Add(translatedKey);
+                _ = _newDownKeys.Add(translatedKey);
                 break;
             case WM_KEYUP:
             case WM_SYSKEYUP:
-                _newDownKeys.Remove(translatedKey);
+                _ = _newDownKeys.Remove(translatedKey);
                 break;
         }
     }
@@ -60,10 +63,10 @@ public sealed class KeyboardManager : IKeyboardManager
     /// <inheritdoc />
     public void CalculateStateChanges(out KeyboardStateChanges stateChanges)
     {
-        foreach (Key key in AllKeys)
+        foreach (var key in AllKeys)
         {
-            bool oldDownKey = _oldDownKeys.Contains(key);
-            bool newDownKey = _newDownKeys.Contains(key);
+            var oldDownKey = _oldDownKeys.Contains(key);
+            var newDownKey = _newDownKeys.Contains(key);
             byte state = 0;
 
             if (newDownKey)
@@ -85,14 +88,7 @@ public sealed class KeyboardManager : IKeyboardManager
 
             _stateChanges.Set((byte)key, state);
 
-            if (newDownKey)
-            {
-                _oldDownKeys.Add(key);
-            }
-            else
-            {
-                _oldDownKeys.Remove(key);
-            }
+            _ = newDownKey ? _oldDownKeys.Add(key) : _oldDownKeys.Remove(key);
         }
 
         stateChanges = _stateChanges;
@@ -100,7 +96,5 @@ public sealed class KeyboardManager : IKeyboardManager
 
     /// <inheritdoc />
     public void Reset()
-    {
-        _newDownKeys.Clear();
-    }
+        => _newDownKeys.Clear();
 }

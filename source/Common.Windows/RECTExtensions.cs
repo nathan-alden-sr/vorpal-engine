@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Silk.NET.Maths;
-using TerraFX.Interop;
+using TerraFX.Interop.Windows;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -23,7 +23,6 @@ public static class RECTExtensions
                 new Vector2D<T>((T)(object)value.left, (T)(object)value.top),
                 new Vector2D<T>((T)(object)(value.right - value.left), (T)(object)(value.bottom - value.top)));
         }
-        // ReSharper disable once ConvertIfStatementToReturnStatement
         if (typeof(T) == typeof(float))
         {
             return new Rectangle<T>(

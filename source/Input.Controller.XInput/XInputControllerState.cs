@@ -52,7 +52,9 @@ public struct XInputControllerState
     public (byte OldValue, byte NewValue) RightTrigger { get; internal set; }
 
     internal ushort DownButtonStates { get; set; }
+
     internal ushort PressedButtonStates { get; set; }
+
     internal ushort ReleasedButtonStates { get; set; }
 
     /// <summary>Determines if a button is down.</summary>

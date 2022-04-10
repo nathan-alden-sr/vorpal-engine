@@ -20,8 +20,8 @@ public sealed class NullWhenEmptyList<T> : IList<T>
     /// <param name="setPropertyDelegate">A delegate to call when the value of the underlying list property needs to be set.</param>
     public NullWhenEmptyList(Func<IList<T>?> getPropertyDelegate, Action<IList<T>?> setPropertyDelegate)
     {
-        ThrowIfNull(getPropertyDelegate, nameof(getPropertyDelegate));
-        ThrowIfNull(setPropertyDelegate, nameof(setPropertyDelegate));
+        ThrowIfNull(getPropertyDelegate);
+        ThrowIfNull(setPropertyDelegate);
 
         _getPropertyDelegate = getPropertyDelegate;
         _setPropertyDelegate = setPropertyDelegate;
@@ -31,7 +31,7 @@ public sealed class NullWhenEmptyList<T> : IList<T>
     {
         get
         {
-            IList<T>? sourceList = _getPropertyDelegate();
+            var sourceList = _getPropertyDelegate();
 
             if (sourceList is null)
             {
@@ -83,7 +83,7 @@ public sealed class NullWhenEmptyList<T> : IList<T>
     /// <inheritdoc />
     public bool Remove(T item)
     {
-        bool result = MutableSourceList.Remove(item);
+        var result = MutableSourceList.Remove(item);
 
         if (Count == 0)
         {

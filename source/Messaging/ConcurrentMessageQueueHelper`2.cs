@@ -24,14 +24,16 @@ public sealed class ConcurrentMessageQueueHelper<TMessageBase, TThread> : IDispo
     /// <summary>Initializes a new instance of the <see cref="ConcurrentMessageQueueHelper{TMessageBase,TThread}" /> class.</summary>
     /// <param name="concurrentMessageQueue">An <see cref="IConcurrentMessageQueue{TMessageBase,TThread}" /> implementation.</param>
     /// <param name="context">A nested context.</param>
-    public ConcurrentMessageQueueHelper(IConcurrentMessageQueue<TMessageBase, TThread> concurrentMessageQueue, NestedContext context = default)
+    public ConcurrentMessageQueueHelper(
+        IConcurrentMessageQueue<TMessageBase, TThread> concurrentMessageQueue,
+        NestedContext context = default)
     {
-        ThrowIfNull(concurrentMessageQueue, nameof(concurrentMessageQueue));
+        ThrowIfNull(concurrentMessageQueue);
 
         _concurrentMessageQueue = concurrentMessageQueue;
         _context = context;
 
-        _state.Transition(VolatileState.Initialized);
+        _ = _state.Transition(VolatileState.Initialized);
     }
 
     /// <inheritdoc />
@@ -88,10 +90,11 @@ public sealed class ConcurrentMessageQueueHelper<TMessageBase, TThread> : IDispo
     /// <typeparam name="TMessage">The type of message to subscribe to.</typeparam>
     /// <param name="handlerDelegate">A delegate to invoke when handling messages.</param>
     /// <returns>This object.</returns>
-    public ConcurrentMessageQueueHelper<TMessageBase, TThread> Subscribe<TMessage>(MessageHandlerDelegate<TMessage> handlerDelegate)
+    public ConcurrentMessageQueueHelper<TMessageBase, TThread> Subscribe<TMessage>(
+        MessageHandlerDelegate<TMessage> handlerDelegate)
         where TMessage : TMessageBase
     {
-        ThrowIfNull(handlerDelegate, nameof(handlerDelegate));
+        ThrowIfNull(handlerDelegate);
 
         AssertNotDisposedOrDisposing(_state);
 
@@ -100,9 +103,9 @@ public sealed class ConcurrentMessageQueueHelper<TMessageBase, TThread> : IDispo
             ThrowInvalidOperationException("No thread was specified.");
         }
 
-        ISubscriptionReceipt subscriptionReceipt = _concurrentMessageQueue.Subscribe(handlerDelegate, _thread.Value, _context);
+        var subscriptionReceipt = _concurrentMessageQueue.Subscribe(handlerDelegate, _thread.Value, _context);
 
-        _subscriptionReceipts.Add(subscriptionReceipt);
+        _ = _subscriptionReceipts.Add(subscriptionReceipt);
 
         return this;
     }

@@ -9,7 +9,7 @@ internal sealed class UnderscoreCamelCaseNamingPolicy : JsonNamingPolicy
 {
     public override string ConvertName(string name)
     {
-        ThrowIfNull(name, nameof(name));
+        ThrowIfNull(name);
 
         return CamelCase.ConvertName(name.StartsWith('_') ? name.Remove(0, 1) : name);
     }

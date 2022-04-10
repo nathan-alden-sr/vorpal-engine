@@ -23,7 +23,7 @@ public unsafe struct Bitmap256GroupsWith4StateBits
     /// <returns>The bits in the group. Bits not in <see cref="GroupMask" /> will be set to zero.</returns>
     public byte Get(byte groupIndex)
     {
-        int shift = GetShift(groupIndex);
+        var shift = GetShift(groupIndex);
 
         return (byte)((_data[GetFieldIndex(groupIndex)] & (GroupMask << shift)) >> shift);
     }
@@ -33,8 +33,8 @@ public unsafe struct Bitmap256GroupsWith4StateBits
     /// <param name="value">A value containing the bits to set. Bits not in <see cref="GroupMask" /> will be discarded.</param>
     public void Set(byte groupIndex, byte value)
     {
-        int fieldIndex = GetFieldIndex(groupIndex);
-        int shift = GetShift(groupIndex);
+        var fieldIndex = GetFieldIndex(groupIndex);
+        var shift = GetShift(groupIndex);
 
         _data[fieldIndex] = (_data[fieldIndex] & ~((uint)GroupMask << shift)) | ((uint)PrepareValue(value) << shift);
     }

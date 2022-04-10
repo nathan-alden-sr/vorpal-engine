@@ -43,6 +43,7 @@
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <Features>strict</Features>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableDefaultNoneItems>false</EnableDefaultNoneItems>

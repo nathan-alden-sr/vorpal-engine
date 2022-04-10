@@ -14,7 +14,7 @@ public sealed class Identifier
     /// <param name="name">The name of the game. The name does not have to be unique across all games.</param>
     public Identifier(Guid id, string name)
     {
-        ThrowIfNull(name, nameof(name));
+        ThrowIfNull(name);
 
         Id = id;
         Name = name;

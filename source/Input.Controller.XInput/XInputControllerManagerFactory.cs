@@ -14,7 +14,7 @@ public sealed class XInputControllerManagerFactory : IXInputControllerManagerFac
     /// <param name="xInputControllerRepository">An <see cref="IXInputControllerRepository" /> implementation.</param>
     public XInputControllerManagerFactory(IXInputControllerRepository xInputControllerRepository)
     {
-        ThrowIfNull(xInputControllerRepository, nameof(xInputControllerRepository));
+        ThrowIfNull(xInputControllerRepository);
 
         _xInputControllerRepository = xInputControllerRepository;
     }

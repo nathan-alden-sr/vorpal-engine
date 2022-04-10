@@ -12,9 +12,9 @@ public sealed class PathManager : IPathManager
     /// <inheritdoc />
     public IIdentifierPaths GetIdentifierPaths(Identifier identifier)
     {
-        ThrowIfNull(identifier, nameof(identifier));
+        ThrowIfNull(identifier);
 
-        char[] invalidPathCharacters = GetInvalidPathChars();
+        var invalidPathCharacters = GetInvalidPathChars();
         var folderName =
             string.Create(
                 identifier.Name.Length,
@@ -26,13 +26,15 @@ public sealed class PathManager : IPathManager
                         span[i] = Array.IndexOf(invalidPathCharacters, name[i]) > -1 ? '_' : name[i];
                     }
                 });
-        string applicationDataDirectory =
-            Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), folderName);
-        string configurationFilePath = Combine(applicationDataDirectory, "config.json");
-        string logFileDirectory = Combine(applicationDataDirectory, "logs");
+        var applicationDataDirectory =
+            Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create),
+                folderName);
+        var configurationFilePath = Combine(applicationDataDirectory, "config.json");
+        var logFileDirectory = Combine(applicationDataDirectory, "logs");
 
-        Directory.CreateDirectory(applicationDataDirectory);
-        Directory.CreateDirectory(logFileDirectory);
+        _ = Directory.CreateDirectory(applicationDataDirectory);
+        _ = Directory.CreateDirectory(logFileDirectory);
 
         return new IdentifierPaths(applicationDataDirectory, configurationFilePath, logFileDirectory);
     }
@@ -47,7 +49,9 @@ public sealed class PathManager : IPathManager
         }
 
         public string DataDirectory { get; }
+
         public string ConfigurationFilePath { get; }
+
         public string LogFileDirectory { get; }
     }
 }

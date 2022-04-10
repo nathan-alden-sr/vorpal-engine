@@ -9,7 +9,7 @@ public static class PropertyCollectionExtensions
 {
     public static void Add(this PropertyCollection propertyCollection, (object Key, object? Value) item)
     {
-        ThrowIfNull(propertyCollection, nameof(propertyCollection));
+        ThrowIfNull(propertyCollection);
 
         propertyCollection.Add(item.Key, item.Value);
     }

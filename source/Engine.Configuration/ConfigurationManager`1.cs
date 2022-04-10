@@ -28,9 +28,9 @@ public sealed class ConfigurationManager<T> : IConfigurationManager<T>
         Identifier gameIdentifier,
         Func<T> defaultConfigurationFactoryDelegate)
     {
-        ThrowIfNull(configurationFileManager, nameof(configurationFileManager));
-        ThrowIfNull(gameIdentifier, nameof(gameIdentifier));
-        ThrowIfNull(defaultConfigurationFactoryDelegate, nameof(defaultConfigurationFactoryDelegate));
+        ThrowIfNull(configurationFileManager);
+        ThrowIfNull(gameIdentifier);
+        ThrowIfNull(defaultConfigurationFactoryDelegate);
 
         _configurationFileManager = configurationFileManager;
         _gameIdentifier = gameIdentifier;
@@ -54,7 +54,7 @@ public sealed class ConfigurationManager<T> : IConfigurationManager<T>
     /// <inheritdoc />
     public void ModifyConfiguration(ModifyConfigurationDelegate<T> modifyConfigurationDelegate)
     {
-        ThrowIfNull(modifyConfigurationDelegate, nameof(modifyConfigurationDelegate));
+        ThrowIfNull(modifyConfigurationDelegate);
 
         T oldConfiguration;
         T newConfiguration;
@@ -70,8 +70,8 @@ public sealed class ConfigurationManager<T> : IConfigurationManager<T>
 
             // Determine if the configuration actually changed
 
-            string oldJson = JsonSerializer.Serialize(oldConfiguration, _jsonSerializerOptions);
-            string newJson = JsonSerializer.Serialize(newConfiguration, _jsonSerializerOptions);
+            var oldJson = JsonSerializer.Serialize(oldConfiguration, _jsonSerializerOptions);
+            var newJson = JsonSerializer.Serialize(newConfiguration, _jsonSerializerOptions);
 
             configurationChanged = !oldJson.Equals(newJson, StringComparison.Ordinal);
 

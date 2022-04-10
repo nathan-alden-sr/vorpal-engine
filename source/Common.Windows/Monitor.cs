@@ -3,8 +3,9 @@
 
 using System.Numerics;
 using Silk.NET.Maths;
-using TerraFX.Interop;
-using static TerraFX.Interop.Windows;
+using TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.MONITOR;
+using static TerraFX.Interop.Windows.Windows;
 
 namespace VorpalEngine.Common.Windows;
 
@@ -14,45 +15,34 @@ public sealed class Monitor : IEquatable<Monitor>
     /// <summary>Initializes a new instance of the <see cref="Monitor" /> class.</summary>
     /// <param name="monitorHandle">The handle of the monitor.</param>
     /// <param name="deviceContextHandle">The device context (DC) handle of the monitor.</param>
-    public unsafe Monitor(IntPtr monitorHandle, IntPtr deviceContextHandle)
+    public unsafe Monitor(HMONITOR monitorHandle, HDC deviceContextHandle)
     {
-        if (monitorHandle == IntPtr.Zero)
+        if (monitorHandle == HMONITOR.NULL)
         {
             ThrowArgumentException("Invalid monitor handle.", nameof(monitorHandle));
         }
 
         MonitorHandle = monitorHandle;
 
-        MONITORINFOEXW monitorInfo =
-            new()
-            {
-                Base =
-                {
-                    cbSize = (uint)sizeof(MONITORINFOEXW)
-                }
-            };
+        var monitorInfo = new MONITORINFOEXW { Base = { cbSize = (uint)sizeof(MONITORINFOEXW) } };
 
-        ThrowIfZero(
-            GetMonitorInfoW(monitorHandle, (MONITORINFO*)&monitorInfo),
-            nameof(GetMonitorInfoW));
+        ThrowIfZero(GetMonitorInfoW(monitorHandle, (MONITORINFO*)&monitorInfo));
 
-        RECT bounds = monitorInfo.Base.rcMonitor;
-        RECT workingArea = monitorInfo.Base.rcWork;
+        var bounds = monitorInfo.Base.rcMonitor;
+        var workingArea = monitorInfo.Base.rcWork;
 
         Bounds = bounds.ToRectangle<int>();
         WorkingArea = workingArea.ToRectangle<int>();
         Primary = (monitorInfo.Base.dwFlags & MONITORINFOF_PRIMARY) != 0;
         DeviceName = new string((char*)monitorInfo.szDevice);
 
-        IntPtr screenDeviceContextHandle = deviceContextHandle;
+        var screenDeviceContextHandle = deviceContextHandle;
 
         try
         {
             if (screenDeviceContextHandle == IntPtr.Zero)
             {
-                ThrowIfZero(
-                    screenDeviceContextHandle = CreateDCW(monitorInfo.szDevice, null, null, null),
-                    nameof(CreateDCW));
+                ThrowIfNull(screenDeviceContextHandle = CreateDCW(monitorInfo.szDevice, null, null, null));
             }
 
             BitsPerPixel = GetDeviceCaps(screenDeviceContextHandle, BITSPIXEL);
@@ -69,12 +59,12 @@ public sealed class Monitor : IEquatable<Monitor>
 
     /// <summary>Initializes a new instance of the <see cref="Monitor" /> class.</summary>
     /// <param name="monitorHandle">The handle of the monitor.</param>
-    public Monitor(IntPtr monitorHandle) : this(monitorHandle, IntPtr.Zero)
+    public Monitor(HMONITOR monitorHandle) : this(monitorHandle, HDC.NULL)
     {
     }
 
     /// <summary>Gets the handle of the monitor.</summary>
-    public IntPtr MonitorHandle { get; }
+    public HMONITOR MonitorHandle { get; }
 
     /// <summary>Gets a <see cref="Rectangle{T}" /> representing the full size of the monitor's display area.</summary>
     public Rectangle<int> Bounds { get; }
@@ -103,7 +93,7 @@ public sealed class Monitor : IEquatable<Monitor>
     /// <returns>A <see cref="Monitor" /> whose bounds contain <paramref name="vector" />, defaulting to the nearest monitor.</returns>
     public static Monitor From(Vector2D<int> vector)
     {
-        POINT point = new(vector.X, vector.Y);
+        var point = new POINT(vector.X, vector.Y);
 
         return new Monitor(MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST));
     }

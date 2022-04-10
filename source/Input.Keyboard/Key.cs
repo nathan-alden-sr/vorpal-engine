@@ -2,7 +2,7 @@
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
 using System.Diagnostics.CodeAnalysis;
-using static TerraFX.Interop.Windows;
+using static TerraFX.Interop.Windows.VK;
 
 namespace VorpalEngine.Input.Keyboard;
 
