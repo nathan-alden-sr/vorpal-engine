@@ -134,122 +134,124 @@ internal static class Program
                         {
                             var isStateValid = _hidControllerManager.TryGetState(index, out var controller, out var state);
 
-                            if (controller is not null)
+                            if (controller is null)
                             {
-                                descriptionParts.Clear();
+                                continue;
+                            }
 
-                                if (controller.Manufacturer is not null)
+                            descriptionParts.Clear();
+
+                            if (controller.Manufacturer is not null)
+                            {
+                                descriptionParts.Add($"Mfg: {controller.Manufacturer}");
+                            }
+                            if (controller.ProductName is not null)
+                            {
+                                descriptionParts.Add($"Product: {controller.ProductName}");
+                            }
+                            if (controller.SerialNumber is not null)
+                            {
+                                descriptionParts.Add($"SN: {controller.SerialNumber}");
+                            }
+                            if (descriptionParts.Count == 0)
+                            {
+                                descriptionParts.Add(index.ToString());
+                            }
+
+                            ConsoleHelper.WriteLine(
+                                new ConsoleContent()
+                                    .FormatText(TextFormat.BrightForegroundGreen)
+                                    .Text(
+                                        $"HID controller {(descriptionParts.Count == 0 ? index : $"({string.Join(", ", descriptionParts)})")} is connected (update counter: {state.UpdateCounter})")
+                                    .FormatText(TextFormat.Default));
+                            ConsoleHelper.WriteLine();
+
+                            if (!isStateValid)
+                            {
+                                continue;
+                            }
+
+                            var content = new ConsoleContent();
+
+                            _ = content.Text("Buttons:   ");
+
+                            for (byte i = 0; i < controller.ButtonCount; i++)
+                            {
+                                if (state.IsButtonDown(i))
                                 {
-                                    descriptionParts.Add($"Mfg: {controller.Manufacturer}");
+                                    _ = content.FormatText(TextFormat.Negative);
                                 }
-                                if (controller.ProductName is not null)
+                                _ = content.Text(i.ToString());
+                                _ = content.FormatText(TextFormat.Default);
+                                _ = content.Text("   ");
+                            }
+
+                            ConsoleHelper.WriteLine(content);
+                            ConsoleHelper.WriteLine("Values:");
+                            ConsoleHelper.WriteLine();
+
+                            ValuesDataTable.Rows.Clear();
+
+                            static void AddRow(DataTable table, string valueName, HidControllerStateValue stateValue)
+                            {
+                                _ = table.Rows.Add(
+                                    valueName,
+                                    stateValue.IsValid ? "yes" : "no",
+                                    stateValue.LogicalMinimum.ToString(),
+                                    stateValue.Value.ToString(),
+                                    stateValue.LogicalMaximum.ToString());
+
+                                foreach (var column in table.Columns())
                                 {
-                                    descriptionParts.Add($"Product: {controller.ProductName}");
+                                    column.ExtendedProperties["Width"] =
+                                        Math.Max(
+                                            column.Caption.Length,
+                                            table.Rows().Max(a => ((string)a[column]).Length));
                                 }
-                                if (controller.SerialNumber is not null)
-                                {
-                                    descriptionParts.Add($"SN: {controller.SerialNumber}");
-                                }
-                                if (descriptionParts.Count == 0)
-                                {
-                                    descriptionParts.Add(index.ToString());
-                                }
+                            }
 
-                                ConsoleHelper.WriteLine(
-                                    new ConsoleContent()
-                                        .FormatText(TextFormat.BrightForegroundGreen)
-                                        .Text(
-                                            $"HID controller {(descriptionParts.Count == 0 ? index : $"({string.Join(", ", descriptionParts)})")} is connected (update counter: {state.UpdateCounter})")
-                                        .FormatText(TextFormat.Default));
-                                ConsoleHelper.WriteLine();
+                            AddRow(ValuesDataTable, "Hat switch", state.HatSwitch.NewValue);
+                            AddRow(ValuesDataTable, "Directional pad up", state.DirectionalPadUp.NewValue);
+                            AddRow(ValuesDataTable, "Directional pad down", state.DirectionalPadDown.NewValue);
+                            AddRow(ValuesDataTable, "Directional pad left", state.DirectionalPadLeft.NewValue);
+                            AddRow(ValuesDataTable, "Directional pad right", state.DirectionalPadRight.NewValue);
+                            AddRow(ValuesDataTable, "X-axis", state.XAxis.NewValue);
+                            AddRow(ValuesDataTable, "Y-axis", state.YAxis.NewValue);
+                            AddRow(ValuesDataTable, "Z-axis", state.ZAxis.NewValue);
+                            AddRow(ValuesDataTable, "X-axis rotation", state.XAxisRotation.NewValue);
+                            AddRow(ValuesDataTable, "Y-axis rotation", state.YAxisRotation.NewValue);
+                            AddRow(ValuesDataTable, "Z-axis rotation", state.ZAxisRotation.NewValue);
 
-                                if (!isStateValid)
-                                {
-                                    continue;
-                                }
+                            content = new ConsoleContent();
 
-                                var content = new ConsoleContent();
+                            const int padding = 3;
 
-                                _ = content.Text("Buttons:   ");
+                            foreach (DataColumn column in ValuesDataTable.Columns)
+                            {
+                                var width = (int)column.ExtendedProperties["Width"]!;
 
-                                for (byte i = 0; i < controller.ButtonCount; i++)
-                                {
-                                    if (state.IsButtonDown(i))
-                                    {
-                                        _ = content.FormatText(TextFormat.Negative);
-                                    }
-                                    _ = content.Text(i.ToString());
-                                    _ = content.FormatText(TextFormat.Default);
-                                    _ = content.Text("   ");
-                                }
+                                _ = content.Text(column.Caption.PadRight(width + padding));
+                            }
 
-                                ConsoleHelper.WriteLine(content);
-                                ConsoleHelper.WriteLine("Values:");
-                                ConsoleHelper.WriteLine();
+                            ConsoleHelper.WriteLine(content);
 
-                                ValuesDataTable.Rows.Clear();
+                            ImmutableArray<(DataColumn column, int width)> columns =
+                                ValuesDataTable.Columns().Select(a => (a, (int)a.ExtendedProperties["Width"]!))
+                                    .ToImmutableArray();
 
-                                static void AddRow(DataTable table, string valueName, HidControllerStateValue stateValue)
-                                {
-                                    _ = table.Rows.Add(
-                                        valueName,
-                                        stateValue.IsValid ? "yes" : "no",
-                                        stateValue.LogicalMinimum.ToString(),
-                                        stateValue.Value.ToString(),
-                                        stateValue.LogicalMaximum.ToString());
-
-                                    foreach (var column in table.Columns())
-                                    {
-                                        column.ExtendedProperties["Width"] =
-                                            Math.Max(
-                                                column.Caption.Length,
-                                                table.Rows().Max(a => ((string)a[column]).Length));
-                                    }
-                                }
-
-                                AddRow(ValuesDataTable, "Hat switch", state.HatSwitch.NewValue);
-                                AddRow(ValuesDataTable, "Directional pad up", state.DirectionalPadUp.NewValue);
-                                AddRow(ValuesDataTable, "Directional pad down", state.DirectionalPadDown.NewValue);
-                                AddRow(ValuesDataTable, "Directional pad left", state.DirectionalPadLeft.NewValue);
-                                AddRow(ValuesDataTable, "Directional pad right", state.DirectionalPadRight.NewValue);
-                                AddRow(ValuesDataTable, "X-axis", state.XAxis.NewValue);
-                                AddRow(ValuesDataTable, "Y-axis", state.YAxis.NewValue);
-                                AddRow(ValuesDataTable, "Z-axis", state.ZAxis.NewValue);
-                                AddRow(ValuesDataTable, "X-axis rotation", state.XAxisRotation.NewValue);
-                                AddRow(ValuesDataTable, "Y-axis rotation", state.YAxisRotation.NewValue);
-                                AddRow(ValuesDataTable, "Z-axis rotation", state.ZAxisRotation.NewValue);
-
+                            foreach (DataRow row in ValuesDataTable.Rows)
+                            {
                                 content = new ConsoleContent();
 
-                                const int padding = 3;
-
-                                foreach (DataColumn column in ValuesDataTable.Columns)
+                                foreach (var (column, width) in columns)
                                 {
-                                    var width = (int)column.ExtendedProperties["Width"]!;
-
-                                    _ = content.Text(column.Caption.PadRight(width + padding));
+                                    _ = content.Text(((string)row[column]).PadRight(width + padding));
                                 }
 
                                 ConsoleHelper.WriteLine(content);
-
-                                ImmutableArray<(DataColumn column, int width)> columns =
-                                    ValuesDataTable.Columns().Select(a => (a, (int)a.ExtendedProperties["Width"]!))
-                                        .ToImmutableArray();
-
-                                foreach (DataRow row in ValuesDataTable.Rows)
-                                {
-                                    content = new ConsoleContent();
-
-                                    foreach (var (column, width) in columns)
-                                    {
-                                        _ = content.Text(((string)row[column]).PadRight(width + padding));
-                                    }
-
-                                    ConsoleHelper.WriteLine(content);
-                                }
-
-                                ConsoleHelper.WriteLine();
                             }
+
+                            ConsoleHelper.WriteLine();
                         }
 
                         ConsoleHelper.Render();

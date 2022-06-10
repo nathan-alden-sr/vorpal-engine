@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Windows;
 using Autofac;
 using Stylet;
+using VorpalEngine.Input.Keyboard;
 using VorpalEngine.Samples.EngineTest.Views.Root;
 
 namespace VorpalEngine.Samples.EngineTest;
@@ -48,6 +49,10 @@ public class AutofacBootstrapper<TRootViewModel> : BootstrapperBase
         _ = containerBuilder.RegisterInstance<IViewManager>(new ViewManager(viewManagerConfig));
         _ = containerBuilder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
         _ = containerBuilder.RegisterInstance<IWindowManagerConfig>(this).ExternallyOwned();
+
+        // Register keyboard input
+
+        _ = containerBuilder.RegisterType<KeyboardManager>().As<IKeyboardManager>().SingleInstance();
 
         // Build the container
         _container = containerBuilder.Build();
