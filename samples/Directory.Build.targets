@@ -2,12 +2,12 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
 
   <ItemGroup>
-    <PackageReference Update="Silk.NET.Maths" Version="2.15.0" />
-    <PackageReference Update="TerraFX" Version="0.1.0-alpha.2240337292" />
+    <PackageReference Update="Silk.NET.Maths" Version="2.20.0" />
+    <PackageReference Update="TerraFX" Version="0.1.0-alpha.4270779782" />
   </ItemGroup>
 
   <ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), '^net\d+\.\d+-windows$'))">
-    <PackageReference Update="TerraFX.Interop.Windows" Version="10.0.20348.1-rc3.2316295926" />
+    <PackageReference Update="TerraFX.Interop.Windows" Version="10.0.22621.6" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
