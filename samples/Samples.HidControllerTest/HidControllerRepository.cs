@@ -7,7 +7,7 @@ namespace VorpalEngine.Samples.HidControllerTest;
 
 public sealed class HidControllerRepository : IHidControllerRepository
 {
-    private readonly Dictionary<(string?, string?, string?), uint> _controllers = new();
+    private readonly Dictionary<(string?, string?, string?), uint> _controllers = [];
 
     public (uint index, bool? enabled, bool enabledDefault) AddHidController(
         string? manufacturer,

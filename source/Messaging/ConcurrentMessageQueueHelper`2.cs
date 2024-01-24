@@ -17,7 +17,7 @@ public sealed class ConcurrentMessageQueueHelper<TMessageBase, TThread> : IDispo
 {
     private readonly IConcurrentMessageQueue<TMessageBase, TThread> _concurrentMessageQueue;
     private readonly NestedContext _context;
-    private readonly HashSet<ISubscriptionReceipt> _subscriptionReceipts = new();
+    private readonly HashSet<ISubscriptionReceipt> _subscriptionReceipts = [];
     private VolatileState _state;
     private TThread? _thread;
 

@@ -1,9 +1,6 @@
 // Copyright (c) Nathan Alden, Sr. and Contributors.
 // Licensed under the MIT License (MIT). See LICENSE.md in the repository root for more information.
 
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using TerraFX.Interop.DirectX;
 using VorpalEngine.Common;
@@ -11,7 +8,6 @@ using VorpalEngine.Logging;
 using static TerraFX.Interop.DirectX.DirectX;
 using static TerraFX.Interop.DirectX.XINPUT;
 using static TerraFX.Interop.Windows.ERROR;
-using static TerraFX.Utilities.ExceptionUtilities;
 
 namespace VorpalEngine.Input.Controller.XInput;
 
@@ -22,7 +18,7 @@ public sealed class XInputControllerManager : IXInputControllerManager
     private const int MaximumIndex = 3;
     private readonly ContextLogger? _logger;
     private readonly IXInputControllerRepository _xInputControllerRepository;
-    private readonly Dictionary<byte, XInputController?> _xInputControllersByIndex = new();
+    private readonly Dictionary<byte, XInputController?> _xInputControllersByIndex = [];
 
     /// <summary>Initializes a new instance of the <see cref="XInputControllerManager" /> class.</summary>
     /// <param name="xInputControllerRepository">An <see cref="IXInputControllerRepository" /> implementation.</param>

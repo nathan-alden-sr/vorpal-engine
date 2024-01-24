@@ -46,7 +46,7 @@ internal static class Program
                 }
 
                 (XInputControllerButton, string)[] directionalPads =
-                {
+                [
                     (XInputControllerButton.DirectionalPadLeft, "DPad L"),
                     (XInputControllerButton.DirectionalPadUp, "DPad U"),
                     (XInputControllerButton.DirectionalPadRight, "DPad R"),
@@ -55,7 +55,7 @@ internal static class Program
                     (XInputControllerButton.LeftShoulder, "L Shoulder"), (XInputControllerButton.LeftThumb, "L Thumb"),
                     (XInputControllerButton.RightShoulder, "R Shoulder"), (XInputControllerButton.RightThumb, "R Thumb"),
                     (XInputControllerButton.Back, "Back"), (XInputControllerButton.Start, "Start")
-                };
+                ];
 
                 var content = new ConsoleContent();
 

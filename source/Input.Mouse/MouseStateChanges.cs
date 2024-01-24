@@ -27,24 +27,24 @@ public struct MouseStateChanges
     /// <summary>Determines whether a button is down.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button is down; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonDown(Button button)
+    public readonly bool IsButtonDown(Button button)
         => (ButtonDownStates & (1 << (byte)button)) != 0;
 
     /// <summary>Determines whether a button is down.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button is down; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonUp(Button button)
+    public readonly bool IsButtonUp(Button button)
         => !IsButtonDown(button);
 
     /// <summary>Determines whether a button was pressed.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button was pressed; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonPressed(Button button)
+    public readonly bool WasButtonPressed(Button button)
         => (ButtonPressedStates & (1 << (byte)button)) != 0;
 
     /// <summary>Determines whether a button was released.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button was released; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonReleased(Button button)
+    public readonly bool WasButtonReleased(Button button)
         => (ButtonReleasedStates & (1 << (byte)button)) != 0;
 }

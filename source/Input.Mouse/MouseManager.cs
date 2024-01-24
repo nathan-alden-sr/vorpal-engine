@@ -7,7 +7,7 @@ namespace VorpalEngine.Input.Mouse;
 public abstract class MouseManager : IMouseManager
 {
     private static readonly ImmutableHashSet<Button> AllButtons =
-        new[] { Button.Left, Button.Right, Button.Middle, Button.X1, Button.X2 }.ToImmutableHashSet();
+        [Button.Left, Button.Right, Button.Middle, Button.X1, Button.X2];
 
     private readonly HashSet<Button> _newDownButtons = new(AllButtons.Count);
     private readonly HashSet<Button> _oldDownButtons = new(AllButtons.Count);

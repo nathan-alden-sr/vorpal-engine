@@ -146,22 +146,14 @@ public class ConcurrentMessageQueue<TMessageBase, TThread> : IConcurrentMessageQ
         }
     }
 
-    private sealed class Subscription : ISubscriptionReceipt
+    private sealed class Subscription(Type messageType, TThread thread, Delegate handlerDelegate, NestedContext context) : ISubscriptionReceipt
     {
-        public Subscription(Type messageType, TThread thread, Delegate handlerDelegate, NestedContext context)
-        {
-            MessageType = messageType;
-            Thread = thread;
-            HandlerDelegate = handlerDelegate;
-            Context = context;
-        }
+        public Type MessageType { get; } = messageType;
 
-        public Type MessageType { get; }
+        public TThread Thread { get; } = thread;
 
-        public TThread Thread { get; }
+        public Delegate HandlerDelegate { get; } = handlerDelegate;
 
-        public Delegate HandlerDelegate { get; }
-
-        public NestedContext Context { get; }
+        public NestedContext Context { get; } = context;
     }
 }

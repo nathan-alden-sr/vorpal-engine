@@ -42,7 +42,7 @@ public class AutofacBootstrapper<TRootViewModel> : BootstrapperBase
             new()
             {
                 ViewFactory = GetInstance,
-                ViewAssemblies = new List<Assembly> { typeof(App).Assembly }
+                ViewAssemblies = [typeof(App).Assembly]
             };
 
         _ = containerBuilder.RegisterType<MessageBoxViewModel>().As<IMessageBoxViewModel>().ExternallyOwned();

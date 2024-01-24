@@ -90,7 +90,7 @@ internal static class Program
 
                     // Register Raw Input devices
 
-                    ushort[] usages = { HID_USAGE_GENERIC_GAMEPAD, HID_USAGE_GENERIC_JOYSTICK };
+                    ushort[] usages = [HID_USAGE_GENERIC_GAMEPAD, HID_USAGE_GENERIC_JOYSTICK];
                     var pRawInputDevices = stackalloc RAWINPUTDEVICE[usages.Length];
 
                     for (uint i = 0; i < usages.Length; i++)

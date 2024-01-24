@@ -7,18 +7,12 @@ using static TerraFX.Interop.Windows.ERROR;
 
 namespace VorpalEngine.Input.Controller.XInput;
 
-internal sealed class XInputController
+internal sealed class XInputController(byte index)
 {
     private XINPUT_STATE? _oldState;
-    private XInputControllerState _state;
+    private XInputControllerState _state = new(index);
 
-    public XInputController(byte index)
-    {
-        Index = index;
-        _state = new XInputControllerState(index);
-    }
-
-    public byte Index { get; }
+    public byte Index { get; } = index;
 
     public unsafe bool TryGetState(out XInputControllerState state)
     {

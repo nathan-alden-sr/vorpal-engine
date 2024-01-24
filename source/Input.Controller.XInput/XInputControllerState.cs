@@ -60,24 +60,24 @@ public struct XInputControllerState
     /// <summary>Determines if a button is down.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button is down; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonDown(XInputControllerButton button)
+    public readonly bool IsButtonDown(XInputControllerButton button)
         => (DownButtonStates & (ushort)button) != 0;
 
     /// <summary>Determines if a button is up.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button is up; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonUp(XInputControllerButton button)
+    public readonly bool IsButtonUp(XInputControllerButton button)
         => !IsButtonDown(button);
 
     /// <summary>Determines if a button was pressed.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button was pressed; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonPressed(XInputControllerButton button)
+    public readonly bool WasButtonPressed(XInputControllerButton button)
         => (PressedButtonStates & (ushort)button) != 0;
 
     /// <summary>Determines if a button was released.</summary>
     /// <param name="button">The button to test.</param>
     /// <returns><see langword="true" /> if the button was released; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonReleased(XInputControllerButton button)
+    public readonly bool WasButtonReleased(XInputControllerButton button)
         => (ReleasedButtonStates & (ushort)button) != 0;
 }

@@ -26,16 +26,10 @@ internal sealed class Vector2DConverter<T> : JsonConverter<Vector2D<T>>
         JsonSerializer.Serialize(writer, vector2D, options);
     }
 
-    private struct Vector2D
+    private struct Vector2D(T x, T y)
     {
-        public Vector2D(T x, T y)
-        {
-            X = x;
-            Y = y;
-        }
+        public T X { get; set; } = x;
 
-        public T X { get; set; }
-
-        public T Y { get; set; }
+        public T Y { get; set; } = y;
     }
 }

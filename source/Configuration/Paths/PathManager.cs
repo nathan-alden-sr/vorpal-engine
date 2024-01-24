@@ -39,19 +39,12 @@ public sealed class PathManager : IPathManager
         return new IdentifierPaths(applicationDataDirectory, configurationFilePath, logFileDirectory);
     }
 
-    private sealed class IdentifierPaths : IIdentifierPaths
+    private sealed class IdentifierPaths(string dataDirectory, string configurationFilePath, string logFileDirectory) : IIdentifierPaths
     {
-        public IdentifierPaths(string dataDirectory, string configurationFilePath, string logFileDirectory)
-        {
-            DataDirectory = dataDirectory;
-            ConfigurationFilePath = configurationFilePath;
-            LogFileDirectory = logFileDirectory;
-        }
+        public string DataDirectory { get; } = dataDirectory;
 
-        public string DataDirectory { get; }
+        public string ConfigurationFilePath { get; } = configurationFilePath;
 
-        public string ConfigurationFilePath { get; }
-
-        public string LogFileDirectory { get; }
+        public string LogFileDirectory { get; } = logFileDirectory;
     }
 }

@@ -11,7 +11,7 @@ namespace VorpalEngine.Common.Windows;
 public sealed class MonitorProvider : IMonitorProvider
 {
     private readonly object _lockObject = new();
-    private readonly HashSet<Monitor> _monitors = new();
+    private readonly HashSet<Monitor> _monitors = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MonitorProvider" /> class. The monitor list will be populated after the

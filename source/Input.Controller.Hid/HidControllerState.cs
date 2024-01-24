@@ -108,7 +108,7 @@ public struct HidControllerState
     /// <summary>Determines if a button is down.</summary>
     /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
     /// <returns><see langword="true" /> if the button is down; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonDown(byte buttonIndex)
+    public readonly bool IsButtonDown(byte buttonIndex)
     {
         ValidateButtonIndex(buttonIndex);
 
@@ -118,7 +118,7 @@ public struct HidControllerState
     /// <summary>Determines if a button is up.</summary>
     /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
     /// <returns><see langword="true" /> if the button is up; otherwise, <see langword="false" />.</returns>
-    public bool IsButtonUp(byte buttonIndex)
+    public readonly bool IsButtonUp(byte buttonIndex)
     {
         ValidateButtonIndex(buttonIndex);
 
@@ -128,7 +128,7 @@ public struct HidControllerState
     /// <summary>Determines if a button was pressed.</summary>
     /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
     /// <returns><see langword="true" /> if the button was pressed; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonPressed(byte buttonIndex)
+    public readonly bool WasButtonPressed(byte buttonIndex)
     {
         ValidateButtonIndex(buttonIndex);
 
@@ -138,7 +138,7 @@ public struct HidControllerState
     /// <summary>Determines if a button was released.</summary>
     /// <param name="buttonIndex">The button index to test. Valid indexes range from 0 to 31.</param>
     /// <returns><see langword="true" /> if the button was released; otherwise, <see langword="false" />.</returns>
-    public bool WasButtonReleased(byte buttonIndex)
+    public readonly bool WasButtonReleased(byte buttonIndex)
     {
         ValidateButtonIndex(buttonIndex);
 

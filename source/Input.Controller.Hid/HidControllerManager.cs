@@ -84,7 +84,7 @@ public sealed class HidControllerManager : IHidControllerManager
     {
         if (_hidControllersByIndex.Remove(index, out var controller))
         {
-            _hidControllersByHandle.Remove(controller.DeviceHandle);
+            _ = _hidControllersByHandle.Remove(controller.DeviceHandle);
         }
     }
 
